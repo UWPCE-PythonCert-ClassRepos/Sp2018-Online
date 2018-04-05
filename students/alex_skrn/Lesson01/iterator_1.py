@@ -4,7 +4,19 @@
 Simple iterator examples
 """
 
+# Task summary:
+# Part 1: Extend IterateMe_1 to be more like range() – add three input
+#  parameters: iterator_2(start, stop, step=1)
+# Part 2: Make iterator_2 more like range() (i.e., in my understanding,
+# not consumable)
 
+# Question: is range an iterator or an iteratable?
+# My answer: range() has no next method, so it is not an iterator;
+# Furthermore, if it is passed to iter() function, you get
+# a range_iterator object, so it should be a kind of iterable
+
+
+# Initial example provided as part of the assignment - MY CODE IS BELOW IT
 class IterateMe_1:
     """
     About as simple an iterator as you can get:
@@ -28,28 +40,40 @@ class IterateMe_1:
             raise StopIteration
 
 
+# MY SOLUTION - Option 1 - with start, stop, step=1
 class IterateMe_2:
-    """Create an iterable object. A very simplified version of range()."""
+    """Create an iterable object. A very simplified version of range().
+
+    three input parameters: start, stop, step=1
+    __iter__ but not __next__ is implemented
+    to make objects of this class inexhaustable like in range()
+    """
 
     def __init__(self, start, stop, step=1):
-        """Assume start < stop."""
+        """Parameters: start, stop (assume > start), step (defaults to 1)."""
         self.start = start
         self.stop = stop
         self.step = step
 
     def __iter__(self):
-        """Make objects of this class inexhaustable like range()."""
+        """Implement iter."""
         n = self.start
         while n < self.stop:
             yield n
             n += self.step
 
 
+# MY SOLUTION - Option 2 - with start, stop=None, step=1
 class IterateMe_3:
-    """Create an iterable object. A very simplified version of range()."""
+    """Create an iterable object. A very simplified version of range().
+
+    three input parameters: start, stop=None, step=1
+    __iter__ but not __next__ is implemented
+    to make objects of this class inexhaustable like in range()
+    """
 
     def __init__(self, start, stop=None, step=1):
-        """Assume start < stop."""
+        """Parameters: start, stop (defaults to None), step (defaults to 1)."""
         if stop is None:
             self.start, self.stop = 0, start
         else:
@@ -58,7 +82,7 @@ class IterateMe_3:
         self.step = step
 
     def __iter__(self):
-        """Make objects of this class inexhaustable like range()."""
+        """Implement iter."""
         n = self.start
         while n < self.stop:
             yield n
@@ -83,8 +107,9 @@ if __name__ == "__main__":
 
     print(list(it))
 
-    print("Testing IterateMe_3 -- now accepts 1 or 2 or 3 args")
+    print("Testing IterateMe_3 -- now accepts 1, 2, or 3 args, not consumable")
     it3a = IterateMe_3(10)
     it3b = IterateMe_3(2, 20, 2)
     print(list(it3a))
+    print(list(it3b))
     print(list(it3b))
