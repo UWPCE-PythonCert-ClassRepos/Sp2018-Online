@@ -4,6 +4,11 @@
 
 # from math import sqrt
 
+# MY COMMENT:
+# I don't understand what test_intsum2() in test_generator.py is for.
+# This function's code is the same as that of test_intsum().
+# And I don't see any relevant task in the assignment.
+
 
 def intsum():
     """Sum of integers."""
@@ -27,7 +32,7 @@ def doubler():
 
 
 def fib():
-    """Fibonacci sequence: 1, 1, 2, 3, 5, 8, 13, 21, 34…."""
+    """Fibonacci sequence: 1, 1, 2, 3, 5, 8, 13, 21, 34,."""
     a, b = 1, 1
     while True:
         yield a
@@ -35,9 +40,9 @@ def fib():
 
 
 def prime():
-    """Generate the prime numbers: 2, 3, 5, 7, 11, 13, 17, 19, 23…."""
+    """Generate prime numbers: 2, 3, 5, 7, 11, 13, 17, 19, 23,."""
     # def is_prime(x):
-    #     """See if x is prime by Trial Division (see wiki on prime numbers)."""
+    #     """See if x is prime by Trial Division."""
     #     for i in range(2, int(sqrt(x)) + 1):
     #         if x % i == 0:
     #             return False
@@ -46,12 +51,12 @@ def prime():
     # is_prime() below does the same is above but with a while loop to avoid
     # having to import math.sqrt
     def is_prime(x):
-        """See if x is prime by Trial Division (see wiki on prime numbers)."""
-        i = 2
-        while i * i <= x:
-            if x % i == 0:
+        """See if x is prime by Trial Division."""
+        d = 2  # the initial divisor to try
+        while d * d <= x:  # do until divisor becomes sqrt of x (in worst case)
+            if x % d == 0:
                 return False
-            i += 1
+            d += 1
         return True
     # start the sequence with 2
     prime = 2
