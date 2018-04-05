@@ -56,7 +56,9 @@ class IterateMe_2:
         self.step = step
 
     def __iter__(self):
-        """Implement iter."""
+        """Implement iter with yield statement like a generator."""
+        # Uses its own variable n so that not to mess with var's in init.
+        # I guess this allows this class objects to be not consumable
         n = self.start
         while n < self.stop:
             yield n
@@ -82,7 +84,9 @@ class IterateMe_3:
         self.step = step
 
     def __iter__(self):
-        """Implement iter."""
+        """Implement iter with yield statement like a generator."""
+        # Uses its own variable n so that not to mess with var's in init.
+        # I guess this allows this class objects to be not consumable
         n = self.start
         while n < self.stop:
             yield n
