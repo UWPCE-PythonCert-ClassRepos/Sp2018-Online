@@ -56,7 +56,7 @@ class IterateMe_2:
         self.step = step
 
     def __iter__(self):
-        """Implement iter with yield statement like a generator."""
+        """Implement iter with yield statement."""
         n = self.start
         while n < self.stop:
             yield n
@@ -80,14 +80,16 @@ class IterateMe_3:
             self.start = start
             self.stop = stop
         self.step = step
-        # Some safeguards in case of illegal input, eg. (10, 1, 1), (1, 10, -1)
+        # Some safeguards to avoid an infinite loop in case of illegal input,
+        # eg. (10, 1, 1), (1, 10, -1)
         if self.start < self.stop:
             assert self.step > 0, "Need a positive Step here"
         if self.start > self.stop:
             assert self.step < 0, "Need a negative Step here"
 
+
     def __iter__(self):
-        """Implement iter with yield statement like a generator."""
+        """Implement iter with yield statement."""
         n = self.start
         # while n < self.stop:
         while n != self.stop:
