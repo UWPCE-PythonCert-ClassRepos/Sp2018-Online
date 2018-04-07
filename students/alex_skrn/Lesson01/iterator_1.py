@@ -40,13 +40,13 @@ class IterateMe_1:
             raise StopIteration
 
 
-# MY SOLUTION - Option 1 - with start, stop, step=1
+# OPTION 1 - with start, stop, step=1
 class IterateMe_2:
-    """Create an iterable object. A very simplified version of range().
+    """Create an iterable inexhaustable range-like object.
 
     three input parameters: start, stop, step=1
     __iter__ but not __next__ is implemented
-    to make objects of this class inexhaustable like in range()
+    to make objects of this class inexhaustable like range()
     """
 
     def __init__(self, start, stop, step=1):
@@ -57,22 +57,54 @@ class IterateMe_2:
 
     def __iter__(self):
         """Implement iter with yield statement like a generator."""
-        # Uses its own variable n so that not to mess with var's in init.
-        # I guess this allows this class objects to be not consumable
         n = self.start
         while n < self.stop:
             yield n
             n += self.step
 
 
-# MY SOLUTION - Option 2 - with start, stop=None, step=1
+# OPTION 2 - with start, stop=None, step=1, reverse possible, e.g. (10, 0, -1)
 class IterateMe_3:
-    """Create an iterable object. A very simplified version of range().
+    """Create an iterable inexhaustable range-like object.
 
     three input parameters: start, stop=None, step=1
     __iter__ but not __next__ is implemented
-    to make objects of this class inexhaustable like in range()
+    to make objects of this class inexhaustable like range()
     """
+
+    def __init__(self, start, stop=None, step=1):
+        """Parameters: start, stop (defaults to None), step (defaults to 1)."""
+        if stop is None:
+            self.start, self.stop = 0, start
+        else:
+            self.start = start
+            self.stop = stop
+        self.step = step
+        # Some safeguards in case of illegal input, eg. (10, 1, 1), (1, 10, -1)
+        if self.start < self.stop:
+            assert self.step > 0, "Need a positive Step here"
+        if self.start > self.stop:
+            assert self.step < 0, "Need a negative Step here"
+
+    def __iter__(self):
+        """Implement iter with yield statement like a generator."""
+        n = self.start
+        # while n < self.stop:
+        while n != self.stop:
+            yield n
+            n += self.step
+
+
+# OPTION 3 -- using 2 separate classes to create a range-like object
+# This more complicated solution is offered on
+# https://anandology.com/python-practice-book/iterators.html
+# Author's note: "if both iteratable and iterator are the same object,
+# it is consumed in a single iteration."
+# I modified the author's code to handle several input parameters
+# and cases like zrange(10, -1, -1)
+
+class zrange:
+    """Create an iterable inexhaustable range-like object."""
 
     def __init__(self, start, stop=None, step=1):
         """Parameters: start, stop (defaults to None), step (defaults to 1)."""
@@ -84,13 +116,32 @@ class IterateMe_3:
         self.step = step
 
     def __iter__(self):
-        """Implement iter with yield statement like a generator."""
-        # Uses its own variable n so that not to mess with var's in init.
-        # I guess this allows this class objects to be not consumable
-        n = self.start
-        while n < self.stop:
-            yield n
-            n += self.step
+        """Return an iterator created by zrange_iter class."""
+        return zrange_iter(self.start, self.stop, self.step)
+
+
+class zrange_iter:
+    """Probvide an iterator object for zrange class."""
+
+    def __init__(self, start, stop, step):
+        if start < stop:
+            assert step > 0, "Need a positive Step here"
+        if start > stop:
+            assert step < 0, "Need a negative Step here"
+        self.start = start
+        self.stop = stop
+        self.step = step
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.start != self.stop:
+            i = self.start
+            self.start += self.step
+            return i
+        else:
+            raise StopIteration()
 
 
 if __name__ == "__main__":
@@ -110,10 +161,35 @@ if __name__ == "__main__":
         print(i)
 
     print(list(it))
+    print(list(it))
 
-    print("Testing IterateMe_3 -- now accepts 1, 2, or 3 args, not consumable")
+    print()
+
+    print("Testing IterateMe_3 -- 1, 2, or 3 args, not consumable, reverse")
     it3a = IterateMe_3(10)
     it3b = IterateMe_3(2, 20, 2)
     print(list(it3a))
+    print(list(it3a))
     print(list(it3b))
     print(list(it3b))
+
+    it3c = IterateMe_3(20, 2, -2)
+    print(list(it3c))
+    print(list(it3c))
+
+    print()
+
+    print("Testing zrange -- up to 3 args, not consumable, reverse possible")
+    z = zrange(5)
+    print(list(z))
+    print(list(z))
+    z2 = zrange(2, 20, 2)
+    print(list(z2))
+    print(list(z2))
+    z3 = zrange(20, 2, -2)
+    print(list(z3))
+    print(list(z3))
+    assert list(zrange(2, 2)) == []
+    z4 = zrange(3, -1, -1)
+    assert list(z4) == [3, 2, 1, 0]
+    assert list(z4) == [3, 2, 1, 0]
