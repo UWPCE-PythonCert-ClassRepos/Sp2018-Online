@@ -23,6 +23,19 @@ def intsum():
         current_sum += current_int
 
 
+def intsum2():
+    """Same as intsum() to pass test_intsum2(), see my comment at the top."""
+    # Keep adding the next integer
+    # 0 + 1 + 2 + 3 + 4 + 5 + …
+    # so the sequence is: 0, 1, 3, 6, 10, 15 ….
+    current_sum = 0
+    current_int = 0
+    while True:
+        yield current_sum
+        current_int += 1
+        current_sum += current_int
+
+
 def doubler():
     """Each value is double the previous value: 1, 2, 4, 8, 16, 32,."""
     current_val = 1
@@ -58,7 +71,7 @@ def prime():
                 return False
             d += 1
         return True
-    # start the sequence with 2
+    # start the sequence at 2
     prime = 2
     while True:
         yield prime

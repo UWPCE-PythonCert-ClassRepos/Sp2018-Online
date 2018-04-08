@@ -39,6 +39,27 @@ class IterateMe_1:
         else:
             raise StopIteration
 
+# After watching the video on Slack -
+#  - there was a hint to reset self.current in __iter__
+class IterateMe_22:
+    def __init__(self,  start, stop, step=1):
+        self.start = start
+        self.stop = stop
+        self.step = step
+
+    def __iter__(self):
+        self.current = self.start - self.step
+        return self
+
+    def __next__(self):
+        self.current += self.step
+        if self.current < self.stop:
+            return self.current
+        else:
+            raise StopIteration
+
+
+# Here goes my previous solutions
 
 # OPTION 1 - with start, stop, step=1
 class IterateMe_2:
@@ -151,6 +172,21 @@ if __name__ == "__main__":
     # print("Testing the iterator")
     # for i in IterateMe_1():
     #     print(i)
+
+    print("Testing IterateMe_22 -- after watching slack video")
+    it22 = IterateMe_22(2, 20, 2)
+    for i in it22:
+        if i > 10:
+            break
+        print(i)
+
+    for i in it22:
+        print(i)
+
+    print(list(it22))
+    print(list(it22))
+
+    print()
 
     print("Testing IterateMe_2 -- accepts 2 or 3 args, not consumable")
     it = IterateMe_2(2, 20, 2)
