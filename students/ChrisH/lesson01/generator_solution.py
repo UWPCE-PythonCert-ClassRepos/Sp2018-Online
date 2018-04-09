@@ -37,4 +37,13 @@ def doubler():
         yield dblr
 
 
+def fib():
+    p = 0
+    q = 1
+
+    yield 1
+
+    while True:
+        yield p + q
+        p, q = q, p + q
 

@@ -1,0 +1,4 @@
+{
+  "lesson01/test_generator.py::test_fib": true,
+  "lesson01/test_generator.py::test_prime": true
+}
