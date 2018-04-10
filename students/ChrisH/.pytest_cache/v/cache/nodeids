@@ -1,7 +1,0 @@
-[
-  "lesson01/test_generator.py::test_intsum",
-  "lesson01/test_generator.py::test_intsum2",
-  "lesson01/test_generator.py::test_doubler",
-  "lesson01/test_generator.py::test_fib",
-  "lesson01/test_generator.py::test_prime"
-]
