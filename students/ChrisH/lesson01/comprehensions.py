@@ -30,3 +30,11 @@ if __name__ == "__main__":
 
     for i in t2[:5]:
         print(f'"{i[1]}" by {i[0]}')
+
+""" Top 5 
+"Bad and Boujee (feat. Lil Uzi Vert)" by Migos
+"Fake Love" by Drake
+"HUMBLE." by Kendrick Lamar
+"Feels" by Calvin Harris
+"Bank Account" by 21 Savage
+"""
