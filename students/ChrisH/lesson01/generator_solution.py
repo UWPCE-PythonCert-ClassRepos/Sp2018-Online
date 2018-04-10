@@ -46,3 +46,19 @@ def fib():
         yield p + q
         p, q = q, p + q
 
+
+def prime():
+    # somewhat inefficient prime number generator using a list comprehension
+    # skips even numbers
+    yield 2
+    num = 3
+    while True:
+        if not [d for d in range(3, num, 2) if num % d == 0]:
+            yield num
+        # else:
+        #    print(num, [d for d in range(3, num, 2) if num % d == 0])
+        num += 2
+
+
+
+
