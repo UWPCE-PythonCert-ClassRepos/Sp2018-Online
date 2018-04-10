@@ -38,10 +38,9 @@ def doubler():
 
 
 def fib():
-    p = 0
-    q = 1
-
-    yield 1
+    # Set first two in sequence as 1,0, which will correctly produce 1, 1, 2 ...
+    p = 1
+    q = 0
 
     while True:
         yield p + q
