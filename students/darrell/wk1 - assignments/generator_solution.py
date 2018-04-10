@@ -71,23 +71,14 @@ def prime():
 
 
 def is_prime(n):
-
-    if n == 1:
-        return False
+    prime_num = False
     if n in [2, 3, 5, 7]:
         return True
-    # exclude even numbers and numbers divisible by 3
-    if n % 2 == 0 or n % 3 == 0:
-        return False
-    # only test 6k +- 1 <= sqrt(n)
-    for i in -1, 1:
-        x = 6 + i
-        while x <= math.sqrt(n):
-            if n % x == 0:
-                return False
-            x += 6
-    return True
-
-
-
+    for i in range(2,n):
+        if n % i == 0:
+            prime_num = False
+            break
+        else:
+            prime_num = True
+    return prime_num
 
