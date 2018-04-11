@@ -31,23 +31,31 @@ if __name__ == "__main__":
     consuming it. 
     """
 
-    rt = range(2, 10, 2)
+    rt = range(2, 20, 2)
 
     print("Range results ")
     for i in rt:
         print(i, end=' ')
     print()
-    print('The rt object has not been consumed and can be looped over')
+    print('The rt object has not been consumed and can be re-looped')
     for i in rt:
         print(i, end=' ')
     print()
 
-    it = IterateMe_2(2, 10, 2)
+    it = IterateMe_2(2, 20, 2)
     print("Testing the iterator")
     for i in it:
+        if i > 10: break
         print(i, end=' ')
+
     print()
-    print('Looping over the class object "it" returns nothing as it has been consumed by the previous loop')
-    print("Testing the iterator, will return nothing because the state of the object invoked the StopIteration")
+    print("Re-looping over the Class based iterator, will return values from where the iter() left off"
+          " because the state of the object was saved")
     for i in it:
         print(i, end=' ')
+
+    print()
+    print("Trying to re-loop over the object will return nothing because it was not stored in a "
+          "container object, like a list and was consumed")
+    for i in it:
+        print(i, end='')
