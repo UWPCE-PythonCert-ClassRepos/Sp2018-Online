@@ -18,4 +18,5 @@ def test_generator():
     assert next(g) == ('Ed Sheeran', 'Castle on the Hill')
     assert next(g) == ('Ed Sheeran', 'Shape of You')
 
-test_generator()
+if __name__ == '__main__':
+    test_generator()
