@@ -5,7 +5,8 @@ def doubler(max):
         y += 1
 
 def intsum(max):
-    x, y = 0
+    x = 0
+    y = 0
     while y < max:
         yield x
         y+=1
@@ -14,7 +15,8 @@ def intsum(max):
 def fib(max):
     x, y = 0, 1
     while x < max:
-        yield x
+        if x > 0:
+            yield x
         x, y = y, x + y
 
 def prime(max):
@@ -25,7 +27,7 @@ def prime(max):
         x += 1
 
 def main():
-        int_sum = doubler(10)
+        int_sum = prime(10)
         for x in int_sum:
             print(x)
 
