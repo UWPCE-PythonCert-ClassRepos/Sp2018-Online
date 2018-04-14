@@ -9,7 +9,7 @@ Write a few generators
 """
 
 
-def sum_ints(x):
+def intsum(x):
     '''
     sum of integers, keep adding the next integer
     '''
@@ -20,7 +20,7 @@ def sum_ints(x):
         yield n
 
 
-def double_ints(x,y):
+def doubler(x,y):
     '''
     Doubler, Each value is double the previous value
     '''
@@ -29,7 +29,7 @@ def double_ints(x,y):
         yield 2 ** (i-1)
 
 
-def fib_seq(n):
+def fib(n):
     '''
     Fibonacci sequence up to a max value
     f(n) = f(n-1) + f(n-2)
@@ -41,7 +41,7 @@ def fib_seq(n):
         a, b = b, a + b
 
 
-def prime_list(max):
+def prime(max):
     '''
     Check for primes in range of max
     '''
@@ -61,16 +61,16 @@ def prime_list(max):
 if __name__ == "__main__":
 
     print("1. Sum of integers:")
-    print(list(sum_ints(20)))
+    print(list(intsum(20)))
 
     print("2. Double the previous value:")
-    print(list(double_ints(1,20)))
+    print(list(doubler(1,20)))
 
     print("3. Fibonacci sequence:")
-    print(list(fib_seq(20)))
+    print(list(fib(20)))
 
     print("4. Prime numbers less than 20:")
-    for p in prime_list(20):
+    for p in prime(20):
         print(p)
 
 
