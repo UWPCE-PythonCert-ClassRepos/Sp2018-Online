@@ -1,9 +1,10 @@
+import math
+
 def doubler(num):
     x, y = 2, 0
     while y < num:
         yield x ** y
         y += 1
-
 
 def intsum(num):
     x = 0
@@ -20,11 +21,10 @@ def fib():
         yield curr
         prev, curr = curr, prev + curr
 
-
 def prime(num):
     x = 1
-    while x < num:
-        if num % x == 0:
+    y = int(math.sqrt(num) +1)
+    while x < y:
+        if y % x == 0:
             yield x
         x += 1
-
