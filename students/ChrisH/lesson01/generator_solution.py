@@ -20,11 +20,11 @@ class intsum(object):
 
 def intsum2():
     current = 0
-    next = 0
+    next_num = 0
     while True:
-        current += next
+        current += next_num
         yield current
-        next += 1
+        next_num += 1
 
 
 def intsum3():
