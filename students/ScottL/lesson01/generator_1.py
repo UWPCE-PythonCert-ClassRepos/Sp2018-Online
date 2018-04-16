@@ -8,74 +8,63 @@ Write a few generators
 4. Prime numbers
 """
 
+import math
 
-def intsum(x):
+
+def intsum():
     '''
     sum of integers, keep adding the next integer
     '''
 
     n = 0
-    for i in range(x):
-        n = n + i
-        yield n
+    the_sum = 0
+    while True:
+        yield the_sum
+        print(the_sum)
+        n += 1
+        the_sum += n
 
 
-def doubler(x,y):
+def doubler():
     '''
     Doubler, Each value is double the previous value
     '''
 
-    for i in range(x,y):
-        yield 2 ** (i-1)
+    i = 1
+    the_double = 1
+    while True:
+        yield the_double
+        print(the_double)
+        i += 1
+        the_double = 2 ** (i - 1)
 
 
-def fib(n):
+
+def fib():
     '''
-    Fibonacci sequence up to a max value
+    Fibonacci sequence generator
     f(n) = f(n-1) + f(n-2)
     '''
 
-    a, b = 0, 1
-    for _ in range(n):
+    a, b = 1, 1
+    while True:
         yield a
+        print(a)
         a, b = b, a + b
 
 
-def prime(max):
+def prime():
     '''
-    Check for primes in range of max
+    Prime number generator
     '''
-
-    primes = []
-    for n in range(2, max):
-        n_prime = True
-        for p in primes:
-            if n%p == 0:
-                n_prime = False
+    count = 2
+    while True:
+        isprime = True
+        for x in range(2, int(math.sqrt(count) + 1)):
+            if count % x == 0:
+                isprime = False
                 break
-        if n_prime:
-            primes.append(n)
-            yield n
-
-
-if __name__ == "__main__":
-
-    print("1. Sum of integers:")
-    print(list(intsum(20)))
-
-    print("2. Double the previous value:")
-    print(list(doubler(1,20)))
-
-    print("3. Fibonacci sequence:")
-    print(list(fib(20)))
-
-    print("4. Prime numbers less than 20:")
-    for p in prime(20):
-        print(p)
-
-
-
-
-
-
-
+        if isprime:
+            yield(count)
+            print(count)
+        count += 1
