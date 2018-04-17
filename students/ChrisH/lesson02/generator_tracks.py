@@ -30,3 +30,11 @@ if __name__ == "__main__":
     a = tracks_by_artist2("Ed Sheeran")
     for x in a:
         print(x)
+
+"""
+Ed Sheeran tracks:       
+Shape of You
+Castle on the Hill
+Galway Girl
+Perfect
+"""
