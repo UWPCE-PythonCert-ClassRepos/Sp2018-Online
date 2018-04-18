@@ -1,10 +1,20 @@
-import math
+#!/usr/bin/env python3
 
-def doubler(num):
-    x, y = 2, 0
-    while y < num:
-        yield x ** y
-        y += 1
+import math as mt
+
+def doubler():
+    current = 1
+    while True:
+        yield current
+        current *= 2
+
+
+def fib():
+    prev, curr = 0, 1
+    while True:
+        yield curr
+        prev, curr = curr, prev + curr
+
 
 def intsum(num):
     x = 0
@@ -14,17 +24,16 @@ def intsum(num):
         y+=1
         x += y
 
-
-def fib():
-    prev, curr = 0, 1
+# I absolutely hated this one. Thank god for stack overflow
+def primes():
+    ps, cur = [2], 3
+    yield 2
     while True:
-        yield curr
-        prev, curr = curr, prev + curr
+        y = int(mt.sqrt(cur))
+        c = next((x for x in ps if cur % x == 0), None)
 
-def prime(num):
-    x = 1
-    y = int(math.sqrt(num) +1)
-    while x < y:
-        if y % x == 0:
-            yield x
-        x += 1
+        if c == None:
+            yield cur
+            ps.append(cur)
+
+        cur += 2
