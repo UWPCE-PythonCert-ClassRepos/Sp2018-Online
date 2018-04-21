@@ -1,12 +1,23 @@
 #!/usr/bin/env python3
 
-"""Mailroom - Lesson 10 - Functional? -- one use of map and filter."""
+"""Mailroom - Lesson 10 - oo mailroom with load/save functionality."""
+
+# Note: I type "python -m pytest test_mailroom.py" to run my tests
+# because the command "pytest test_mailroom.py" raises the error:
+# "No module named 'json_save.json_save_meta'"
+
+# Note 2: I've made no modifications to the json_save module,
+# and I can use it without problems,
+# although the assignment says that some changes would be needed.
+
 import os
 import datetime
 import tkinter as tk
 from tkinter import filedialog
-# import json_save.json_save_meta as js
-from json_save import json_save_meta as js
+import json_save.json_save_meta as js
+# import json_save as js
+# from json_save import json_save_meta as js
+# import json_save_meta as js
 
 data = {'Aristarkh Lentulov': [4.5, 5.0],
         'El Lissitzky': [34.2, 30.0, 35.5],
@@ -253,8 +264,11 @@ class StartMenu(object):
     """Provide a class for user ineraction via prompts and menus."""
 
     def __init__(self):
-        """Instantiate a StartMenu class object with a Donors class object."""
-        self.donors = self.load()
+        """Instantiate with donors and launch main menu."""
+        self.donors = Donors([SingleDonor(key, value)
+                              for key, value in self.load().items()
+                              ]
+                             )
         self.menu_selection(self.main_menu_prompt(), self.main_menu_dispatch())
 
     # lOADING DONOR DATABASE
@@ -265,11 +279,9 @@ class StartMenu(object):
                 reconstructed = js.from_json(tempfile)
             return reconstructed.database
         except IOError:
-            return {'Aristarkh Lentulov': [4.5, 5.0],
-                    'El Lissitzky': [34.2, 30.0, 35.5],
-                    'Kazimir Malevich': [15.0, 20.25, 12.25],
-                    'Marc Chagall': [148.75, 155.0],
-                    'Wassily Kandinsky': [75.0, 50.5, 60.4],
+            return {"Bill Murray": [125, 1.0],
+                    "Woody Harrelson": [71.5, 1.25],
+                    "Jesse Eisenberg": [99.99, 1.75]
                     }
 
     # MANAGING MENUS

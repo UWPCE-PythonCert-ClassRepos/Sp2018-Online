@@ -9,6 +9,13 @@ from unittest.mock import patch
 from unittest.mock import MagicMock
 from  mailroom import *
 
+# Note 1: I type "python -m pytest test_mailroom.py" to run my tests
+# because the command "pytest test_mailroom.py" raises the error:
+# "No module named 'json_save.json_save_meta'"
+
+# Note 2: I've made no modifications to the json_save module,
+# and I can use it without problems,
+# although the assignment says that some changes would be needed.
 
 @pytest.fixture()
 def donors():
@@ -404,7 +411,7 @@ def test_new_donor_interaction_user_input_zero(monkeypatch):
         assert s.new_donor_interaction() is None
 
 
-def test_new_donor_interaction_user_input_new_name(donors):
+def test_new_donor_interaction_user_input_new_name():
     """new_donor_interaction(); User enters a new name on prompt."""
     # WHEN the user enters a new name when prompted to enter a name
     # THEN the function should ask for a donation and print a thank-you email
@@ -420,7 +427,7 @@ def test_new_donor_interaction_user_input_new_name(donors):
     with mock.patch('sys.stdout', new_callable=StringIO) as mock_stdout:
         # Instantitate a class object (though in reality this class never gets
         # assigned to a name)
-        s = StartMenu(donors)
+        s = StartMenu()
 
         # Check that the method prints the correct email on screan
         s.new_donor_interaction()
@@ -428,7 +435,7 @@ def test_new_donor_interaction_user_input_new_name(donors):
         assert "$333.33" in mock_stdout.getvalue()
 
 
-def test_old_donor_interaction_user_input_name(donors):
+def test_old_donor_interaction_user_input_name():
     """old_donor_interaction(); User enters an old name on prompt."""
     # WHEN the user enters an old name when prompted to enter a name
     # THEN the function should ask for an amount and print a thank-you email
@@ -443,7 +450,7 @@ def test_old_donor_interaction_user_input_name(donors):
     with mock.patch('sys.stdout', new_callable=StringIO) as mock_stdout:
         # Instantitate a class object (though in reality this class never gets
         # assigned to a name)
-        s = StartMenu(donors)
+        s = StartMenu()
 
         # This fakes a method so that the execution proceeds to final print()
         s.input_donation = Mock()
@@ -542,7 +549,7 @@ def test_write_file(tmpdir):
         assert file.read() == "some text"
 
 
-def test_write_cwd(monkeypatch, tmpdir, donors):
+def test_write_cwd(monkeypatch, tmpdir):
     """write_cwd() User writes all emails to cwd."""
     # Check that the function indeed created 3 files ('cos there are 3 donors)
     # Check that the files created are not empty at least
@@ -557,7 +564,7 @@ def test_write_cwd(monkeypatch, tmpdir, donors):
     with mock.patch('sys.stdout', new_callable=StringIO) as mock_stdout:
         # Instantitate a class object (though in reality this class never gets
         # assigned to a name)
-        s = StartMenu(donors)
+        s = StartMenu()
         # This checks the self.donors property
         assert "Bill Murray" in s.donors
 
@@ -577,7 +584,7 @@ def test_write_cwd(monkeypatch, tmpdir, donors):
         assert "All letters saved in" in mock_stdout.getvalue()
 
 
-def test_write_select_dir(monkeypatch, tmpdir, donors):
+def test_write_select_dir(monkeypatch, tmpdir):
     """write_select_dir() User selects a directory."""
     # Check that the function indeed created 3 files ('cos there are 3 donors)
     # Check that the files created are not empty at least
@@ -592,7 +599,7 @@ def test_write_select_dir(monkeypatch, tmpdir, donors):
     with mock.patch('sys.stdout', new_callable=StringIO) as mock_stdout:
         # Instantitate a class object (though in reality this class never gets
         # assigned to a name)
-        s = StartMenu(donors)
+        s = StartMenu()
 
         # This fakes the user's choice of the directory
         s.ask_user_dir = Mock()
@@ -631,7 +638,7 @@ def test_write_select_dir_user_cancel():
                           ("Jesse Eisenberg", [199.98, 3.5])
                           ]
                          )
-def test_start_menu_match_donations(donors, name, expected):
+def test_start_menu_match_donations(name, expected):
     """User chooses to match all donations by a factor of 2."""
     # This simulates the user entering "0" to quit main_menu running at start,
     # but I guess a class instance that I create remains in place
@@ -645,7 +652,7 @@ def test_start_menu_match_donations(donors, name, expected):
     with mock.patch('sys.stdout', new_callable=StringIO) as mock_stdout:
         # Instantitate a class object (though in reality this class never gets
         # assigned to a name)
-        s = StartMenu(donors)
+        s = StartMenu()
 
         # Test that the challenge method correctly modifies self.donors
         s.challenge()
@@ -695,7 +702,7 @@ def test_start_menu_match_donations_wrong_inputs():
                           ("Jesse Eisenberg", [99.99, 1.75])
                           ]
                          )
-def test_start_menu_match_donations2(donors, name, expected):
+def test_start_menu_match_donations2(name, expected):
     """User matches all donations by a factor of 2 subject to conditions."""
     # This simulates the user entering "0" to quit main_menu running at start,
     # but I guess a class instance that I create remains in place
@@ -708,7 +715,7 @@ def test_start_menu_match_donations2(donors, name, expected):
     with mock.patch('sys.stdout', new_callable=StringIO) as mock_stdout:
         # Instantitate a class object (though in reality this class never gets
         # assigned to a name)
-        s = StartMenu(donors)
+        s = StartMenu()
 
         # Test that the challenge method correctly modifies self.donors
         s.challenge()
@@ -721,7 +728,7 @@ def test_start_menu_match_donations2(donors, name, expected):
                           (["0", "2", "", "100"], "175.49"),
                           ]
                          )
-def test_start_menu_projection(donors, user_input, expected):
+def test_start_menu_projection(user_input, expected):
     """Check that projection returns the right amounts."""
     # This simulates the user entering "0" to quit main_menu running at start,
     # but I guess a class instance that I create remains in place
@@ -737,7 +744,7 @@ def test_start_menu_projection(donors, user_input, expected):
     with mock.patch('sys.stdout', new_callable=StringIO) as mock_stdout:
         # Instantitate a class object (though in reality this class never gets
         # assigned to a name)
-        s = StartMenu(donors)
+        s = StartMenu()
 
         # Test that the method prints the corect result
         s.run_projection()
@@ -753,4 +760,4 @@ def test_load():
 
     s = StartMenu()
 
-    assert 'Aristarkh Lentulov' in s.donors
+    assert "Bill Murray" in s.donors
