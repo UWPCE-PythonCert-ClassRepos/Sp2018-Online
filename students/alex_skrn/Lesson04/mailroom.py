@@ -5,6 +5,8 @@ import os
 import datetime
 import tkinter as tk
 from tkinter import filedialog
+# import json_save.json_save_meta as js
+from json_save import json_save_meta as js
 
 data = {'Aristarkh Lentulov': [4.5, 5.0],
         'El Lissitzky': [34.2, 30.0, 35.5],
@@ -231,16 +233,44 @@ class Donors(object):
         return sum([sum(donor.donations) for donor in self._donors])
 
 
+#################################################
+# USING THE JSON_SAVE MODULE FROM THE ASSIGNMENT
+#################################################
+class DictJSClass(js.JsonSaveable):
+    """A class for turning a dict database into a JSONable format."""
+
+    database = js.Dict()
+
+    def __init__(self, database):
+        """Instantiate a DictJSClass object."""
+        self.database = database
+
+
 ##################
 # START MENU CLASS
 #################
 class StartMenu(object):
     """Provide a class for user ineraction via prompts and menus."""
 
-    def __init__(self, donors):
+    def __init__(self):
         """Instantiate a StartMenu class object with a Donors class object."""
-        self.donors = donors
+        self.donors = self.load()
         self.menu_selection(self.main_menu_prompt(), self.main_menu_dispatch())
+
+    # lOADING DONOR DATABASE
+    def load(self, filename="donor_db.json"):
+        """Return a dict donor db reconstructed from a json file."""
+        try:
+            with open(filename) as tempfile:
+                reconstructed = js.from_json(tempfile)
+            return reconstructed.database
+        except IOError:
+            return {'Aristarkh Lentulov': [4.5, 5.0],
+                    'El Lissitzky': [34.2, 30.0, 35.5],
+                    'Kazimir Malevich': [15.0, 20.25, 12.25],
+                    'Marc Chagall': [148.75, 155.0],
+                    'Wassily Kandinsky': [75.0, 50.5, 60.4],
+                    }
 
     # MANAGING MENUS
     # Template for dispatch dicts
@@ -530,5 +560,5 @@ class StartMenu(object):
 
 # Load data and run
 if __name__ == "__main__":
-    donors = Donors([SingleDonor(name, data[name]) for name in data])
-    StartMenu(donors)
+    # donors = Donors([SingleDonor(name, data[name]) for name in data])
+    StartMenu()
