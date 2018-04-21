@@ -15,33 +15,26 @@ import datetime
 import tkinter as tk
 from tkinter import filedialog
 import json_save.json_save_meta as js
-# import json_save as js
-# from json_save import json_save_meta as js
-# import json_save_meta as js
-
-data = {'Aristarkh Lentulov': [4.5, 5.0],
-        'El Lissitzky': [34.2, 30.0, 35.5],
-        'Kazimir Malevich': [15.0, 20.25, 12.25],
-        'Marc Chagall': [148.75, 155.0],
-        'Wassily Kandinsky': [75.0, 50.5, 60.4],
-        }
 
 
 ####################
 # SINGLE DONOR CLASS
 ####################
-class SingleDonor(object):
+class SingleDonor(js.JsonSaveable):
     """Provide a class for a single donor."""
 
-    def __init__(self, name, donation):
+    _donations = js.List()
+    _name = js.String()
+
+    def __init__(self, _name, _donations):
         """Instantiate a SingleDonor class object."""
-        self._name = name
-        if isinstance(donation, list):
-            self._donations = donation
-        elif isinstance(donation, tuple):
-            self._donations = list(donation)
+        self._name = _name
+        if isinstance(_donations, list):
+            self._donations = _donations
+        elif isinstance(_donations, tuple):
+            self._donations = list(_donations)
         else:
-            self._donations = [donation]
+            self._donations = [_donations]
 
     @property
     def name(self):
@@ -152,12 +145,14 @@ class SingleDonor(object):
 ##############
 # DONORS CLASS
 ##############
-class Donors(object):
+class Donors(js.JsonSaveable):
     """Provide a class to handle a collection of donors."""
 
-    def __init__(self, donors):
+    _donors = js.List()
+
+    def __init__(self, _donors):
         """Instantiate a Donors class object with a list of SingleDonors."""
-        self._donors = donors
+        self._donors = _donors
 
     def __iter__(self):
         """Make the Donors class object iterable."""
@@ -244,19 +239,6 @@ class Donors(object):
         return sum([sum(donor.donations) for donor in self._donors])
 
 
-#################################################
-# USING THE JSON_SAVE MODULE FROM THE ASSIGNMENT
-#################################################
-class DictJSClass(js.JsonSaveable):
-    """A class for turning a dict database into a JSONable format."""
-
-    database = js.Dict()
-
-    def __init__(self, database):
-        """Instantiate a DictJSClass object."""
-        self.database = database
-
-
 ##################
 # START MENU CLASS
 #################
@@ -265,42 +247,29 @@ class StartMenu(object):
 
     def __init__(self):
         """Instantiate with donors and launch main menu."""
-        self.donors = Donors([SingleDonor(key, value)
-                              for key, value in self.load().items()
-                              ]
-                             )
+        self.donors = self.load()
         self.menu_selection(self.main_menu_prompt(), self.main_menu_dispatch())
 
     # lOADING/SAVING DONOR DATABASE
     def load(self, filename="donor_db.json"):
-        """Return a dict donor db reconstructed from a json file."""
+        """Return a Donors class object reconstructed from a json file."""
         try:
             with open(filename) as tempfile:
                 reconstructed = js.from_json(tempfile)
-            return reconstructed.database
+            return reconstructed
         except IOError:
-            return {"Bill Murray": [125, 1.0],
-                    "Woody Harrelson": [71.5, 1.25],
-                    "Jesse Eisenberg": [99.99, 1.75]
-                    }
+            return Donors([SingleDonor(key, value) for key, value in
+                          {"Bill Murray": [125, 1.0],
+                           "Woody Harrelson": [71.5, 1.25],
+                           "Jesse Eisenberg": [99.99, 1.75]
+                           }.items()
+                           ]
+                          )
 
-    def donors_to_dict(self):
-        """Convert Donors class object into a dict for use by save()."""
-        donors_dict = {donor.name: donor.donations
-                       for donor in self.donors
-                       }
-        # for donor in self.donors:
-        #     donors_dict[donor.name] = donor.donations
-        return donors_dict
-
-    def save(self, filename="donor_db.json", dict_db=None):
-        """Save donors dict to a file."""
-        # Can I save the db without first turning it into a dict???
-        if dict_db is None:
-            dict_db = self.donors_to_dict()
-        js_db = DictJSClass(dict_db)
+    def save(self, filename="donor_db.json"):
+        """Save Donors class object to a file."""
         with open(filename, 'w') as tempfile:
-            tempfile.write(js_db.to_json())
+            tempfile.write(self.donors.to_json())
 
     # MANAGING MENUS
     # Template for dispatch dicts

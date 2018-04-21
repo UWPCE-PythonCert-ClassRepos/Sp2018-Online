@@ -765,23 +765,27 @@ def test_load_from_function():
     assert "Jesse Eisenberg" in s.donors
 
 
-def test_save_to_file():
+def test_save_to_file(tmpdir):
     """Check that donor db can be saved and loaded again from file."""
     # This simulates the user entering "0" to quit main_menu
     builtins.input = Mock()
     builtins.input.side_effect = "0"
 
     s = StartMenu()
-    s.save()
 
-    res = s.load()
+    # write results to a temp file`
+    file = tmpdir.join('output.json')
+    s.save(str(file)) #  or file.strpath
+
+    # load results from the temp file
+    res = s.load(str(file))
 
     assert "Bill Murray" in res
     assert "Woody Harrelson" in res
     assert "Jesse Eisenberg" in res
 
 
-def test_save_to_file_with_change():
+def test_save_to_file_with_change(tmpdir, donors):
     """Check that a changed donor db can be saved and loaded from file."""
     # This simulates the user entering "0" to quit main_menu
     builtins.input = Mock()
@@ -789,9 +793,13 @@ def test_save_to_file_with_change():
 
     s = StartMenu()
     s.donors.append(SingleDonor("Phil Connors", [1, 2, 3]))
-    s.save()
 
-    res = s.load()
+    # write results to a temp file`
+    file = tmpdir.join('output.json')
+    s.save(str(file))  # or file.strpath
+
+    # load results from the temp file
+    res = s.load(str(file))
 
     assert "Bill Murray" in res
     assert "Woody Harrelson" in res
