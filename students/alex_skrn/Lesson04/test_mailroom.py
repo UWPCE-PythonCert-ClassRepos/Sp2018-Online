@@ -742,3 +742,15 @@ def test_start_menu_projection(donors, user_input, expected):
         # Test that the method prints the corect result
         s.run_projection()
         assert expected in mock_stdout.getvalue()
+
+
+# TESTS FOR LOAD/SAVE FUNCTIONALITY
+def test_load():
+    """Check that donor db loads when no file is provided."""
+    # This simulates the user entering "0" to quit main_menu
+    builtins.input = Mock()
+    builtins.input.side_effect = "0"
+
+    s = StartMenu()
+
+    assert 'Aristarkh Lentulov' in s.donors
