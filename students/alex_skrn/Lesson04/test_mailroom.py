@@ -752,8 +752,8 @@ def test_start_menu_projection(user_input, expected):
 
 
 # TESTS FOR LOAD/SAVE FUNCTIONALITY
-def test_load():
-    """Check that donor db loads when no file is provided."""
+def test_load_from_function():
+    """Check that donor db loads when no db file is provided."""
     # This simulates the user entering "0" to quit main_menu
     builtins.input = Mock()
     builtins.input.side_effect = "0"
@@ -761,3 +761,39 @@ def test_load():
     s = StartMenu()
 
     assert "Bill Murray" in s.donors
+    assert "Woody Harrelson" in s.donors
+    assert "Jesse Eisenberg" in s.donors
+
+
+def test_save_to_file():
+    """Check that donor db can be saved and loaded again from file."""
+    # This simulates the user entering "0" to quit main_menu
+    builtins.input = Mock()
+    builtins.input.side_effect = "0"
+
+    s = StartMenu()
+    s.save()
+
+    res = s.load()
+
+    assert "Bill Murray" in res
+    assert "Woody Harrelson" in res
+    assert "Jesse Eisenberg" in res
+
+
+def test_save_to_file_with_change():
+    """Check that a changed donor db can be saved and loaded from file."""
+    # This simulates the user entering "0" to quit main_menu
+    builtins.input = Mock()
+    builtins.input.side_effect = "0"
+
+    s = StartMenu()
+    s.donors.append(SingleDonor("Phil Connors", [1, 2, 3]))
+    s.save()
+
+    res = s.load()
+
+    assert "Bill Murray" in res
+    assert "Woody Harrelson" in res
+    assert "Jesse Eisenberg" in res
+    assert "Phil Connors" in res

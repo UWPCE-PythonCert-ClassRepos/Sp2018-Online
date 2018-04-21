@@ -271,7 +271,7 @@ class StartMenu(object):
                              )
         self.menu_selection(self.main_menu_prompt(), self.main_menu_dispatch())
 
-    # lOADING DONOR DATABASE
+    # lOADING/SAVING DONOR DATABASE
     def load(self, filename="donor_db.json"):
         """Return a dict donor db reconstructed from a json file."""
         try:
@@ -283,6 +283,24 @@ class StartMenu(object):
                     "Woody Harrelson": [71.5, 1.25],
                     "Jesse Eisenberg": [99.99, 1.75]
                     }
+
+    def donors_to_dict(self):
+        """Convert Donors class object into a dict for use by save()."""
+        donors_dict = {donor.name: donor.donations
+                       for donor in self.donors
+                       }
+        # for donor in self.donors:
+        #     donors_dict[donor.name] = donor.donations
+        return donors_dict
+
+    def save(self, filename="donor_db.json", dict_db=None):
+        """Save donors dict to a file."""
+        # Can I save the db without first turning it into a dict???
+        if dict_db is None:
+            dict_db = self.donors_to_dict()
+        js_db = DictJSClass(dict_db)
+        with open(filename, 'w') as tempfile:
+            tempfile.write(js_db.to_json())
 
     # MANAGING MENUS
     # Template for dispatch dicts
