@@ -23,8 +23,8 @@ class IterateMe_2:
 
     def __next__(self):
         self.current += self.step
-        if self.current < self.stop:
-            return self.current
+        if self.current <= self.stop:
+            return self.current - self.step
         else:
             raise StopIteration
 
