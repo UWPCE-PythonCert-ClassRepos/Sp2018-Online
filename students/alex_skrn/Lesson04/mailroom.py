@@ -296,6 +296,7 @@ class StartMenu(object):
                 "3": self.send_all_sub_menu,
                 "4": self.challenge,
                 "5": self.run_projection,
+                "6": self.save,
                 "0": self.quit,
                 }
 
@@ -307,6 +308,7 @@ class StartMenu(object):
                 "3 - Send letters to everyone\n"
                 "4 - Match donations\n"
                 "5 - Run a projection\n"
+                "6 - Save changes to a file\n"
                 "0 - Quit\n"
                 ">> "
                 )
@@ -332,7 +334,7 @@ class StartMenu(object):
                 "\n1 - See the list of donors\n"
                 "2 - Add a new donor and a donation amount\n"
                 "3 - Choose an existing donor\n"
-                "0 - Quit\n"
+                "0 - Return to Main Menu\n"
                 ">> "
                 )
 
@@ -443,7 +445,7 @@ class StartMenu(object):
         return ("\nSend to everyone sub-menu\n"
                 "\n1 - Write to current working directory\n"
                 "2 - Choose a directory to write\n"
-                "0 - Quit\n"
+                "0 - Return to Main Menu\n"
                 ">> "
                 )
 
@@ -548,8 +550,6 @@ class StartMenu(object):
         else:
             self.donors = result
 
-        # return True
-
     def run_projection(self):
         """Get user input and return a projected amount of donations."""
         estimate = self.challenge(projection=True)
@@ -557,7 +557,5 @@ class StartMenu(object):
             print("\nYour contribution would total ${:.2f}".format(estimate))
 
 
-# Load data and run
 if __name__ == "__main__":
-    # donors = Donors([SingleDonor(name, data[name]) for name in data])
     StartMenu()

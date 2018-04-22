@@ -23,8 +23,7 @@ def donors():
     d1 = SingleDonor("Bill Murray", [125, 1.0])
     d2 = SingleDonor("Woody Harrelson", [71.5, 1.25])
     d3 = SingleDonor("Jesse Eisenberg", [99.99, 1.75])
-    res = Donors([d1, d2, d3])
-    return res
+    return Donors([d1, d2, d3])
 
 
 ##################################
@@ -60,7 +59,7 @@ def test_repr_single_donor():
     assert eval(repr(d)) == SingleDonor("Bill Murray", 125)
 
 
-def test_eq_single_donor(donors):
+def test_eq_single_donor():
     """Test equality."""
     d1 = SingleDonor("Bill Murray", [125, 1.0])
     d2 = SingleDonor("Bill Murray", [125, 1.0])
@@ -315,11 +314,6 @@ def test_main_menu_dispatch():
     with patch.object(StartMenu, "__init__", lambda x, y: None):
         s = StartMenu(None)
 
-        # Need to fake a self.donors object within the StartMenu class
-        # which object is used in the main_menu_dispatch() method
-        s.donors = Mock()
-        s.donors.return_value = donors
-
         assert isinstance(s.main_menu_dispatch(), dict)
 
 
@@ -339,11 +333,6 @@ def test_send_thank_you_dispatch():
     with patch.object(StartMenu, "__init__", lambda x, y: None):
         s = StartMenu(None)
 
-        # Need to fake a self._donors object within the StartMenu class
-        # which object is used in the send_thanks_dispatch() method
-        s.donors = Mock()
-        s.donors.return_value = donors
-
         assert isinstance(s.send_thank_you_dispatch(), dict)
 
 
@@ -354,7 +343,7 @@ def test_send_thank_you_prompt():
         s = StartMenu(None)
 
         assert "Send-Thank-You Sub-Menu" in s.send_thank_you_prompt()
-        assert "0 - Quit\n" in s.send_thank_you_prompt()
+        assert "0 - Return to Main Menu\n" in s.send_thank_you_prompt()
 
 
 def test_get_email():
@@ -381,7 +370,7 @@ def test_input_donation_zero(monkeypatch):
         assert s.input_donation("any_name") is False
 
 
-def test_old_donor_interaction_user_input_zero(monkeypatch):
+def test_old_donor_interaction_user_input_zero(monkeypatch, donors):
     """_old_donor_interaction() user enters zero on prompt."""
     # This mocks the complicated __init__ method in the StartMenu class
     with patch.object(StartMenu, "__init__", lambda x, y: None):
@@ -389,7 +378,6 @@ def test_old_donor_interaction_user_input_zero(monkeypatch):
 
         # Need to fake a self.donors object within the StartMenu class
         s.donors = MagicMock()
-        s.donors.return_value = donors
 
         # This simulates the user entering "0" on prompt to quit
         monkeypatch.setattr('builtins.input', lambda _: "0")
@@ -401,10 +389,6 @@ def test_new_donor_interaction_user_input_zero(monkeypatch):
         # This mocks the __init__ method in the StartMenu class
     with patch.object(StartMenu, "__init__", lambda x, y: None):
         s = StartMenu(None)
-
-        # Need to fake a self.donors object within the StartMenu class
-        s.donors = MagicMock()
-        s.donors.return_value = donors
 
         # This simulates the user entering "0" on prompt to quit
         monkeypatch.setattr('builtins.input', lambda _: "0")
@@ -500,10 +484,6 @@ def test_send_all_dispatch():
     with patch.object(StartMenu, "__init__", lambda x, y: None):
         s = StartMenu(None)
 
-        # Need to fake a self.donors object within the StartMenu class
-        s.donors = Mock()
-        s.donors.return_value = donors
-
         assert isinstance(s.send_all_dispatch(), dict)
 
 
@@ -514,7 +494,7 @@ def test_send_all_prompt():
         s = StartMenu(None)
 
         assert "Send to everyone sub-menu" in s.send_all_prompt()
-        assert "0 - Quit\n" in s.send_all_prompt()
+        assert "0 - Return to Main Menu\n" in s.send_all_prompt()
 
 
 @pytest.fixture
@@ -549,7 +529,7 @@ def test_write_file(tmpdir):
         assert file.read() == "some text"
 
 
-def test_write_cwd(monkeypatch, tmpdir):
+def test_write_cwd(monkeypatch, tmpdir, donors):
     """write_cwd() User writes all emails to cwd."""
     # Check that the function indeed created 3 files ('cos there are 3 donors)
     # Check that the files created are not empty at least
@@ -565,8 +545,9 @@ def test_write_cwd(monkeypatch, tmpdir):
         # Instantitate a class object (though in reality this class never gets
         # assigned to a name)
         s = StartMenu()
-        # This checks the self.donors property
-        assert "Bill Murray" in s.donors
+
+        # Need to fake a self.donors attr within the StartMenu class
+        s.donors = donors
 
         # This fakes cwd by substituting it for a temp dir
         monkeypatch.chdir(tmpdir)
@@ -584,7 +565,7 @@ def test_write_cwd(monkeypatch, tmpdir):
         assert "All letters saved in" in mock_stdout.getvalue()
 
 
-def test_write_select_dir(monkeypatch, tmpdir):
+def test_write_select_dir(monkeypatch, tmpdir, donors):
     """write_select_dir() User selects a directory."""
     # Check that the function indeed created 3 files ('cos there are 3 donors)
     # Check that the files created are not empty at least
@@ -600,6 +581,7 @@ def test_write_select_dir(monkeypatch, tmpdir):
         # Instantitate a class object (though in reality this class never gets
         # assigned to a name)
         s = StartMenu()
+        s.donors = donors
 
         # This fakes the user's choice of the directory
         s.ask_user_dir = Mock()
