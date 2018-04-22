@@ -1,13 +1,13 @@
 #Sum generator
 
-def sum_next():
+def intsum():
     list=[0]
     while True:
         if len(list) == 1:
             yield 0
         else:
             yield sum(list)
-
+        list.append(list[-1] + 1)
 
 def doubler():
     i = 1
@@ -18,13 +18,32 @@ def doubler():
             yield i
         i *= 2
 
-result_dbl = (x * 2 for x in range (10))
+#result_dbl = (x * 2 for x in range (10))
 
 def firstn(n):
     num = 0
     while num < 0:
         yield num
         num += 1
+
+def fib():
+    list = [1]
+    while True:
+        yield list[-1]
+        if len[list] == 1:
+            list.append(1)
+        else:
+            list.append(sum(list[-2:]))
+
+def prime():
+    prime_numbers = []
+    x = 2
+    while True:
+        if is_prime(x):
+            prime_numbers.append(x)
+            yield prime_numbers[-1]
+        x += 1
+
 
 # storelast.py
 #
@@ -41,16 +60,16 @@ class storelast(object):
         return self
 
 # Example
-if __name__ == '__main__':
-    from follow import *
-    from apachelog import *
+#if __name__ == '__main__':
+    #from follow import *
+    #from apachelog import *
 
-    lines = storelast(follow(open("run/foo/access-log")))
-    log   = apache_log(lines)
+    #lines = storelast(follow(open("run/foo/access-log")))
+    #log   = apache_log(lines)
 
-    for r in log:
-        print r
-        print lines.last
+    #for r in log:
+     #   print(r)
+     # print(lines.last)
 
 def integers():
     """Infinite sequence of integers."""
