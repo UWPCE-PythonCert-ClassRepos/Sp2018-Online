@@ -7,7 +7,7 @@ from unittest import mock
 from unittest.mock import Mock
 from unittest.mock import patch
 from unittest.mock import MagicMock
-from  mailroom import *
+from mailroom import *
 
 # Note 1: I type "python -m pytest test_mailroom.py" to run my tests
 # because the command "pytest test_mailroom.py" raises the error:
@@ -524,9 +524,9 @@ def test_write_file(tmpdir):
     with patch.object(StartMenu, "__init__", lambda x, y: None):
         s = StartMenu(None)
 
-        file = tmpdir.join('output.txt')
-        s.write_file(file.strpath, "some text")  # or str(file)
-        assert file.read() == "some text"
+        filename = tmpdir.join('output.txt')
+        s.write_file(filename.strpath, "some text")  # or str(filename)
+        assert filename.read() == "some text"
 
 
 def test_write_cwd(monkeypatch, tmpdir, donors):
@@ -557,9 +557,9 @@ def test_write_cwd(monkeypatch, tmpdir, donors):
         assert len(tmpdir.listdir()) == 3
 
         # Check that all files in temp dir contain the word "Dear"
-        for file in tmpdir.listdir():
-            # assert "something " in file.read()  # Must fail
-            assert "Dear " in file.read()
+        for filename in tmpdir.listdir():
+            # assert "something " in filename.read()  # Must fail
+            assert "Dear " in filename.read()
 
         # Check that the method executed its print statement
         assert "All letters saved in" in mock_stdout.getvalue()
@@ -592,9 +592,9 @@ def test_write_select_dir(monkeypatch, tmpdir, donors):
         assert len(tmpdir.listdir()) == 3
 
         # Check that all files in temp dir contain the word "Dear"
-        for file in tmpdir.listdir():
-            # assert "something " in file.read()  # Must fail
-            assert "Dear " in file.read()
+        for filename in tmpdir.listdir():
+            # assert "something " in filename.read()  # Must fail
+            assert "Dear " in filename.read()
 
         # Check that the method executed its print statement
         assert "All letters saved in" in mock_stdout.getvalue()
@@ -710,7 +710,7 @@ def test_start_menu_match_donations2(name, expected):
                           (["0", "2", "", "100"], "175.49"),
                           ]
                          )
-def test_start_menu_projection(user_input, expected):
+def test_start_menu_projection(user_input, expected, donors):
     """Check that projection returns the right amounts."""
     # This simulates the user entering "0" to quit main_menu running at start,
     # but I guess a class instance that I create remains in place
@@ -728,40 +728,23 @@ def test_start_menu_projection(user_input, expected):
         # assigned to a name)
         s = StartMenu()
 
+        s.donors = donors
+
         # Test that the method prints the corect result
         s.run_projection()
         assert expected in mock_stdout.getvalue()
 
 
 # TESTS FOR LOAD/SAVE FUNCTIONALITY
-def test_load_from_function():
+def test_load_from_function(donors):
     """Check that donor db loads when no db file is provided."""
     # This simulates the user entering "0" to quit main_menu
     builtins.input = Mock()
     builtins.input.side_effect = "0"
 
-    s = StartMenu()
+    res = StartMenu().load()
 
-    assert "Bill Murray" in s.donors
-    assert "Woody Harrelson" in s.donors
-    assert "Jesse Eisenberg" in s.donors
-
-
-def test_save_to_file(tmpdir):
-    """Check that donor db can be saved and loaded again from file."""
-    # This simulates the user entering "0" to quit main_menu
-    builtins.input = Mock()
-    builtins.input.side_effect = "0"
-
-    s = StartMenu()
-
-    # write results to a temp file`
-    file = tmpdir.join('output.json')
-    s.save(str(file)) #  or file.strpath
-
-    # load results from the temp file
-    res = s.load(str(file))
-
+    # This is the initial donors list hard-coded in the load method
     assert "Bill Murray" in res
     assert "Woody Harrelson" in res
     assert "Jesse Eisenberg" in res
@@ -774,14 +757,15 @@ def test_save_to_file_with_change(tmpdir, donors):
     builtins.input.side_effect = "0"
 
     s = StartMenu()
+    s.donors = donors
     s.donors.append(SingleDonor("Phil Connors", [1, 2, 3]))
 
-    # write results to a temp file`
-    file = tmpdir.join('output.json')
-    s.save(str(file))  # or file.strpath
+    # write results to a temp file
+    filename = tmpdir.join('output.json')
+    s.save(str(filename))  # or filename.strpath
 
     # load results from the temp file
-    res = s.load(str(file))
+    res = s.load(str(filename))
 
     assert "Bill Murray" in res
     assert "Woody Harrelson" in res

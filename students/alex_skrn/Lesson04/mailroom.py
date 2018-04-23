@@ -87,18 +87,71 @@ class SingleDonor(js.JsonSaveable):
         """Return the last donation."""
         return self._donations[-1]
 
-    def challenge(self,
-                  factor,
-                  min_donation,
-                  max_donation,
-                  projection):
-        """Return a SingleDonor class object or the projected contribution.
+    # def challenge(self,
+    #               factor,
+    #               min_donation,
+    #               max_donation,
+    #               projection):
+    #     """Return a SingleDonor class object or the projected contribution.
+    #
+    #     Either multiply all donations by the factor, or
+    #     multiply only those donations which are above min_donation or
+    #     below max_donation, if any of these parameters is provided,
+    #     while the remaining donations remain unchanged.
+    #     If the projection is True, return the projected contribution.
+    #     """
+    #     # Several safeguards
+    #     if type(factor) is str or factor <= 1:
+    #         raise ValueError("Factor must be a number > 1")
+    #     elif type(min_donation) is str or type(max_donation) is str:
+    #         raise ValueError("Input must be a number")
+    #     elif min_donation is not None and max_donation is not None:
+    #         raise ValueError("Min and max must not be both defined")
+    #
+    #     # Helper function.
+    #     def subject_to_increase(x):
+    #         """Return True if x above min /below max or if min/max undefined."""
+    #         if min_donation is not None:
+    #             return x > min_donation
+    #         elif max_donation is not None:
+    #             return x < max_donation
+    #         else:
+    #             return True
+    #
+    #     # The only reason for the following ugly construct is because
+    #     # I couldn't imagine how to structure my solution to use map/filter
+    #     some_donations = list(filter(subject_to_increase, self.donations))
+    #     updated_donations = list(map(lambda x: x * factor
+    #                                  if x in some_donations
+    #                                  else x,
+    #                                  self.donations
+    #                                  )
+    #                              )
+    #
+    #     # The following does the same as above but looks much clearer
+    #     # updated_donations = [x * factor
+    #     #                      if subject_to_increase(x)
+    #     #                      else x
+    #     #                      for x in self.donations
+    #     #                      ]
+    #
+    #     # projected contribution = increased donationed minus old donations
+    #     if projection:
+    #         return sum(updated_donations) - sum(self.donations)
+    #     else:
+    #         return SingleDonor(self.name, updated_donations)
 
-        Either multiply all donations by the factor, or
-        multiply only those donations which are above min_donation or
-        below max_donation, if any of these parameters is provided,
-        while the remaining donations remain unchanged.
-        If the projection is True, return the projected contribution.
+    def multiplier_factory(self, factor, min_donation, max_donation):
+        """Create the multiplier function for use in challenge method.
+
+           Args:
+                factor (float): the multiplier to be locked in
+                                the return function
+                min_donation (float or None): a condition to be locked in
+                max_donation (None or float): a condition to be locked in
+            Returns:
+                  a function which will multiply its argument by factor
+                  subject to conditions.
         """
         # Several safeguards
         if type(factor) is str or factor <= 1:
@@ -108,34 +161,35 @@ class SingleDonor(js.JsonSaveable):
         elif min_donation is not None and max_donation is not None:
             raise ValueError("Min and max must not be both defined")
 
-        # Helper function.
-        def subject_to_increase(x):
-            """Return True if x above min /below max or if min/max undefined."""
-            if min_donation is not None:
-                return x > min_donation
-            elif max_donation is not None:
-                return x < max_donation
+        def func(x):
+            def subject_to_increase(x):
+                """Decide if the donation (i.e. x) must be increased."""
+                if min_donation is not None:
+                    return x > min_donation
+                elif max_donation is not None:
+                    return x < max_donation
+                else:
+                    return True
+
+            if subject_to_increase(x):
+                return factor * x
             else:
-                return True
+                return x
 
-        # The only reason for the following ugly construct is because
-        # I couldn't imagine how to structure my solution to use map/filter
-        some_donations = list(filter(subject_to_increase, self.donations))
-        updated_donations = list(map(lambda x: x * factor
-                                     if x in some_donations
-                                     else x,
-                                     self.donations
-                                     )
-                                 )
+        return func
 
-        # The following does the same as above but looks much clearer
-        # updated_donations = [x * factor
-        #                      if subject_to_increase(x)
-        #                      else x
-        #                      for x in self.donations
-        #                      ]
+    def challenge(self,
+                  factor,
+                  min_donation,
+                  max_donation,
+                  projection):
+        """Return an updated SingleDonor object or a projected contribution."""
+        multiplier = self.multiplier_factory(factor,
+                                             min_donation,
+                                             max_donation)
+        updated_donations = list(map(multiplier, self.donations))
 
-        # projected contribution = increased donationed minus old donations
+        # projected contribution = increased donations minus old donations
         if projection:
             return sum(updated_donations) - sum(self.donations)
         else:
@@ -510,7 +564,7 @@ class StartMenu(object):
                         return value
 
     def challenge(self, projection=False):
-        """Update self.donors or return total project contibution.
+        """Update self.donors or return total projected contibution.
 
         Increase some or all of donations by a factor, subj. to min or max.
         If run in projection mode, return total expected contribution.
