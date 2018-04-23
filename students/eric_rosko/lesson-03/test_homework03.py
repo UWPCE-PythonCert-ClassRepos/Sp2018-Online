@@ -64,3 +64,11 @@ Closing the doors.
 Restarting the pumps.
 '''
     assert locke.logger == expected
+
+
+def test_factorial():
+    assert doFactorial(0) == 1
+    assert doFactorial(1) == 1
+    assert doFactorial(2) == 2
+    assert doFactorial(5) == 120
+    assert doFactorial(6) == 720

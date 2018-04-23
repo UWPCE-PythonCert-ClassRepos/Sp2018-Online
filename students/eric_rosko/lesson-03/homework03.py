@@ -38,5 +38,12 @@ class Locke:
         return self
 
 
+def doFactorial(limit):
+    if limit == 0:
+        return 1
+
+    return limit * doFactorial(limit - 1)
+
+
 if __name__ == "__main__":
     pass
