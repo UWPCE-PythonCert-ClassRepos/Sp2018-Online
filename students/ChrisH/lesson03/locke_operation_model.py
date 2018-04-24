@@ -38,6 +38,7 @@ class Locke(object):
             raise ValueError('Must send at least one boat through.')
         print("Moving {} boats through.".format(boats))
 
+
 if __name__ == "__main__":
 
     L = Locke(15)
@@ -47,11 +48,6 @@ if __name__ == "__main__":
         print(type(L))
         print(type(locke_15))
         print(bool(locke_15 == L))
-        try:
-            locke_15.move_boats_through(28)
-        except ValueError as err:
-            print(err)
-            print(type(err))
 
     with Locke(10) as locke_10:
         print(locke_10.capacity)
