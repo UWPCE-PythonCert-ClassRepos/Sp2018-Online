@@ -9,11 +9,7 @@ from unittest.mock import patch
 from unittest.mock import MagicMock
 from mailroom import *
 
-# Note 1: I type "python -m pytest test_mailroom.py" to run my tests
-# because the command "pytest test_mailroom.py" raises the error:
-# "No module named 'json_save.json_save_meta'"
-
-# Note 2: I've made no modifications to the json_save module,
+# Note 1: I've made no modifications to the json_save module,
 # and I can use it without problems,
 # although the assignment says that some changes would be needed.
 

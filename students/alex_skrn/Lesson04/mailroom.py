@@ -2,11 +2,7 @@
 
 """Mailroom - Lesson 10 - oo mailroom with load/save functionality."""
 
-# Note: I type "python -m pytest test_mailroom.py" to run my tests
-# because the command "pytest test_mailroom.py" raises the error:
-# "No module named 'json_save.json_save_meta'"
-
-# Note 2: I've made no modifications to the json_save module,
+# Note: I've made no modifications to the json_save module,
 # and I can use it without problems,
 # although the assignment says that some changes would be needed.
 
