@@ -23,19 +23,57 @@ class LockeTest(unittest.TestCase):
                 L = Locke(v)
 
 
-    # Test return value from close()
+    # Test return error value from close()
 
     # Test that context manager is returned
+    def test_locke_enter(self):
+        f = StringIO()
+        l = Locke(1)
+        with redirect_stdout(f):
+            cx_mgr = l.__enter__()
+
+        self.assertIsInstance(cx_mgr, Locke)
+        self.assertIn("Stopping the pumps.", f.getvalue())
+        self.assertIn("Opening the doors.", f.getvalue())
+
+    def test_locke_exit(self):
+        f = StringIO()
+        l = Locke(1)
+        with redirect_stdout(f):
+            cx_mgr = l.__exit__(None, None, None)
+
+        self.assertIsInstance(cx_mgr, Locke)
+        self.assertIn("Closing the doors.", f.getvalue())
+        self.assertIn("Restarting the pumps.", f.getvalue())
+
+    def test_locke_context_manager_basic(self):
+        f = StringIO()
+        with redirect_stdout(f):
+            with Locke(1):
+                pass
+        self.assertIn("Stopping the pumps.", f.getvalue())
+        self.assertIn("Opening the doors.", f.getvalue())
+        self.assertIn("Closing the doors.", f.getvalue())
+        self.assertIn("Restarting the pumps.", f.getvalue())
+
+    def test_locke_move_boats_through(self):
+        f = StringIO()
+        l = Locke(5)
+        with redirect_stdout(f):
+            with l:
+                l.move_boats_through(5)
+        self.assertIn("Moving 5 boats through.", f.getvalue())
+
+        with redirect_stdout(f):
+            with l:
+                try:
+                    l.move_boats_through(65)
+                except ValueError:
+                    self.assertIn("Too many boats for locke size.", f.getvalue())
 
 
 
 '''
-Expected output lines
-"Stopping the pumps."
-"Opening the doors."
-"Closing the doors."
-"Restarting the pumps."
-
 
 small_locke = Locke(5)
 large_locke = Locke(10)

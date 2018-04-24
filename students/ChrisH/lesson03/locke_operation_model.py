@@ -22,20 +22,42 @@ class Locke(object):
         self.capacity = capacity
 
     def __enter__(self):
-        print("enter")
-        pass
+        print("Stopping the pumps.")
+        print("Opening the doors.")
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        print("exit")
-        pass
+        print("Closing the doors.")
+        print("Restarting the pumps.")
+        return self
 
+    def move_boats_through(self, boats):
+        if boats > self.capacity:
+            raise ValueError('Too many boats for locke size.')
+        elif boats < 1:
+            raise ValueError('Must send at least one boat through.')
+        print("Moving {} boats through.".format(boats))
 
 if __name__ == "__main__":
 
     L = Locke(15)
 
-    with L:
+    with L as locke_15:
         print('test')
+        print(type(L))
+        print(type(locke_15))
+        print(bool(locke_15 == L))
+        try:
+            locke_15.move_boats_through(28)
+        except ValueError as err:
+            print(err)
+            print(type(err))
+
+    with Locke(10) as locke_10:
+        print(locke_10.capacity)
+
+
+
 
 
 
