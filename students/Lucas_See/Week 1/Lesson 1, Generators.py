@@ -28,19 +28,22 @@ def doubler():
         first = first*2
         
 b = doubler()
-next(b)
+#next(b)
 
 #Fibonnaci sequence function
 def fibonnaci():
     first = 1
+    yield first
     second = 1
+    yield second
     while True:
         third = first + second
         first = second
         second = third
-        yield second
+        yield third
 
 c= fibonnaci()
+#next(c)
 
 def prime():
     n  = 0
