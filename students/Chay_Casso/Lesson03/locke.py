@@ -9,7 +9,7 @@ class Locke():
         self.capacity = capacity
 
     def __enter__(self):
-        return self.capacity
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         print("Stopping the pumps.")
