@@ -3,6 +3,10 @@
 # Context Managers: Locke
 # Chay Casso, 4/22/18
 
+# Sorry, I can't get this to work. But I'm not sure what exactly is wrong with this.
+# I get a __enter__ attribute error.
+# But this is what I feel like this should look like.
+
 class Locke():
 
     def __init__(self, capacity):
