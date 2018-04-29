@@ -10,13 +10,13 @@ class Locke():
     def __exit__(self, exc_type, exc_val, exc_tb):
         print('locke waiting on other boats')
         return self
-    
+
     def move_boats_through(self, boats):
         if(boats <= self.capacity):
             self.print_action()
             time.sleep(2)
             self.print_action()
-        else: raise Exception
+        else: raise ValueError('boats exceding locke capacity')
 
     def print_action(self):
         msg = """
@@ -36,15 +36,15 @@ def run_locke():
     with small_locke as locke:
         try:
             locke.move_boats_through(boats)
-        except:
-            print ('over capacity')
+        except Exception as e:
+            print (e)
 
     # A lock with sufficient capacity can move boats without incident.
     with large_locke as locke:
         try:
             locke.move_boats_through(boats)
-        except:
-            print ('over capacity')
+        except Exception as e:
+            print(e)
 
 
 if __name__ == "__main__":
