@@ -6,11 +6,12 @@ import logging
 
 
 format = "%(asctime)s %(filename)s:%(lineno)-4d %(levelname)s %(message)s"
-# logging.basicConfig(level=logging.WARNING,
-#                     format=format,
-#                     filename='mylog.log')
 # Create a "formatter" using our format string
 formatter = logging.Formatter(format)
+
+# Setting up a formatter for the syslog logger - no time stamp
+format2 = "%(filename)s:%(lineno)-4d %(levelname)s %(message)s"
+syslog_formatter = logging.Formatter(format2)
 
 # Create a log message handler that sends output to the file 'mylog.log'
 file_handler = logging.FileHandler('mylog.log')
@@ -23,6 +24,11 @@ file_handler.setFormatter(formatter)
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(formatter)
+
+# Setting up a syslog server logger for Windows
+syslog_handler = logging.DatagramHandler("127.0.0.1", 514)
+syslog_handler.setLevel(logging.ERROR)
+syslog_handler.setFormatter(syslog_formatter)
 
 # Get the "root" logger.
 logger = logging.getLogger()
