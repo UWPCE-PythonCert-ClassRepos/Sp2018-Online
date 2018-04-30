@@ -3,6 +3,7 @@
 """Logging and debugging lesson."""
 
 import logging
+import datetime
 
 
 format = "%(asctime)s %(filename)s:%(lineno)-4d %(levelname)s %(message)s"
@@ -13,8 +14,9 @@ formatter = logging.Formatter(format)
 format2 = "%(filename)s:%(lineno)-4d %(levelname)s %(message)s"
 syslog_formatter = logging.Formatter(format2)
 
-# Create a log message handler that sends output to the file 'mylog.log'
-file_handler = logging.FileHandler('mylog.log')
+# Create a log message handler that sends output to the file 'todays_date.log'
+todays_date = str(datetime.date.today())
+file_handler = logging.FileHandler("{}.log".format(todays_date))
 file_handler.setLevel(logging.WARNING)
 # Set the formatter for this log message handler to the formatter we created above.
 file_handler.setFormatter(formatter)
@@ -26,14 +28,14 @@ console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(formatter)
 
 # Setting up a syslog server logger for Windows
-syslog_handler = logging.DatagramHandler("127.0.0.1", 514)
-syslog_handler.setLevel(logging.ERROR)
-syslog_handler.setFormatter(syslog_formatter)
+syslog_handler_w = logging.DatagramHandler("127.0.0.1", 514)
+syslog_handler_w.setLevel(logging.ERROR)
+syslog_handler_w.setFormatter(syslog_formatter)
 
-# Setting up a syslog server logger for Mac
-syslog_handler = logging.SysLogHandler()
-syslog_handler.setLevel(logging.ERROR)
-syslog_handler.setFormatter(syslog_formatter)
+# # Setting up a syslog server logger for Mac
+# syslog_handler_m = logging.SysLogHandler()
+# syslog_handler_m.setLevel(logging.ERROR)
+# syslog_handler_m.setFormatter(syslog_formatter)
 
 # Get the "root" logger.
 logger = logging.getLogger()
@@ -41,6 +43,8 @@ logger.setLevel(logging.DEBUG)
 # Add our file_handler to the "root" logger's handlers.
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
+logger.addHandler(syslog_handler_w)
+# logger.addHandler(syslog_handler_m)
 
 
 def my_fun(n):
