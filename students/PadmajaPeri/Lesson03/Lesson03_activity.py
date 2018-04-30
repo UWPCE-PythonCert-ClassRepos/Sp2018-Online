@@ -17,6 +17,10 @@ class Locke(object):
 
     def __exit__(self, exception_type, exception_value, traceback):
         """ Frees up the resources. """
+        print("Stopping the pumps.")
+        print("Opening the doors.")
+        print("Closing the doors.")
+        print("Restarting the pumps.")
         print("Releasing Locke and freeing up the capacity")
         return
 
