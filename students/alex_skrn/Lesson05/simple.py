@@ -30,6 +30,11 @@ syslog_handler = logging.DatagramHandler("127.0.0.1", 514)
 syslog_handler.setLevel(logging.ERROR)
 syslog_handler.setFormatter(syslog_formatter)
 
+# Setting up a syslog server logger for Mac
+syslog_handler = logging.SysLogHandler()
+syslog_handler.setLevel(logging.ERROR)
+syslog_handler.setFormatter(syslog_formatter)
+
 # Get the "root" logger.
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
