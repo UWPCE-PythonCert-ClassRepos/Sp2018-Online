@@ -28,15 +28,17 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(formatter)
 
+# UNCOMMENT IF ON WINDOWS
 # Setting up a syslog server logger for Windows
-syslog_handler_w = logging.handlers.DatagramHandler("127.0.0.1", 514)
-syslog_handler_w.setLevel(logging.ERROR)
-syslog_handler_w.setFormatter(syslog_formatter)
+# syslog_handler_w = handlers.DatagramHandler("127.0.0.1", 514)
+# syslog_handler_w.setLevel(logging.ERROR)
+# syslog_handler_w.setFormatter(syslog_formatter)
 
+# COMMENT OUT THE FOLLOING 3 LINES IF ON WINDOWS
 # # Setting up a syslog server logger for Mac
-# syslog_handler_m = logging.SysLogHandler()
-# syslog_handler_m.setLevel(logging.ERROR)
-# syslog_handler_m.setFormatter(syslog_formatter)
+syslog_handler_m = handlers.SysLogHandler()
+syslog_handler_m.setLevel(logging.ERROR)
+syslog_handler_m.setFormatter(syslog_formatter)
 
 # Get the "root" logger.
 logger = logging.getLogger()
@@ -44,8 +46,10 @@ logger.setLevel(logging.DEBUG)
 # Add our file_handler to the "root" logger's handlers.
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
-logger.addHandler(syslog_handler_w)
-# logger.addHandler(syslog_handler_m)
+# UNCOMMENT THE FOLLOWING LINE IF ON WINDOWS
+# logger.addHandler(syslog_handler_w)
+# COMMENT OUT THE FOLLOING LINE IF ON WINDOWS
+logger.addHandler(syslog_handler_m)
 
 
 def my_fun(n):
