@@ -4,6 +4,7 @@
 
 import logging
 import datetime
+from logging import handlers
 
 
 format = "%(asctime)s %(filename)s:%(lineno)-4d %(levelname)s %(message)s"
@@ -28,7 +29,7 @@ console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(formatter)
 
 # Setting up a syslog server logger for Windows
-syslog_handler_w = logging.DatagramHandler("127.0.0.1", 514)
+syslog_handler_w = logging.handlers.DatagramHandler("127.0.0.1", 514)
 syslog_handler_w.setLevel(logging.ERROR)
 syslog_handler_w.setFormatter(syslog_formatter)
 
