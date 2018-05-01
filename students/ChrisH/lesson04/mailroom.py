@@ -7,11 +7,15 @@
 import time
 from sys import exit
 import pickle
+import json_save.json_save_dec as js
 
 
+@js.json_save
 class Donors(object):
 
     DATA_FILE = 'donors.pkl'
+
+    donorlist = js.List()
 
     def __init__(self, donorlist=None):
         if donorlist:
@@ -135,8 +139,11 @@ class Donors(object):
             ) for donor in self.donorlist]
         )
 
-
+@js.json_save
 class Donor(object):
+
+    name = js.String()
+    donations = js.List()
 
     def __init__(self, name, donations=None):
         if not name:
@@ -308,6 +315,15 @@ def menu(menu_data):
 
     return None
 
+def print_json(dlist):
+    print(dlist.to_json())
+
+def load_json(dlist):
+    pass
+
+def save_json(dlist):
+    pass
+
 
 if __name__ == "__main__":
 
@@ -320,6 +336,9 @@ if __name__ == "__main__":
         ('Make donation projections', make_projections, dl),
         ('Load donor list', dl.load_donorlist, None),
         ('Save donor list', dl.save_donorlist, None),
+        ('Print JSON', print_json, dl),
+        ('Save donor list JSON', load_json, dl),
+        ('Load donor list JSON', save_json, dl),
         ('Quit', exit, None),
     ]
     while True:
