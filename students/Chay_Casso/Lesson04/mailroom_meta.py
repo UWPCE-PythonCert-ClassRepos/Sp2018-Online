@@ -5,16 +5,18 @@
 
 from collections import OrderedDict
 
+import json_save.json_save_dec as js
 
+
+@js.json_save
 class Mailroom(object):
 
-    def __init__(self):
-        # Initial donor table with the donation values.
-        self.donor_table_dict = {"William Gates, III": [401321.52, 201342.71],
-                                 "Mark Zuckerberg": [123.45, 5123.21, 8213.11],
-                                 "Jeff Bezos": [877.33], "Paul Allen": [152.42, 30.54, 825.21],
-                                 "Steve Ballmer": [5198.96, 654.98]}
-        answer = ""
+    # Initial donor table with the donation values.
+    donor_table_dict = js.Dict()
+
+
+    def __init__(self, donor_table_dict):
+        self.donor_table_dict = donor_table_dict
 
     def thank_you(self, thank_you_dict, full_name, donation_value_str):
         output_string = ""
@@ -75,33 +77,49 @@ save@kids.org
                 writefile.write(letter)
         print("Letters have been created.\n")
 
-    def main_menu(self):
-        while True:
-            try:
-                print("Main Menu\n1. Send a Thank You\n2. Create a Report\n3. Send Letters to All\n4. Quit")
-                answer_dict = {"1": Mailroom.thank_you,
-                               "2": Mailroom.create_report,
-                               "3": Mailroom.send_letters,
-                               "4": "quit"}
-                answer = input("Please select an option. >")
-                if answer == "1":
-                    name = input("Please enter a full name. >")
-                    donation = input("Please enter a donation amount. >")
-                    self.donor_table_dict, print_string = answer_dict[answer](self, self.donor_table_dict, name,
-                                                                              donation)
-                    print(print_string)
-                elif answer == "2":
-                    self.donor_table_dict, print_string = answer_dict[answer](self, self.donor_table_dict)
-                    print(print_string)
-                elif answer == "4" or answer == "quit":
-                    print("Have a nice day.")
-                    break
-                else:
-                    answer_dict[answer](self, self.donor_table_dict)
-            except KeyError:
-                print()
+    def load_data(self):
+        pass
+
+    def save_data(self):
+        pass
 
 
 if __name__ == "__main__":
-    m = Mailroom()
-    m.main_menu()
+    initial_dict = {"William Gates, III": [401321.52, 201342.71],
+                        "Mark Zuckerberg": [123.45, 5123.21, 8213.11],
+                        "Jeff Bezos": [877.33], "Paul Allen": [152.42, 30.54, 825.21],
+                        "Steve Ballmer": [5198.96, 654.98]}
+    m = Mailroom(initial_dict)
+    while True:
+        try:
+            print("Main Menu\n1. Load Data\n2. Save Data\n3. Send a Thank You\n4. Create a Report\n"
+                  "5. Send Letters to All\n6. Quit")
+            answer_dict = {"1": "Load Data",
+                           "2": "Save Data",
+                           "3": m.thank_you,
+                           "4": m.create_report,
+                           "5": m.send_letters,
+                           "6": "quit"}
+            answer = input("Please select an option. >")
+            if answer == "1":
+                with open("savefile.txt", "w") as file:
+                    json_output = m.to_json_compat()
+                    file.write(json_output)
+            elif answer == "2":
+                pass
+            elif answer == "3":
+                name = input("Please enter a full name. >")
+                donation = input("Please enter a donation amount. >")
+                m.donor_table_dict, print_string = answer_dict[answer](m.donor_table_dict, name,
+                                                                          donation)
+                print(print_string)
+            elif answer == "4":
+                m.donor_table_dict, print_string = answer_dict[answer](m.donor_table_dict)
+                print(print_string)
+            elif answer == "6" or answer == "quit":
+                print("Have a nice day.")
+                break
+            else:
+                answer_dict[answer](m.donor_table_dict)
+        except KeyError:
+            print()
