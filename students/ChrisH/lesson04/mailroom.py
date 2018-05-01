@@ -13,7 +13,7 @@ import json_save.json_save_dec as js
 @js.json_save
 class Donors(object):
 
-    DATA_FILE = 'donors.pkl'
+    DATA_FILE = 'donors'
 
     donorlist = js.List()
 
@@ -85,23 +85,27 @@ class Donors(object):
 
     def load_json(self):
         print('loading from json')
-        with open("test_donors.json") as file_in:
+        with open(self.DATA_FILE + ".json") as file_in:
             temp = js.from_json(file_in)
         self.donorlist = temp.donorlist
+        return self.count
 
     def save_json(self):
+        print('saving to json')
         json_dlist = self.to_json()
-        with open("test_donors.json", 'w') as file_out:
+        with open(self.DATA_FILE + ".json", 'w') as file_out:
             file_out.write(json_dlist)
         return self.count
 
     def load_donorlist(self):
-        with open(self.DATA_FILE, 'rb') as file_in:
+        print('loading from pickle')
+        with open(self.DATA_FILE + ".pkl", 'rb') as file_in:
             self.donorlist = pickle.load(file_in)
         return self.count
 
     def save_donorlist(self):
-        with open(self.DATA_FILE, 'wb') as file_out:
+        print('saving to pickle')
+        with open(self.DATA_FILE + ".pkl", 'wb') as file_out:
             pickle.dump(self.donorlist, file_out)
         return self.count
 

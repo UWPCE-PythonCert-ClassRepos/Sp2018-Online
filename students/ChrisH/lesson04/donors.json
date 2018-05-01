@@ -49,22 +49,9 @@
         },
         {
             "__obj_type": "Donor",
-            "name": "Test DATA1",
+            "name": "Albert Knog",
             "donations": [
-                1,
-                2,
-                3,
-                4,
-                5
-            ]
-        },
-        {
-            "__obj_type": "Donor",
-            "name": "TestDATA2",
-            "donations": [
-                1,
-                2,
-                3
+                123.0
             ]
         }
     ]

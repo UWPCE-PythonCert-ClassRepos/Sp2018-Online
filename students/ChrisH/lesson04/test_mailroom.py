@@ -25,7 +25,7 @@ class MailroomTest(unittest.TestCase):
 
     def setUp(self):
         self.dl = mailroom.Donors()
-        self.dl.DATA_FILE = 'test_donors.pkl'   # Create instance value for DATA_FILE to override class value
+        self.dl.DATA_FILE = 'test_donors'   # Create instance value for DATA_FILE to override class value
         # Note, with pickle, can't simply dl.load_donors(), as the pickle file was created from main() in the
         # mailroom module. So, we will simply build a database and save/load it from here.
         for don in self.donor_data:
@@ -43,9 +43,11 @@ class MailroomTest(unittest.TestCase):
 
     def test_save_data(self):
         self.assertEqual(7, self.dl.save_donorlist())
+        self.assertEqual(7, self.dl.save_json())
 
     def test_load_data(self):
         self.assertEqual(7, self.dl.load_donorlist())
+        self.assertEqual(7, self.dl.load_json())
 
     def test_donor_count(self):
         self.assertEqual(7, self.dl.count)
