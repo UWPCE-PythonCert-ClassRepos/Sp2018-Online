@@ -29,7 +29,6 @@ class Locke(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         print("Closing the doors.")
         print("Restarting the pumps.")
-        return self
 
     def move_boats_through(self, boats):
         if boats > self.capacity:
