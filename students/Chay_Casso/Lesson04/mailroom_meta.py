@@ -3,6 +3,7 @@
 # Mailroom Meta
 # Chay Casso, 4/29/18
 
+import json
 from collections import OrderedDict
 
 import json_save.json_save_dec as js
@@ -13,7 +14,6 @@ class Mailroom(object):
 
     # Initial donor table with the donation values.
     donor_table_dict = js.Dict()
-
 
     def __init__(self, donor_table_dict):
         self.donor_table_dict = donor_table_dict
@@ -77,12 +77,6 @@ save@kids.org
                 writefile.write(letter)
         print("Letters have been created.\n")
 
-    def load_data(self):
-        pass
-
-    def save_data(self):
-        pass
-
 
 if __name__ == "__main__":
     initial_dict = {"William Gates, III": [401321.52, 201342.71],
@@ -102,11 +96,22 @@ if __name__ == "__main__":
                            "6": "quit"}
             answer = input("Please select an option. >")
             if answer == "1":
-                with open("savefile.txt", "w") as file:
-                    json_output = m.to_json_compat()
-                    file.write(json_output)
+                try:
+                    with open("savefile.json", "r") as file:
+                        json_input = file.read()
+                        json_dict = json.loads(json_input)
+                        m = Mailroom.from_json_dict(json_dict)
+                        print("Data has been imported from savefile.json.")
+                except:
+                    print("Please make sure savefile.json exists and is in the directory.")
             elif answer == "2":
-                pass
+                with open("savefile.json", "w") as file:
+                    json_output = m.to_json_compat()
+                    # I don't understand why I can't just save the JSON directly, but I can't.
+                    # h/t: https://pythonspot.com/save-a-dictionary-to-a-file/
+                    json_dict = json.dumps(json_output)
+                    file.write(json_dict)
+                    print("Data has been saved to savefile.json.")
             elif answer == "3":
                 name = input("Please enter a full name. >")
                 donation = input("Please enter a donation amount. >")
