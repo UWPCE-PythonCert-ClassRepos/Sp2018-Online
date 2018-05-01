@@ -80,6 +80,21 @@ class Donors(object):
         self.add_donor(newdonor)
         return newdonor
 
+    def print_json(self):
+        print(self.to_json())
+
+    def load_json(self):
+        print('loading from json')
+        with open("test_donors.json") as file_in:
+            temp = js.from_json(file_in)
+        self.donorlist = temp.donorlist
+
+    def save_json(self):
+        json_dlist = self.to_json()
+        with open("test_donors.json", 'w') as file_out:
+            file_out.write(json_dlist)
+        return self.count
+
     def load_donorlist(self):
         with open(self.DATA_FILE, 'rb') as file_in:
             self.donorlist = pickle.load(file_in)
@@ -315,15 +330,6 @@ def menu(menu_data):
 
     return None
 
-def print_json(dlist):
-    print(dlist.to_json())
-
-def load_json(dlist):
-    pass
-
-def save_json(dlist):
-    pass
-
 
 if __name__ == "__main__":
 
@@ -336,9 +342,9 @@ if __name__ == "__main__":
         ('Make donation projections', make_projections, dl),
         ('Load donor list', dl.load_donorlist, None),
         ('Save donor list', dl.save_donorlist, None),
-        ('Print JSON', print_json, dl),
-        ('Save donor list JSON', load_json, dl),
-        ('Load donor list JSON', save_json, dl),
+        ('Print JSON', dl.print_json, None),
+        ('Load donor list JSON', dl.load_json, None),
+        ('Save donor list JSON', dl.save_json, None),
         ('Quit', exit, None),
     ]
     while True:
