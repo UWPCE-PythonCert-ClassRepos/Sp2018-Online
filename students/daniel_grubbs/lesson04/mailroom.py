@@ -10,6 +10,7 @@ Refernced article from Real Python:
 https://realpython.com/python-json/
 https://www.json.org/
 """
+# Imports for mailroom
 import os
 import sys
 from textwrap import dedent
@@ -18,8 +19,9 @@ import json
 # Importing json_save for working with the data in JSON format
 import json_save.json_save_dec as js
 
+
 # Play around with where to place this directory path. Might need to go under the class DonorDB???
-file_obj = os.path.abspath("data/donor_records.json")
+# file_obj = os.path.abspath("data/donor_records.json")
 
 
 @js.json_save
@@ -42,7 +44,7 @@ class Donor(object):
     _donor_records = None
 
     # Constructor - take in the name of the donor and donations
-    def __init__(self, name, donations=None):
+    def __init__(self, donor_name, donations=None):
         """
         Create a new Donor object
 
@@ -51,8 +53,8 @@ class Donor(object):
         :param donations=None: iterable of past donations, name: name of the donor passed in
         """
         # Follow the example in example_dec.py
-        self.norm_name = self.normalize_name(name)
-        self.name = name.strip()
+        self.norm_name = self.normalize_name(donor_name)
+        self.donor_name = donor_name.strip()
         if donations is None:
             self.donations = []
         else:
@@ -66,7 +68,7 @@ class Donor(object):
         :return: returns the inner function
         """
 
-        # print("mutate (outer) method called")
+        # print("transaction (outer) method called")
 
         # Note from class - when using an inner function use the
         # *args and **kwargs. May not use the **kwargs but
@@ -125,7 +127,7 @@ class Donor(object):
     def letter_template(self):
         """Template for writing a letter to a donor, thanking them for their donation."""
         return """Dear {},\nThank you for your very kind donation of {:.2f}.\n\nIt will be put to very good use.\n\n \t\tSincerely,\n\t\t\t-The Team""".format(
-            self.name, self.last_donation)
+            self.donor_name, self.last_donation)
 
 
 @js.json_save
@@ -147,9 +149,9 @@ class DonorDB(object):
         # Database
         # Does it exist?
         if donor_data is None:
-            self.donor_data = "data/donor_records.json"
+            self.donor_data = os.path.abspath("data/donor_records.json")
         else:
-            self.donor_data = donor_data
+            self.donor_data = os.path.abspath("data/donor_records.json")
 
         # Donors
         if donors is None:
@@ -160,7 +162,7 @@ class DonorDB(object):
     @property
     def donors(self):
         """Method to get the donor values."""
-        return self.donor_data.values()
+        return self.donor_records.values()
 
     def list_donors(self):
         """
@@ -168,7 +170,7 @@ class DonorDB(object):
         """
         listing = ["Donor list:"]
         for donor in self.donors:
-            listing.append(donor.name)
+            listing.append(donor.donor_name)
         return "\n".join(listing)
 
     def find_donor(self, name):
@@ -181,39 +183,22 @@ class DonorDB(object):
         self.donor_data[donor.norm_name] = donor
         return donor
 
-    def gen_letter(self, donor):
-        """Generate a thank you letter for the donor."""
-        return dedent('''Dear {0:s},
-
-              Thank you for your very kind donation of ${1:.2f}.
-              It will be put to very good use.
-
-                             Sincerely,
-                                -The Team
-              '''.format(donor.name, donor.last_donation)
-                      )
-
-    @staticmethod
-    def sort_key(item):
-        # used to sort on name in self.donor_data
-        return item[1]
-
     def donor_save_records(self, file):
         """Save donor and information related to donor."""
         # Open donor_records.json in write mode an save to the file.
-        with open(self.donor_data, 'w') as file_obj:
-            self.to_json(file_obj)
+        with open(self.donor_data, 'w') as donor_data:
+            self.to_json(donor_data)
 
     @classmethod
     def load_donor_records_from_file(cls, file):
         """Load the donor and information from file. Uses a file that is in json format already."""
         # Open donor_records.json using context manager
         with open(file) as f_obj:
-            donors = json.load(f_obj)
+            temp_donors = json.load(f_obj)
         # lookp through the donors and append to the donor_list
         donor_list = []
         # loop through the donors pulled from the file
-        for donor in donors:
+        for donor in temp_donors:
             donor_list.append(donor)
 
         # return the list of donors from the file
@@ -224,8 +209,8 @@ class DonorDB(object):
         """Method for working with the json_save library."""
         # Open donor_records.json using context manager
         with open(file) as f_obj:
-            donors = js.from_json(file_obj)
-        donors.donor_data = file
+            temp_donors = js.from_json(file_obj)
+        temp_donors.donor_data = file
 
     def create_donor_report(self):
         """Create a report of the donors and donation amounts."""
@@ -245,6 +230,18 @@ class DonorDB(object):
             print("{:26s} | {:14.2f} | {:15d} | {:13.2f}".format(*amount))
         print()
 
+    def gen_letter(self, donor):
+        """Generate a thank you letter for the donor."""
+        return dedent('''Dear {0:s},
+
+              Thank you for your very kind donation of ${1:.2f}.
+              It will be put to very good use.
+
+                             Sincerely,
+                                -The Team
+              '''.format(donor.donor_name, donor.last_donation)
+                      )
+
     def save_letters_to_disk(self):
         """Method to save letters to disk for each of the donors in the database."""
         for donor in self.donor_data.values():
@@ -260,16 +257,10 @@ class DonorDB(object):
 # Working with the classes using the menu system #
 ##################################################
 data_dir = os.path.abspath("data/donor_records.json")
-donor_db = DonorDB()
 records = DonorDB.load_donor_records_from_file(data_dir)
-initial_data_set = {
-    'Jimmy Nguyen': [100, 1350, 55],
-    'Steve Smith': [213, 550, 435],
-    'Julia Norton': [1500, 1500, 1500],
-    'Ed Johnson': [150],
-    'Elizabeth McBath': [10000, 1200]
-}
-
+# print(records)
+type(records)
+donor_db = DonorDB()
 
 
 def quit():
@@ -304,17 +295,19 @@ def thank_you():
             break
 
     # Enter a new donor
-    donor = DonorDB.find_donor(full_name)
+    donor = donor_db.find_donor(full_name)
     if donor is None:
         donor = donor_db.add_donor(full_name)
 
     # Add in donation for the donor
-    donor.donor_donation(donate)
+    donor.donor_donation(donote)
 
     # Print the donor letter
-    print(donor.letter_template())
+    # print(donor.letter_template())
+    print(Donor.letter_template(donor))
 
-    print(Donor.letter_template(donor_obj, donor))
+
+    # print(Donor.letter_template(donor_obj, donor))
 
 
 def print_header():
@@ -335,6 +328,10 @@ def print_header():
         selection = int(input('Please select a menu item: '))
 
     return selection
+
+
+def donor_report(file):
+    return (DonorDB.create_donor_report(data_dir))
 
 
 def main():
