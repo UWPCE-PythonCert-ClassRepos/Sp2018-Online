@@ -7,11 +7,12 @@
 # -------------------------------------------------#
 
 '''
-mailroom_meta status 4/30
+mailroom_meta status 5/01
 1. test data is loaded at startup
 2. json data is saved to donors.txt using menu item 4
-3. Code is in place to load the json from donors.txt correctly (commented out)
-4. Creating donations from json is still in progress (having problems with this step)
+3. Code is in place to load the json from donors.txt
+4. Code needs to be add to deserialize data
+4a. My logic may be incorrect, unable to get past this point
 '''
 
 import sys
@@ -19,7 +20,7 @@ import json_save.json_save_meta as js
 
 
 def load_test_data():
-    #test data not used in json meta programming assignment
+    #test data should not be used in json meta programming assignment
     return [donor_record("Peter Parker", [288.09, 9.01, 61288.09]),
             donor_record("Iron Man", [1238.09, 8199.01, 1468.07]),
             donor_record("Captain Marvel", [43188.09, 1288.09]),
@@ -27,7 +28,7 @@ def load_test_data():
             ]
 
 def create_from_saved(myfile):
-    print("\n==" + str(myfile))
+    print("\nParse this data and create database: " + str(myfile))
 
 class donor_record():
 
@@ -131,15 +132,15 @@ class donor_database(js.JsonSaveable):
         return ("*** Files saved! ***")
 
 
-#loading test data before implementing json
-database = donor_database(load_test_data())
+#loading test data
+#database = donor_database(load_test_data())
 
-'''
-#loadind saved data from json stub
+
+#loadind saved data from json file
 mydata = donor_database.load_from_file("donors.txt")
-print("\n" + str(mydata))
-database = donor_database(create_from_saved(mydata))
-'''
+print("from_json data: " + str(mydata))
+print("Add code to deserialize the data...")
+
 
 def gen_letter_body(name, amount):
 
