@@ -1,24 +1,23 @@
 import sys
-import json_save.json_save_meta as js
+
+
 donor_data = {"sai emani": [20.23, 30.456, 50.786],
                    "sirisha marthy": [67.89, 45.89],
                    "ani emani": [12.789, 5.456],
                    "charles dickens": [15.89, 89.20, 345.67],
                    "mark twain": [678.986]
-              }
+                   }
 
-class Donor(js.JsonSaveable):
-    name = js.String()
-    donations = js.List()
 
-    def __init__(self, name, donations=None):
+class Donor(object):
+    def __init__(self, name, donations):
         if not name:
             raise ValueError("Donor name can not be empty")
         self.name = name
-        if donations:
-            self.donations = donations
-        else:
+        if not donations:
             self.donations = []
+        else:
+            self.donations = donations
 
     @property
     def first_name(self):
@@ -33,7 +32,6 @@ class Donor(js.JsonSaveable):
             return ''
         else:
             return ''.join(name_split[1:])
-
     @property
     def donor_donations(self):
         """
@@ -41,7 +39,6 @@ class Donor(js.JsonSaveable):
         :return: list of donor donations
         """
         return self.donations
-
     @property
     def donor_donations_sum(self):
         """
@@ -49,7 +46,6 @@ class Donor(js.JsonSaveable):
         :return: donor latest donation
         """
         return sum(self.donations)
-
     @property
     def latest_donation(self):
         """
@@ -73,18 +69,13 @@ class Donor(js.JsonSaveable):
         return "Dear {},\n \nThank you for your generous donation {}.\n \n\n\t\tSincerely, \n\t\tLocal Charity". \
             format(self.name, self.latest_donation)
 
-
-class Donors(js.JsonSaveable):
-    data_file = 'donors'
-    donors_list = js.List()
-
+class Donors(object):
     def __init__(self, donors_list=None):
         # list of donors objects
-        if donors_list:
-            self.donors_list = donors_list
-        else:
+        if not donors_list:
             self.donors_list = []
-
+        else:
+            self.donors_list = donors_list
     @property
     def list_of_donors(self):
         return [donor.name for donor in self.donors_list]
@@ -101,8 +92,7 @@ class Donors(js.JsonSaveable):
             return None
 
         for donor in self.donors_list:
-            #print("donor is {}..".format(donor))
-            if donor.name == name:
+            if donor == name:
                 return donor
         new_donor = Donor(name, [])
         self.add_donor(new_donor)
@@ -122,7 +112,8 @@ class Donors(js.JsonSaveable):
         print("Donor Name                | Total Given | Num Gifts | Average Gift")
         for donor in self.donors_list:
             if donor.donations:
-                print(f"{donor.name:26} $ {sum(donor.donations):>10.2f}   {len(donor.donations):9} ${sum(donor.donations)/len(donor.donations):>12.2f}")
+                print(f"{donor.name:26} $ {sum(donor.donations):>10.2f}   {len(donor.donations):9} "
+                    f"${sum(donor.donations)/len(donor.donations):>12.2f}")
             else:
                 print("coming to else")
 
@@ -133,35 +124,14 @@ class Donors(js.JsonSaveable):
             donor_obj = Donor(donor, donations)
             donor_obj.donations = donor_data[donor]
             temp_list.append(donor_obj)
-        self.donors_list = temp_list
-        return self.count
-
-    def load_json_from_file(self):
-        print("Loading from json")
-        with open(self.data_file + ".json", 'r') as file_in:
-            temp = js.from_json(file_in)
-        self.donors_list = temp.donors_list
+        self.donors_list =  temp_list
         return self.count
 
     def save_donors_list(self):
-        donor_data = {}
         for donor in self.donors_list:
-            name = donor.name
-            donations = donor.donations
-            donor_data[name] = donations
+            if donor.name not in donor_data:
+                donor_data[donor.name] = donor.donations
         return self.count
-
-    def save_json_to_file(self):
-        print("Saving to json file")
-        #json_dlist = self.to_json()
-        with open(self.data_file + ".json", 'w') as file_out:
-            self.to_json(file_out)
-#            file_out.write(json_dlist)
-
-        return self.count
-
-    def print_json(self):
-        print(self.to_json())
 
     def total_contribution(self):
         return sum([sum(d.donations) for d in self.donors_list])
@@ -196,7 +166,6 @@ def send_a_thankyou(donors_obj):
             continue
         else:
             donor = donors_obj.get_donor(name)
-            #print("donor is {}.. and name is {}".format(donor, name))
             if not donor:
                 print("Name can not be empty")
                 continue
@@ -215,7 +184,6 @@ def send_a_thankyou(donors_obj):
     #for donor in donors_obj.donors_list:
      #   print("Donor name {} and donation {}".format(donor.name, donor.donations))
     print(donor.generate_letter())
-
 
 def menu(menu_data):
 
@@ -242,7 +210,6 @@ def make_projections(donors_obj):
     mul = 1
 
     projection = donors_obj.challenge(mul, min, max)
-
     def set_value():
         while True:
             try:
@@ -284,32 +251,22 @@ def make_projections(donors_obj):
         else:
             fn()
 
-
 if __name__ == "__main__":
-    donor_data = {"sai emani": [20.23, 30.456, 50.786],
-                 "sirisha marthy": [67.89, 45.89],
-                 "ani emani": [12.789, 5.456],
-                 "charles dickens": [15.89, 89.20, 345.67],
-                 "mark twain": [678.986]
-                 }
     donors_obj = Donors()
     menu_fns = [
         ('Send thank you', send_a_thankyou, donors_obj),
         ('create a report', donors_obj.create_a_report, None),
         ('send letters to every one', donors_obj.send_letters, None),
         ('load donors list', donors_obj.load_donors_list, None),
-        ('load json from file', donors_obj.load_json_from_file, None),
         ('save donors list', donors_obj.save_donors_list, None),
-        ('save json to file', donors_obj.save_json_to_file, None),
         ('quit', sys.exit, None)
     ]
-    #print("came here")
-    #print(donors_obj.load())
+
     #choice_dict = {1: send_a_thankyou, 2: donors_obj.create_a_report, 3: donors_obj.send_letters,
      #              4: donors_obj.load_donors_list, 5: donors_obj.save_donor_list, 6: sys.exit}
     while True:
         try:
-            fn, param = menu(menu_fns)
+            fn , param = menu(menu_fns)
             if param:
                 fn(param)
             else:

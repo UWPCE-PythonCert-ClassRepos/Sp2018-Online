@@ -1,5 +1,5 @@
 import sys
-import json_save.json_save_meta as js
+import json_save.json_save_dec as js
 donor_data = {"sai emani": [20.23, 30.456, 50.786],
                    "sirisha marthy": [67.89, 45.89],
                    "ani emani": [12.789, 5.456],
@@ -7,7 +7,8 @@ donor_data = {"sai emani": [20.23, 30.456, 50.786],
                    "mark twain": [678.986]
               }
 
-class Donor(js.JsonSaveable):
+@js.json_save
+class Donor(object):
     name = js.String()
     donations = js.List()
 
@@ -73,8 +74,8 @@ class Donor(js.JsonSaveable):
         return "Dear {},\n \nThank you for your generous donation {}.\n \n\n\t\tSincerely, \n\t\tLocal Charity". \
             format(self.name, self.latest_donation)
 
-
-class Donors(js.JsonSaveable):
+@js.json_save
+class Donors():
     data_file = 'donors'
     donors_list = js.List()
 
@@ -101,8 +102,7 @@ class Donors(js.JsonSaveable):
             return None
 
         for donor in self.donors_list:
-            #print("donor is {}..".format(donor))
-            if donor.name == name:
+            if donor == name:
                 return donor
         new_donor = Donor(name, [])
         self.add_donor(new_donor)
@@ -144,25 +144,22 @@ class Donors(js.JsonSaveable):
         return self.count
 
     def save_donors_list(self):
-        donor_data = {}
         for donor in self.donors_list:
-            name = donor.name
-            donations = donor.donations
-            donor_data[name] = donations
+            if donor.name not in donor_data:
+                donor_data[donor.name] = donor.donations
         return self.count
 
     def save_json_to_file(self):
         print("Saving to json file")
-        #json_dlist = self.to_json()
+        json_dlist = self.to_json()
         with open(self.data_file + ".json", 'w') as file_out:
-            self.to_json(file_out)
-#            file_out.write(json_dlist)
+            file_out.write(json_dlist)
 
         return self.count
 
     def print_json(self):
         print(self.to_json())
-
+        
     def total_contribution(self):
         return sum([sum(d.donations) for d in self.donors_list])
 
@@ -196,7 +193,6 @@ def send_a_thankyou(donors_obj):
             continue
         else:
             donor = donors_obj.get_donor(name)
-            #print("donor is {}.. and name is {}".format(donor, name))
             if not donor:
                 print("Name can not be empty")
                 continue

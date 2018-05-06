@@ -25,9 +25,11 @@ class MailroomOoUnitTests(unittest.TestCase):
 
     def test_load_donors_list(self):
         self.assertEqual(5, self.donors.load_donors_list())
+        self.assertEqual(5, self.donors.load_json_from_file())
 
     def test_save_donors_list(self):
         self.assertEqual(5, self.donors.save_donors_list())
+        self.assertEqual(5, self.donors.save_json_to_file())
 
     def test_add_donor(self):
         new_donor = self.donors.get_donor("first last")
