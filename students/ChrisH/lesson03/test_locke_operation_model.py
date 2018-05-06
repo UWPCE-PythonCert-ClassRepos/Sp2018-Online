@@ -36,9 +36,8 @@ class LockeTest(unittest.TestCase):
         f = StringIO()
         locke = Locke(1)
         with redirect_stdout(f):
-            cx_mgr = locke.__exit__(None, None, None)
+            locke.__exit__(None, None, None)
 
-        self.assertIsInstance(cx_mgr, Locke)
         self.assertIn("Closing the doors.", f.getvalue())
         self.assertIn("Restarting the pumps.", f.getvalue())
 
