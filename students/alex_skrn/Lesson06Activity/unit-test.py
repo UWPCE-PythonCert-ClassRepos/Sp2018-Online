@@ -57,7 +57,10 @@ class DividerTests(TestCase):
 
         for i in range(-10, 10):
             for j in range(-10, 10):
-                self.assertEqual(i / j, divider.calc(i, j))
+                try:
+                    self.assertEqual(i / j, divider.calc(i, j))
+                except ZeroDivisionError:
+                    pass
 
 
 class CalculatorTests(TestCase):
