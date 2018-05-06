@@ -8,6 +8,7 @@ from calculator.subtracter import Subtracter
 from calculator.multiplier import Multiplier
 from calculator.divider import Divider
 from calculator.calculator import Calculator
+from calculator.exceptions import InsufficientOperands
 
 
 class ModuleTests(TestCase):
@@ -35,3 +36,6 @@ class ModuleTests(TestCase):
         result = calculator.subtract()
 
         self.assertEqual(6, result)
+
+        with self.assertRaises(InsufficientOperands):
+            calculator.add()
