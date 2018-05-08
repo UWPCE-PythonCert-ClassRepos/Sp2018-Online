@@ -1,13 +1,22 @@
 # simple.py
 
 import logging
+import logging.handlers
+
+import datetime
+
 
 format = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
-#logging.basicConfig(level=logging.WARNING, format=format, filename='mylog.log')
+format_syslog = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 
 formatter = logging.Formatter(format)
+formatter_syslog = logging.Formatter(format_syslog)
 
-file_handler = logging.FileHandler('mylog.log')
+syslog_handler = logging.handlers.DatagramHandler('localhost', 514)
+syslog_handler.setLevel(logging.ERROR)
+syslog_handler.setFormatter(formatter_syslog)
+
+file_handler = logging.FileHandler(datetime.datetime.now().isoformat()[:10] + '.log')
 file_handler.setLevel(logging.WARNING)
 file_handler.setFormatter(formatter)
 
@@ -16,6 +25,7 @@ console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(formatter)
 
 logger = logging.getLogger()
+logger.addHandler(syslog_handler)
 logger.setLevel(logging.DEBUG)
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
@@ -34,4 +44,6 @@ def my_fun(n):
 
 if __name__ == "__main__":
     my_fun(100)
+
+
 
