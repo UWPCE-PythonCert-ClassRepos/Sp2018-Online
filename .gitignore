@@ -101,6 +101,7 @@ ENV/
 /site
 
 # mypy
+.idea/
 .mypy_cache/
 .idea/workspace.xml
 Videos/
