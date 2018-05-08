@@ -1,0 +1,9 @@
+What is wrong with our logic?
+—- The program is supposed to return either True or False. As written, it does not have an opportunity to return False if the n supplied is not a power of two. 
+
+Why doesn't the function stop calling itself?
+-— The program does not have an exit condition when the n supplied is not a power of two. If n is not a power of two, the function proceeds indefinitely until it meets Python’s maximum recursion depth. 
+
+
+What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+— As n gets deeper and deeper into recursion, n is continually cut in half. Depending on the maximum recursion depth, its value will eventually be less than 2, at which point cutting it in half will never allow it to equal 2 and return True. 
