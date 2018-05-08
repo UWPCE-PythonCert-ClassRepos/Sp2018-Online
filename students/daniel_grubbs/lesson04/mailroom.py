@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 """
-Using the Object Oriented Programming implementation done by Rick Riehl but changed it up with items from my
-mailroom.py program.
-
 The goal is to use a JSON-save system started in the Metaprogramming Lesson (week 04)
 to make your model classes saveable and loadable as JSON.
 
@@ -13,21 +10,20 @@ https://www.json.org/
 # Imports for mailroom
 import os
 import sys
-from textwrap import dedent
-import json
+from pathlib import Path
 
 # Importing json_save for working with the data in JSON format
 import json_save.json_save_dec as js
 
 
-# Play around with where to place this directory path. Might need to go under the class DonorDB???
+# Play around with where to place this directory path. Might need to go under the Donor class???
 # file_obj = os.path.abspath("data/donor_records.json")
 
 
 @js.json_save
-class Donor(object):
+class DonorDonations(object):
     """
-    class to hold the information about a single donor
+    Class to hold the records of a donor and their donations.
     """
 
     # Class attributes
@@ -37,75 +33,34 @@ class Donor(object):
     donor_name = js.String()
     # list --> Donations made by donor
     donations = js.List()
-
-    # Let's define the data file.
-    # Set initial value to None.
-    # If the value is actually not None then work with it to save any changes/additions
-    _donor_records = None
+    # May not be needed but adding in case need it
+    initial_state = False
 
     # Constructor - take in the name of the donor and donations
     def __init__(self, donor_name, donations=None):
-        """
-        Create a new Donor object
-
-        :param name: the full name of the donor
-
-        :param donations=None: iterable of past donations, name: name of the donor passed in
-        """
+        """Constructor for instantiating a donor."""
         # Follow the example in example_dec.py
-        self.norm_name = self.normalize_name(donor_name)
-        self.donor_name = donor_name.strip()
+        # self.donor_name = donor_name
+        # self.donations = []
+        self.donor_name = donor_name
         if donations is None:
             self.donations = []
         else:
             self.donations = list(donations)
 
-    def transaction(func):
-        """
-        Method for saving items that have been changed. Apply to other methods as needed.
-        This method is a decorator so it will take in another method as an argument and not self.
+    @property
+    def first_name(self):
+        forename = self.donor_name.split()
+        return forename[0]
 
-        :return: returns the inner function
-        """
-
-        # print("transaction (outer) method called")
-
-        # Note from class - when using an inner function use the
-        # *args and **kwargs. May not use the **kwargs but
-        # add it into the inner functions anyways.
-        def inner(self, *args, **kwargs):
-            # print("inner method called")
-            print(self._donor_records)  # is there anything in the db
-            trans = func(self, *args, **kwargs)
-            if self._donor_records is not None:
-                self._donor_records.save()
-            return trans
-
-        return inner
-
-    @transaction
-    def donor_donation(self, donation_amt):
-        """This method is for adding a donation."""
-        # Should add in the donation as a float so
-        # if donation_amt is not already a float then
-        # simply make sure it is  using float()
-        donation_amt = float(donation_amt)
-        self.donations.append(donation_amt)
-
-    @staticmethod
-    def normalize_name(name):
-        """
-        return a normalized version of a name to use as a comparison key
-
-        simple enough to not be in a method now, but maybe you'd want to make it fancier later.
-        """
-        return name.lower().strip().replace(" ", "")
+    @property
+    def last_name(self):
+        surname = self.donor_name.split()
+        return surname[1]
 
     @property
     def last_donation(self):
-        """
-        The most recent donation made
-        """
+        """Grab the most recent donation from the list of donations."""
         try:
             # We want the last donation so we want to use the negative index
             return self.donations[-1]
@@ -120,135 +75,124 @@ class Donor(object):
     @property
     def average_donation(self):
         """Take the total_donations that were calculated and divide by the amount of
-        donations made using len() on the donations list.
-        """
+        donations made using len() on the donations list."""
         return self.total_donations / len(self.donations)
 
     def letter_template(self):
         """Template for writing a letter to a donor, thanking them for their donation."""
-        return """Dear {},\nThank you for your very kind donation of {:.2f}.\n\nIt will be put to very good use.\n\n \t\tSincerely,\n\t\t\t-The Team""".format(
-            self.donor_name, self.last_donation)
+        return """Dear {}{},\n
+        Thank you for your very kind donation of ${:.2f}.\n\n
+        It will be put to very good use.\n\n \t\tSincerely,\n\t\t\t
+        -The Team""".format(
+            self.first_name,
+            self.last_name,
+            self.last_donation
+        )
 
 
 @js.json_save
-class DonorDB(object):
+class Donor(object):
     """
     Encapsulation of the entire database of donors and data associated with them.
     """
-
     # Class attributes
     # Will be using a dictionary here to work with it
+    db = None
     donor_records = js.Dict()
+    initial_state = False
 
     def __init__(self, donors=None, donor_data=None):
-        """
-        Initialize a new donor database
-
-        :param donors=None: iterable of Donor objects; data_file=None: access the file named _file.json
-        """
+        """Initialize a new donor database."""
         # Database
         # Does it exist?
         if donor_data is None:
             self.donor_data = os.path.abspath("data/donor_records.json")
         else:
-            self.donor_data = os.path.abspath("data/donor_records.json")
+            self.donor_data = Path(donor_data)
+
+        self.donor_records = {}
 
         # Donors
-        if donors is None:
-            self.donor_data = {}
-        else:
-            self.donor_data = {d.norm_name: d for d in donors}
+        if donors is not None:
+            self.initial_state = True
+            for i in donors:
+                self.add_donor(i)
 
     @property
     def donors(self):
         """Method to get the donor values."""
         return self.donor_records.values()
 
-    def list_donors(self):
-        """
-        creates a list of the donors as a string, so they can be printed
-        """
-        listing = ["Donor list:"]
-        for donor in self.donors:
-            listing.append(donor.donor_name)
-        return "\n".join(listing)
-
-    def find_donor(self, name):
-        """Method for looking up a donor."""
-        return self.donor_data.get(Donor.normalize_name(name))
-
-    def add_donor(self, name):
-        """Add a new donor to donor_records."""
-        donor = Donor(name)
-        self.donor_data[donor.norm_name] = donor
+    def add_donor(self, donor):
+        """Add a donor."""
+        if not isinstance(donor, DonorDonations):
+            donor = DonorDonations(donor)
+        self.donor_records[donor] = donor
+        donor.db = self
         return donor
 
-    def donor_save_records(self, file):
+    def list_donors(self):
+        """Method to create a list of the donors as a string, so they can be printed."""
+        donor_list = ["Donor list:"]
+        for donor in self.donors:
+            donor_list.append(donor.donor_name)
+        return "\n".join(donor_list)
+
+    def donor_lookup(self, name):
+        """Method for looking up a donor."""
+        return self.donor_records.get(DonorDonations(name))
+
+    def donor_save_records(self):
         """Save donor and information related to donor."""
         # Open donor_records.json in write mode an save to the file.
         with open(self.donor_data, 'w') as donor_data:
             self.to_json(donor_data)
 
     @classmethod
-    def load_donor_records_from_file(cls, file):
-        """Load the donor and information from file. Uses a file that is in json format already."""
-        # Open donor_records.json using context manager
-        with open(file) as f_obj:
-            temp_donors = json.load(f_obj)
-        # lookp through the donors and append to the donor_list
-        donor_list = []
-        # loop through the donors pulled from the file
-        for donor in temp_donors:
-            donor_list.append(donor)
-
-        # return the list of donors from the file
-        return donor_list
-
-    @classmethod
     def load_donor_records_js(cls, file):
-        """Method for working with the json_save library."""
+        """Class method for working with the json_save library."""
         # Open donor_records.json using context manager
         with open(file) as f_obj:
-            temp_donors = js.from_json(file_obj)
+            temp_donors = js.from_json(f_obj)
         temp_donors.donor_data = file
 
     def create_donor_report(self):
         """Create a report of the donors and donation amounts."""
+        # Set an empty list for donations to append donations to as they are iterated over.
         donations = []
 
         print("{:26s} | {:13s} | {:9s} | {:13s}".format("Donor name", "Total Donation", "Number of Gifts",
                                                         "Average Gifts"))
         print("-" * 80)
+        # print(self.donor_records.values())
 
-        for donor, gift in self.donor_records.values():
-            total_given = sum(gift)
-            number_gifts = len(gift)
-            average_gift = total_given / number_gifts
-            donations.append((donor, total_given, number_gifts, average_gift))
+        for donor in self.donor_records.values():
+            full_name = donor.name
+            gifts = donor.donor_donation
+            total_given = donor.total_donations
+            number_gifts = len(gifts)
+            average_gift = donor.average_donation
+            donations.append((full_name, total_given, number_gifts, average_gift))
 
         for amount in donations:
             print("{:26s} | {:14.2f} | {:15d} | {:13.2f}".format(*amount))
         print()
 
+        return donations
+
     def gen_letter(self, donor):
         """Generate a thank you letter for the donor."""
-        return dedent('''Dear {0:s},
+        """Template for writing a letter to a donor, thanking them for their donation."""
+        return """Dear {0:s},\nThank you for your very kind donation of ${1:.2f}.\n\nIt will be put to very good use.\n\n \t\tSincerely,\n\t\t\t-The Team""".format(
+            donor, donor.last_donation)
 
-              Thank you for your very kind donation of ${1:.2f}.
-              It will be put to very good use.
-
-                             Sincerely,
-                                -The Team
-              '''.format(donor.donor_name, donor.last_donation)
-                      )
-
-    def save_letters_to_disk(self):
-        """Method to save letters to disk for each of the donors in the database."""
-        for donor in self.donor_data.values():
-            print("Writing a letter to:", donor.name)
-            letter = self.gen_letter(donor)
-            filename = donor.name.replace(" ", "_") + ".txt"
-            open(filename, 'w').write(letter)
+    def send_letter_file(self):
+        """Write a thank you letter and save to file."""
+        for k, v in donor_data.values():
+            letter = gen_letter(donor)
+            file_name = donor.name.replace(" ", "_") + ".txt"
+            with open(file_name, 'w') as f:
+                f.write(letter)
 
         print('Completed creating letters to send out to donors.')
 
@@ -256,16 +200,13 @@ class DonorDB(object):
 ##################################################
 # Working with the classes using the menu system #
 ##################################################
-data_dir = os.path.abspath("data/donor_records.json")
-records = DonorDB.load_donor_records_from_file(data_dir)
+# data_dir = os.path.abspath("data/donor_records.json")
+# records = Donor.load_donor_records_js(data_dir)
 # print(records)
-type(records)
-donor_db = DonorDB()
-
 
 def quit():
     """Function for exiting the mailroom program."""
-    return sys.exit(0)
+    return sys.exit("Logging out of Donation Management System")
 
 
 def thank_you():
@@ -276,7 +217,9 @@ def thank_you():
 
         if full_name == 'list':
             print('Below is the current donor list:')
-            print(donor_db.list_donors())
+            d = donor_in.list_donors
+            # print(donor_in.list_donors)
+            print(d)
         elif full_name == 'menu':
             return
         else:
@@ -284,7 +227,7 @@ def thank_you():
 
     # Enter a donation amount
     while True:
-        donation = int(input("Please enter a donation amount. 'menu' to return to original menu: "))
+        donation = float(input("Please enter a donation amount. 'menu' to return to original menu: "))
         if donation == 'menu':
             return
         try:
@@ -295,19 +238,16 @@ def thank_you():
             break
 
     # Enter a new donor
-    donor = donor_db.find_donor(full_name)
+    donor = donor_in.find_donor(full_name)
     if donor is None:
-        donor = donor_db.add_donor(full_name)
+        donor = donor_in.add_donor(full_name)
 
     # Add in donation for the donor
-    donor.donor_donation(donote)
+    donor.donor_donation(donate)
 
     # Print the donor letter
     # print(donor.letter_template())
-    print(Donor.letter_template(donor))
-
-
-    # print(Donor.letter_template(donor_obj, donor))
+    print(DonorDonations.letter_template(donor))
 
 
 def print_header():
@@ -330,10 +270,6 @@ def print_header():
     return selection
 
 
-def donor_report(file):
-    return (DonorDB.create_donor_report(data_dir))
-
-
 def main():
     """Main mneu of the program."""
     while True:
@@ -345,10 +281,19 @@ def main():
 
 
 if __name__ == '__main__':
+    donor_in = Donor()
+    initial_data = [
+    ["Jimmy Nguyen", [653772.32, 12.17]],
+    ["Steve Smith", [877.33, 55.67]],
+    ["Julia Norton", [663.23, 43.87, 1.32]],
+    ["Ed Johnson", [1663.23, 4300.87, 10432.15]],
+    ["Elizabeth McBath", [1663.23, 4300.87, 10432.25]]
+]
+
     menu_selection = {
         1: thank_you,
-        2: donor_db.create_donor_report,
-        3: donor_db.save_letters_to_disk,
+        2: donor_in.create_donor_report,
+        3: donor_in.send_letter_file,
         4: quit
     }
     main()
