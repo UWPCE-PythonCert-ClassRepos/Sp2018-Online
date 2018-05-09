@@ -137,4 +137,64 @@ class ControllerTests(unittest.TestCase):
     # TODO: write a test or tests for each of the behaviors defined for
     #       Controller.tick
 
-    pass
+    # pass
+    def setUp(self):
+        """Run each time before any test method is run."""
+        self.sensor = Sensor('http://127.0.0.1', '8000')
+        self.pump = Pump('http://127.0.0.1', '8000')
+        self.decider = Decider(100, 0.05)
+
+        self.controller = Controller(self.sensor, self.pump, self.decider)
+
+        self.actions = {'PUMP_IN': self.pump.PUMP_IN,
+                        'PUMP_OUT': self.pump.PUMP_OUT,
+                        'PUMP_OFF': self.pump.PUMP_OFF,
+                        }
+
+    def test_instantiate_controller(self):
+        """Test that an instance of the Controller class is created."""
+        # mock all external input instances
+        sensor = MagicMock()
+        pump = MagicMock()
+        decider = MagicMock()
+        self.controller = Controller(sensor, pump, decider)
+        self.assertIsInstance(self.controller, Controller)
+
+    def test_controller_tick_true_when_pump_acknowledged_state(self):
+        """Test that tick returns True when pump acknowledged a new state."""
+        # Provided that all external objects within tick work as expected
+        self.sensor.measure = MagicMock()
+        self.pump.get_state = MagicMock()
+        self.decider.decide = MagicMock()
+
+        # And provided that the pump acknowledged a new state
+        self.pump.set_state = MagicMock(return_value=True)
+
+        # Now tick must return True
+        self.assertTrue(self.controller.tick())
+
+    def test_controller_tick_false_when_pump_does_not_acknowledge_state(self):
+        """Test that tick returns True when pump acknowledged a new state."""
+        # Provided that all external objects within tick work as expected
+        self.sensor.measure = MagicMock()
+        self.pump.get_state = MagicMock()
+        self.decider.decide = MagicMock()
+
+        # And provided that the pump failed to acknowledge a new state
+        self.pump.set_state = MagicMock(return_value=False)
+
+        # Now tick must return False
+        self.assertFalse(self.controller.tick())
+
+    def test_tick_calls_sensor_measure(self):
+        """Test that all methods within tick are called with right args."""
+        self.sensor.measure = MagicMock(return_value=90)
+        self.pump.get_state = MagicMock(return_value=0)
+        self.decider.decide = MagicMock(return_value=1)
+        self.pump.set_state = MagicMock()
+
+        self.controller.tick()
+        self.sensor.measure.assert_called_with()
+        self.pump.get_state.assert_called_with()
+        self.decider.decide.assert_called_with(90, 0, self.actions)
+        self.pump.set_state.assert_called_with(1)
