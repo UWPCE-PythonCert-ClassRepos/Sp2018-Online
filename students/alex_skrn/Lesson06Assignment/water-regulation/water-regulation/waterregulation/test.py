@@ -1,6 +1,4 @@
-"""
-Unit tests for the water-regulation module
-"""
+"""Unit tests for the water-regulation module."""
 
 import unittest
 from unittest.mock import MagicMock
@@ -13,9 +11,7 @@ from .decider import Decider
 
 
 class DeciderTests(unittest.TestCase):
-    """
-    Unit tests for the Decider class
-    """
+    """Unit tests for the Decider class."""
 
     # # TODO: write a test or tests for each of the behaviors defined for
     # #       Decider.decide

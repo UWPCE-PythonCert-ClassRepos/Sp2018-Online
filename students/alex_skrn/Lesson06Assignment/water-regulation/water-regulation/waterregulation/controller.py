@@ -1,31 +1,24 @@
-"""
-Encapsulates command and coordination for the water-regulation module
-"""
+"""Encapsulates command and coordination for the water-regulation module."""
 
 
 class Controller(object):
-    """
-    Encapsulates command and coordination for the water-regulation module
-    """
+    """Encapsulates command and coordination for the waterregulation module."""
 
     def __init__(self, sensor, pump, decider):
-        """
-        Create a new controller
+        """Create a new controller.
 
         :param sensor: Typically an instance of sensor.Sensor
         :param pump: Typically an instance of pump.Pump
         :param decider: Typically an instance of decider.Decider
         """
-
         self.sensor = sensor
         self.pump = pump
         self.decider = decider
 
-        self.actions = {
-            'PUMP_IN': pump.PUMP_IN,
-            'PUMP_OUT': pump.PUMP_OUT,
-            'PUMP_OFF': pump.PUMP_OFF,
-        }
+        self.actions = {'PUMP_IN': pump.PUMP_IN,
+                        'PUMP_OUT': pump.PUMP_OUT,
+                        'PUMP_OFF': pump.PUMP_OFF,
+                        }
 
     def tick(self):
         """

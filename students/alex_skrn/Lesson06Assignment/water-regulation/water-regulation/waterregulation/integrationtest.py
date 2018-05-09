@@ -1,6 +1,4 @@
-"""
-Module tests for the water-regulation module
-"""
+"""Module tests for the water-regulation module."""
 
 import unittest
 from unittest.mock import MagicMock
@@ -13,13 +11,10 @@ from .decider import Decider
 
 
 class ModuleTests(unittest.TestCase):
-    """
-    Module tests for the water-regulation module
-    """
+    """Module tests for the water-regulation module."""
 
     # TODO: write an integration test that combines controller and decider,
     #       using a MOCKED sensor and pump.
-
     def setUp(self):
         """Run each time before any test method is run."""
         self.sensor = Sensor('http://127.0.0.1', '8000')
@@ -46,7 +41,7 @@ class ModuleTests(unittest.TestCase):
         #  So tick should returns true
         self.assertTrue(self.controller.tick())
 
-    def test_module_with_decider_behavior_one_tick_true(self):
+    def test_module_with_decider_behavior_one_tick_false(self):
         """Test that the module acts as expected for decider behavior 1."""
         # With mocked sensor and pump methods
         # Start with initial water height 90, i.e. 10 units below target
