@@ -41,6 +41,12 @@ class DeciderTests(unittest.TestCase):
 
         self.decider = Decider(100, 0.05)
 
+    def test_decider_init(self):
+        """Test that decider gets intantiated with expected params."""
+        self.assertIsInstance(self.decider, Decider)
+        self.assertEqual(self.decider.target_height, 100)
+        self.assertEqual(self.decider.margin, 0.05)
+
     def test_off_and_below_then_pump_in(self):
         """Test behavior 1.
 
@@ -129,10 +135,9 @@ class DeciderTests(unittest.TestCase):
                          self.pump.PUMP_OUT
                          )
 
+
 class ControllerTests(unittest.TestCase):
-    """
-    Unit tests for the Controller class
-    """
+    """Unit tests for the Controller class."""
 
     # TODO: write a test or tests for each of the behaviors defined for
     #       Controller.tick
@@ -151,14 +156,13 @@ class ControllerTests(unittest.TestCase):
                         'PUMP_OFF': self.pump.PUMP_OFF,
                         }
 
-    def test_instantiate_controller(self):
-        """Test that an instance of the Controller class is created."""
-        # mock all external input instances
-        sensor = MagicMock()
-        pump = MagicMock()
-        decider = MagicMock()
-        self.controller = Controller(sensor, pump, decider)
+    def test_controller_init(self):
+        """Test that controller gets intantiated with expected params."""
         self.assertIsInstance(self.controller, Controller)
+        self.assertIsInstance(self.controller.sensor, Sensor)
+        self.assertIsInstance(self.controller.pump, Pump)
+        self.assertIsInstance(self.controller.decider, Decider)
+        self.assertEqual(self.controller.actions, self.actions)
 
     def test_controller_tick_true_when_pump_acknowledged_state(self):
         """Test that tick returns True when pump acknowledged a new state."""
