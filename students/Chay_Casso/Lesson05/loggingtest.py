@@ -20,14 +20,18 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(formatter)
 
-syslog_handler = logging.handlers.DatagramHandler("127.0.0.1", 514)
+# Strangely, I can only get the following to work on my system if the logging level is set to DEBUG only.
+# No WARNING, No ERROR.
+syslog_handler = logging.handlers.DatagramHandler("127.0.0.1", 1514)
+# syslog_handler = logging.handlers.SysLogHandler(address=('localhost', 1514))
 syslog_handler.setLevel(logging.ERROR)
 syslog_handler.setFormatter(syslogformatter)
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
-logger.addHandler(file_handler)
 logger.addHandler(console_handler)
+logger.addHandler(file_handler)
+logger.addHandler(syslog_handler)
 
 def my_fun(n):
     for i in range(0, n):
