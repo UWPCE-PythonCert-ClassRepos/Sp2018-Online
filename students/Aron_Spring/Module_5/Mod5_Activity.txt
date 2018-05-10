@@ -1,0 +1,18 @@
+> c:\users\arona\recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  -> import sys
+  2
+  3     def my_fun(n):
+  4         if n == 2:
+  5             return True
+  6
+  7         return my_fun(n/2)
+  8
+  9     if __name__ == '__main__':
+ 10         n = int(sys.argv[1])
+ 11         print(my_fun(n))
+ 12
+(Pdb)
+
+The goal of the function should return false when 'n' is not a power of 2 or true when 'n' is a power of 2. However in this case only the true path has been defined. So there is no way to get at false and stop. Instead 'n' keeps getting divided by 2 and checks to see if n==2. To address we need the function to allow for where n < 1 to return false, and thereby stop recursion. 
