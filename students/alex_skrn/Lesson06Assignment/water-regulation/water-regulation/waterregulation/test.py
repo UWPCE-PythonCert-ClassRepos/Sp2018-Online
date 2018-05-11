@@ -49,7 +49,10 @@ class DeciderTests(unittest.TestCase):
         1. If the pump is off and the height is below the margin region,
         then the pump should be turned to PUMP_IN.
         """
-        self.assertEqual(self.decider.decide(90, 0, self.actions),
+        self.assertEqual(self.decider.decide(90,
+                                             self.pump.PUMP_OFF,
+                                             self.actions
+                                             ),
                          self.pump.PUMP_IN
                          )
 
@@ -59,7 +62,10 @@ class DeciderTests(unittest.TestCase):
         2. If the pump is off and the height is above the margin region, then
         the pump should be turned to PUMP_OUT.
         """
-        self.assertEqual(self.decider.decide(110, 0, self.actions),
+        self.assertEqual(self.decider.decide(110,
+                                             self.pump.PUMP_OFF,
+                                             self.actions
+                                             ),
                          self.pump.PUMP_OUT
                          )
 
@@ -71,23 +77,38 @@ class DeciderTests(unittest.TestCase):
         PUMP_OFF.
         """
         # pump off and height at the margin boundary then pump remains off
-        self.assertEqual(self.decider.decide(105, 0, self.actions),
+        self.assertEqual(self.decider.decide(105,
+                                             self.pump.PUMP_OFF,
+                                             self.actions
+                                             ),
                          self.pump.PUMP_OFF
                          )
         # pump off and height at the margin boundary then pump remains off
-        self.assertEqual(self.decider.decide(95, 0, self.actions),
+        self.assertEqual(self.decider.decide(95,
+                                             self.pump.PUMP_OFF,
+                                             self.actions
+                                             ),
                          self.pump.PUMP_OFF
                          )
         # pump off and height is withon margin then pump remains off
-        self.assertEqual(self.decider.decide(101, 0, self.actions),
+        self.assertEqual(self.decider.decide(101,
+                                             self.pump.PUMP_OFF,
+                                             self.actions
+                                             ),
                          self.pump.PUMP_OFF
                          )
         # pump off and height is withon margin then pump remains off
-        self.assertEqual(self.decider.decide(100, 0, self.actions),
+        self.assertEqual(self.decider.decide(100,
+                                             self.pump.PUMP_OFF,
+                                             self.actions
+                                             ),
                          self.pump.PUMP_OFF
                          )
         # pump off and height is withon margin then pump remains off
-        self.assertEqual(self.decider.decide(99, 0, self.actions),
+        self.assertEqual(self.decider.decide(99,
+                                             self.pump.PUMP_OFF,
+                                             self.actions
+                                             ),
                          self.pump.PUMP_OFF
                          )
 
