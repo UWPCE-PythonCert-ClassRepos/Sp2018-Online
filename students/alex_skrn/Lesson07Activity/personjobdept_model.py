@@ -77,10 +77,51 @@ class PersonNumKey(BaseModel):
     nickname = CharField(max_length = 20, null = True)
 
 
+class DeptIdField(CharField):
+    """Custom-define a field for Department table, to impose a restriction."""
+
+    def db_value(self, value):
+        """Provide a value for the database."""
+        if (len(value) != 4
+                or not value[0].isalpha()
+                or not value[1:].isdigit()):
+            raise TypeError("DeptID: 4 chars long and start with a letter")
+        return value
+
+    def python_value(self, value):
+        """Define a python value for the custom field."""
+        return value
+
+
+class Department(BaseModel):
+    """
+        This class defines Department, which maintains details of Departments
+        in which Jobs were held by a Person. Referenced to unique jobs.
+    """
+
+    logger.info('Now the Department class')
+    logger.info('Note: no primary key so there will be repeatitions of data')
+    logger.info('Department number')
+    dept_num = DeptIdField()
+
+    logger.info('Department name')
+    dept_name = CharField(max_length = 30)
+
+    logger.info('Department manager name')
+    dept_manager_name = CharField(max_length = 30)
+
+    logger.info('Duration in days that the job was held')
+    days_in_job = IntegerField()
+
+    logger.info('Which Job was held in this department - Jobs are unique')
+    job_held = ForeignKeyField(Job, related_name='job_held', null = False)
+
+
 database.create_tables([
         Job,
         Person,
-        PersonNumKey
+        PersonNumKey,
+        Department
     ])
 
 database.close()
