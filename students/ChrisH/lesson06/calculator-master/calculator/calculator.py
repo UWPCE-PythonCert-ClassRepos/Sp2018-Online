@@ -1,5 +1,6 @@
 from .exceptions import InsufficientOperands
 
+
 class Calculator(object):
 
     def __init__(self, adder, subtracter, multiplier, divider):
@@ -15,7 +16,7 @@ class Calculator(object):
 
     def _do_calc(self, operator):
         try:
-            result = operator.calc(self.stack[0], self.stack[1])
+            result = operator.calc(self.stack[1], self.stack[0])
         except IndexError:
             raise InsufficientOperands
 
