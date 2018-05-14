@@ -1,0 +1,206 @@
+# Running function with n = 15 results in recursive depth being exceeded because
+#n will never equal true and as a result n/2 will always be passed into the new 
+#function call until the depth is exceeded, example:
+
+#Value of n for each call:
+#(1)    n = 15
+#(2)    n = 7.5
+#(3)    n = 3.75
+#(4)    n = 1.875
+#(5)    n = 0.9375
+
+#as you can see n will never equal 2 and my_fun(n/2) will be called until the
+#depth is exceeded
+
+debugfile('C:/Users/seelc/OneDrive/Desktop/Python/Advanced Python/lesson 5 activity.py', wdir='C:/Users/seelc/OneDrive/Desktop/Python/Advanced Python')
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(6)<module>()
+      4 
+      5 @author: seelc
+----> 6 """
+      7 
+      8 import sys
+
+
+ipdb> n
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(8)<module>()
+      6 """
+      7 
+----> 8 import sys
+      9 
+     10 def my_fun(n):
+
+
+ipdb> n
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(10)<module>()
+      8 import sys
+      9 
+---> 10 def my_fun(n):
+     11     if n == 2:
+     12         return True
+
+
+ipdb> n
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(15)<module>()
+     13     return my_fun(n/2)
+     14 
+---> 15 if __name__ == '__main__':
+     16     n = 15
+     17     print(my_fun(n))
+
+
+ipdb> n
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(16)<module>()
+     13     return my_fun(n/2)
+     14 
+     15 if __name__ == '__main__':
+---> 16     n = 15
+     17     print(my_fun(n))
+
+
+ipdb> n
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(17)<module>()
+     13     return my_fun(n/2)
+     14 
+     15 if __name__ == '__main__':
+     16     n = 15
+---> 17     print(my_fun(n))
+
+
+ipdb> s
+--Call--
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(10)my_fun()
+      8 import sys
+      9 
+---> 10 def my_fun(n):
+     11     if n == 2:
+     12         return True
+
+
+ipdb> print(n)
+15
+
+ipdb> n
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(11)my_fun()
+      9 
+     10 def my_fun(n):
+---> 11     if n == 2:
+     12         return True
+     13     return my_fun(n/2)
+
+
+ipdb> n
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(13)my_fun()
+     11     if n == 2:
+     12         return True
+---> 13     return my_fun(n/2)
+     14 
+     15 if __name__ == '__main__':
+
+
+ipdb> s
+--Call--
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(10)my_fun()
+      8 import sys
+      9 
+---> 10 def my_fun(n):
+     11     if n == 2:
+     12         return True
+
+
+ipdb> print(n)
+7.5
+
+ipdb> n
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(11)my_fun()
+      9 
+     10 def my_fun(n):
+---> 11     if n == 2:
+     12         return True
+     13     return my_fun(n/2)
+
+
+ipdb> n
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(13)my_fun()
+     11     if n == 2:
+     12         return True
+---> 13     return my_fun(n/2)
+     14 
+     15 if __name__ == '__main__':
+
+
+ipdb> s
+--Call--
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(10)my_fun()
+      8 import sys
+      9 
+---> 10 def my_fun(n):
+     11     if n == 2:
+     12         return True
+
+
+ipdb> print(n)
+3.75
+
+ipdb> n
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(11)my_fun()
+      9 
+     10 def my_fun(n):
+---> 11     if n == 2:
+     12         return True
+     13     return my_fun(n/2)
+
+
+ipdb> n
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(13)my_fun()
+     11     if n == 2:
+     12         return True
+---> 13     return my_fun(n/2)
+     14 
+     15 if __name__ == '__main__':
+
+
+ipdb> s
+--Call--
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(10)my_fun()
+      8 import sys
+      9 
+---> 10 def my_fun(n):
+     11     if n == 2:
+     12         return True
+
+
+ipdb> print(n)
+1.875
+
+ipdb> n 
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(11)my_fun()
+      9 
+     10 def my_fun(n):
+---> 11     if n == 2:
+     12         return True
+     13     return my_fun(n/2)
+
+
+ipdb> n
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(13)my_fun()
+     11     if n == 2:
+     12         return True
+---> 13     return my_fun(n/2)
+     14 
+     15 if __name__ == '__main__':
+
+
+ipdb> s
+--Call--
+> c:\users\seelc\onedrive\desktop\python\advanced python\lesson 5 activity.py(10)my_fun()
+      8 import sys
+      9 
+---> 10 def my_fun(n):
+     11     if n == 2:
+     12         return True
+
+
+ipdb> print(n)
+0.9375
+
+ipdb> 

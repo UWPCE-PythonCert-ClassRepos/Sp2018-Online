@@ -18,15 +18,19 @@ class Locke:
         print("opening the doors")
         print("closing the doors")
         print("restarting the pumps")
+        return self
 
     
     #If I was working with opening + reading files I would ensure that
     #I was closing the file here, however in this example that isnt the case    
-    def __exit__(self):
+    def __exit__(self, exception_type, exception_value, traceback):
         print("stopping pumps")
         print("opening the doors")
         print("closing the doors")
         print("restarting the pumps")
+        if exception_type is not None:
+            print(exception_type, exception_value, traceback)
+        return self
 
     #Compares the boats moved to the Locke capacity to determine if the
     #boats can pass through
@@ -38,17 +42,17 @@ class Locke:
             print("Moved boats succesfully")
 
  
-#Used below code to test that outputs matched sample outputs       
-small_locke = Locke(5)
-large_locke = Locke(10)
+#Used below code to test that outputs matched sample outputs 
 boats = 8
-
-#small_locke.move_boats_through(boats)
-small_locke.__enter__()
-small_locke.__exit__()
+with Locke(5) as small_locke:
+    small_locke.move_boats_through(boats)
 
 
-large_locke.move_boats_through(boats)
+with Locke(10) as large_locke:
+    large_locke.move_boats_through(boats)
+
+
+
 
 
 
