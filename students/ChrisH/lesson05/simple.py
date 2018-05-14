@@ -6,11 +6,11 @@ import logging.handlers
 import datetime
 
 
-format = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
-format_syslog = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
+msg_log = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
+msg_syslog = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 
-formatter = logging.Formatter(format)
-formatter_syslog = logging.Formatter(format_syslog)
+formatter = logging.Formatter(msg_log)
+formatter_syslog = logging.Formatter(msg_syslog)
 
 syslog_handler = logging.handlers.DatagramHandler('localhost', 514)
 syslog_handler.setLevel(logging.ERROR)
