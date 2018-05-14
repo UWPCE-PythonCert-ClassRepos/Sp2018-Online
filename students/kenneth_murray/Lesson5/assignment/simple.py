@@ -10,6 +10,7 @@ so DO NOT include the current time in the format of the log messages that you se
 """
 import logging
 import datetime
+import logging.handlers
 
 format = "%(asctime)s %(filename)s:%(lineno)-3d %(levelname)s %(message)s"
 sys_error_format = "%(filename)s:%(lineno)-3d %(levelname)s %(message)s"
@@ -27,6 +28,10 @@ file_handler.setFormatter(formatter)
 file_error_handler.setLevel(logging.ERROR)
 file_error_handler.setFormatter(sys_error_formater)
 
+sys_log_handler = logging.handlers.DatagramHandler('127.0.0.1', 514)
+sys_log_handler.setLevel(logging.ERROR)
+sys_log_handler.setFormatter(sys_error_formater)
+
 console_handler = logging.StreamHandler()
 console_handler.setLevel(0)
 console_handler.setFormatter(formatter)
@@ -36,7 +41,7 @@ logger.setLevel(logging.DEBUG)
 logger.addHandler(file_handler)
 logger.addHandler(file_error_handler)
 logger.addHandler(console_handler)
-
+logger.addHandler(sys_log_handler)
 
 def my_fun(n):
     for i in range(0, n):
