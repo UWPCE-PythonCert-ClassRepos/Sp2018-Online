@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 
 import logging
+import logging.handlers
+import datetime
 
 format = "%(asctime)s %(filename)s:%(lineno)-4d %(levelname)s %(message)s"
+format_syslog = "%(filename)s:%(lineno)-4d %(levelname)s %(message)s"
 
 formatter = logging.Formatter(format)
+formatter_syslog = logging.Formatter(format_syslog)
 
-file_handler = logging.FileHandler('mylog.log')
+file_handler = logging.FileHandler("{}.log".format(str(datetime.date.today())))
 file_handler.setLevel(logging.WARNING)
 file_handler.setFormatter(formatter)
 
@@ -14,12 +18,17 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(formatter)
 
+syslog_handler = logging.handlers.SysLogHandler(address = ('127.0.0.1', 1514))
+syslog_handler.setLevel(logging.ERROR)
+syslog_handler.setFormatter(formatter_syslog)
+
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
+logger.addHandler(syslog_handler)
 
-logging.basicConfig(level = logging.WARNING, format = format, filename = 'mylog.txt')
+logging.basicConfig(level = logging.WARNING, format = format, filename = 'mylog.log')
 
 def my_fun(n):
     for i in range(0, n):
