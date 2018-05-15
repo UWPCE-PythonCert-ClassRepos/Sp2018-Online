@@ -117,7 +117,7 @@ class Department(BaseModel):
     days_in_job = IntegerField()
 
     logger.info('attr: job held  - a ref to a unique Job in the jobs table')
-    job_held = ForeignKeyField(Job, related_name='job_held', null=False)
+    job_held = ForeignKeyField(Job, related_name='job_held_at', null=False)
 
 
 database.create_tables([

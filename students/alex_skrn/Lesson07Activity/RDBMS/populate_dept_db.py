@@ -17,8 +17,6 @@ def populate_db():
 
     logger.info('----------------------------------------------------')
     logger.info('Working with Department class')
-    # logger.info('Note how I use constants and a list of tuples as a simple schema')
-    # logger.info('Normally you probably will have prompted for this from a user')
 
     dept_num = 0
     dept_name = 1
@@ -52,10 +50,10 @@ def populate_db():
 
         logger.info('Print the Department records we saved...')
         for saved_dept in Department:
-            logger.info(f'{saved_dept.dept_num} - {saved_dept.dept_name} ' +
+            logger.info(f'{saved_dept.dept_num}-{saved_dept.dept_name} ' +
                         f'headed by {saved_dept.dept_manager_name}; ' +
                         f'Days job held: {saved_dept.days_in_job}, ' +
-                        f'Jon Title: {saved_dept.job_held.job_name}')
+                        f'Job held title: {saved_dept.job_held.job_name}')
 
     except Exception as e:
         logger.info(f'Error creating = {department[dept_num]}')

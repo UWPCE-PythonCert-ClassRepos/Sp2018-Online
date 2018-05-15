@@ -27,7 +27,7 @@ for person in query:
     if len(person.was_filled_by) > 0:
         for job in person.was_filled_by:
             print(' worked as', job.job_name, end=' ')
-            for dept in job.job_held:
-                print('at', dept.dept_name)
+            for dept in job.job_held_at:
+                print('at', dept.dept_name, 'for', dept.days_in_job, 'days')
     else:
         print('  had no jobs')
