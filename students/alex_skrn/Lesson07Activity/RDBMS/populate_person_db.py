@@ -8,7 +8,7 @@
 
 import logging
 from peewee import *
-from Lesson07Activity.personjobdept_model import Person
+from .personjobdept_model import Person
 
 
 def populate_db():

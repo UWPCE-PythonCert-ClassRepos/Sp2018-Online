@@ -2,7 +2,7 @@
 
 import logging
 from peewee import *
-from Lesson07Activity.personjobdept_model import Department
+from .personjobdept_model import Department
 
 
 def populate_db():
@@ -15,6 +15,7 @@ def populate_db():
 
     database = SqliteDatabase('personjob.db')
 
+    logger.info('----------------------------------------------------')
     logger.info('Working with Department class')
     # logger.info('Note how I use constants and a list of tuples as a simple schema')
     # logger.info('Normally you probably will have prompted for this from a user')
@@ -26,17 +27,14 @@ def populate_db():
     job_held = 4
 
     departments = [
-        ('S002', 'Strategy', 'Bruce Willis', 1, 'Analyst'),
-        ('S002', 'Strategy', 'Bruce Willis', 2, 'Senior analyst'),
+        ('S002', 'Planning', 'Bruce Willis', 1, 'Analyst'),
+        ('S002', 'Planning', 'Bruce Willis', 2, 'Senior analyst'),
         ('S002', 'Strategy', 'Bruce Willis', 3, 'Senior business analyst'),
         ('A001', 'Administration', 'Eric Cartman', 10, 'Admin supervisor'),
         ('A001', 'Administration', 'Eric Cartman', 15, 'Admin manager'),
     ]
 
-
-    logger.info('Creating Department records: iterate through the list of tuples')
-    # logger.info('Prepare to explain any errors with exceptions')
-    # logger.info('and the transaction tells the database to fail on error')
+    logger.info('Create Department records: iterate through a list of tuples')
 
     try:
         database.connect()
@@ -54,15 +52,14 @@ def populate_db():
 
         logger.info('Print the Department records we saved...')
         for saved_dept in Department:
-            logger.info(f'In {saved_dept.dept_num} titled {saved_dept.dept_name} ' + \
-                        f'headed by {saved_dept.dept_manager_name} ' + \
-                        f'for {saved_dept.days_in_job} days ' +\
-                        f'the job of {saved_dept.job_held} was held')
+            logger.info(f'{saved_dept.dept_num} - {saved_dept.dept_name} ' +
+                        f'headed by {saved_dept.dept_manager_name}; ' +
+                        f'Days job held: {saved_dept.days_in_job}, ' +
+                        f'Jon Title: {saved_dept.job_held.job_name}')
 
     except Exception as e:
         logger.info(f'Error creating = {department[dept_num]}')
         logger.info(e)
-        logger.info('See how the database protects our data')
 
     finally:
         logger.info('database closes')

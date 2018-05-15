@@ -7,7 +7,7 @@
 """
 
 from peewee import *
-from Lesson07Activity.personjobdept_model import Person, Job
+from .personjobdept_model import Person, Job
 
 import logging
 
