@@ -10,384 +10,99 @@ Answer: The value of n becomes smaller or divided by 2 as the functions gets dee
 Debugging Output:
 =================
 
-Preethis-MacBook-Pro:python_workspace preethi$ python -m pdb recursive.py
+Preethis-MacBook-Pro:python_workspace preethi$ python -m pdb recursive.py 15
 > /Users/preethi/python_workspace/recursive.py(1)<module>()
 -> import sys
 (Pdb) n
 > /Users/preethi/python_workspace/recursive.py(3)<module>()
 -> def my_fun(n):
-(Pdb) ll
-  1  	import sys
-  2  	
-  3  ->	def my_fun(n):
-  4  	    if n == 2:
-  5  	        return True
-  6  	    return my_fun(n/2)
-  7  	
-  8  	if __name__ == "__main__":
-  9  	    n = int(sys.argv[1])
- 10  	    print(my_fun(n))
 (Pdb) n
 > /Users/preethi/python_workspace/recursive.py(8)<module>()
 -> if __name__ == "__main__":
 (Pdb) n
 > /Users/preethi/python_workspace/recursive.py(9)<module>()
 -> n = int(sys.argv[1])
-(Pdb) ll
-  1  	import sys
-  2  	
-  3  	def my_fun(n):
-  4  	    if n == 2:
-  5  	        return True
-  6  	    return my_fun(n/2)
-  7  	
-  8  	if __name__ == "__main__":
-  9  ->	    n = int(sys.argv[1])
- 10  	    print(my_fun(n))
+(Pdb) b 6
+Breakpoint 1 at /Users/preethi/python_workspace/recursive.py:6
+(Pdb) condition 1 n != 2
+New condition set for breakpoint 1.
 (Pdb) n
-IndexError: list index out of range
-> /Users/preethi/python_workspace/recursive.py(9)<module>()
--> n = int(sys.argv[1])
-(Pdb) 
---Return--
-> /Users/preethi/python_workspace/recursive.py(9)<module>()->None
--> n = int(sys.argv[1])
-(Pdb) ll
-  1  	import sys
-  2  	
-  3  	def my_fun(n):
-  4  	    if n == 2:
-  5  	        return True
-  6  	    return my_fun(n/2)
-  7  	
-  8  	if __name__ == "__main__":
-  9  ->	    n = int(sys.argv[1])
- 10  	    print(my_fun(n))
+> /Users/preethi/python_workspace/recursive.py(10)<module>()
+-> print(my_fun(n))
+(Pdb) pp n
+15
 (Pdb) c
-Traceback (most recent call last):
-  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/pdb.py", line 1667, in main
-    pdb._runscript(mainpyfile)
-  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/pdb.py", line 1548, in _runscript
-    self.run(statement)
-  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/bdb.py", line 431, in run
-    exec(cmd, globals, locals)
-  File "<string>", line 1, in <module>
-  File "/Users/preethi/python_workspace/recursive.py", line 9, in <module>
-    n = int(sys.argv[1])
-IndexError: list index out of range
-Uncaught exception. Entering post mortem debugging
-Running 'cont' or 'step' will restart the program
-> /Users/preethi/python_workspace/recursive.py(9)<module>()->None
--> n = int(sys.argv[1])
-(Pdb) s
-Post mortem debugger finished. The recursive.py will be restarted
-> /Users/preethi/python_workspace/recursive.py(1)<module>()
--> import sys
-(Pdb) s
-> /Users/preethi/python_workspace/recursive.py(3)<module>()
--> def my_fun(n):
-(Pdb) s
-> /Users/preethi/python_workspace/recursive.py(8)<module>()
--> if __name__ == "__main__":
-(Pdb) s
-> /Users/preethi/python_workspace/recursive.py(9)<module>()
--> n = int(sys.argv[1])
-(Pdb) s
-IndexError: list index out of range
-> /Users/preethi/python_workspace/recursive.py(9)<module>()
--> n = int(sys.argv[1])
-(Pdb) s
---Return--
-> /Users/preethi/python_workspace/recursive.py(9)<module>()->None
--> n = int(sys.argv[1])
-(Pdb) s
-IndexError: list index out of range
-> <string>(1)<module>()->None
-(Pdb) ll
-*** could not get source code
-(Pdb) ll
-*** could not get source code
-(Pdb) s
---Return--
-> <string>(1)<module>()->None
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+15
 (Pdb) c
-Traceback (most recent call last):
-  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/pdb.py", line 1667, in main
-    pdb._runscript(mainpyfile)
-  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/pdb.py", line 1548, in _runscript
-    self.run(statement)
-  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/bdb.py", line 431, in run
-    exec(cmd, globals, locals)
-  File "<string>", line 1, in <module>
-  File "/Users/preethi/python_workspace/recursive.py", line 9, in <module>
-    n = int(sys.argv[1])
-IndexError: list index out of range
-Uncaught exception. Entering post mortem debugging
-Running 'cont' or 'step' will restart the program
-> /Users/preethi/python_workspace/recursive.py(9)<module>()->None
--> n = int(sys.argv[1])
-(Pdb) 
-Post mortem debugger finished. The recursive.py will be restarted
-> /Users/preethi/python_workspace/recursive.py(1)<module>()
--> import sys
-(Pdb) n
-> /Users/preethi/python_workspace/recursive.py(3)<module>()
--> def my_fun(n):
-(Pdb) n
-> /Users/preethi/python_workspace/recursive.py(8)<module>()
--> if __name__ == "__main__":
-(Pdb) n
-> /Users/preethi/python_workspace/recursive.py(9)<module>()
--> n = int(sys.argv[1])
-(Pdb) ll
-  1  	import sys
-  2  	
-  3  	def my_fun(n):
-  4  	    if n == 2:
-  5  	        return True
-  6  	    return my_fun(n/2)
-  7  	
-  8  	if __name__ == "__main__":
-  9  ->	    n = int(sys.argv[1])
- 10  	    print(my_fun(n))
-(Pdb) n = 20
-IndexError: list index out of range
-> /Users/preethi/python_workspace/recursive.py(9)<module>()
--> n = int(sys.argv[1])
-(Pdb) n
---Return--
-> /Users/preethi/python_workspace/recursive.py(9)<module>()->None
--> n = int(sys.argv[1])
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
 (Pdb) pp n
-*** NameError: name 'n' is not defined
-(Pdb) n = 15
-IndexError: list index out of range
-> <string>(1)<module>()->None
-(Pdb) pp n
-*** NameError: name 'n' is not defined
-(Pdb) 
-*** NameError: name 'n' is not defined
-(Pdb) 
-*** NameError: name 'n' is not defined
-(Pdb) q
-Preethis-MacBook-Pro:python_workspace preethi$ clear
-
-Preethis-MacBook-Pro:python_workspace preethi$ python -m pdb recursive.py
-> /Users/preethi/python_workspace/recursive.py(1)<module>()
--> import sys
-(Pdb) ll
-  1  ->	import sys
-  2  	
-  3  	def my_fun(n):
-  4  	    if n == 2:
-  5  	        return True
-  6  	    return my_fun(n/2)
-  7  	
-  8  	if __name__ == "__main__":
-  9  	    n = int(sys.argv[1])
- 10  	    print(my_fun(n))
-(Pdb) n
-> /Users/preethi/python_workspace/recursive.py(3)<module>()
--> def my_fun(n):
-(Pdb) ll
-  1  	import sys
-  2  	
-  3  ->	def my_fun(n):
-  4  	    if n == 2:
-  5  	        return True
-  6  	    return my_fun(n/2)
-  7  	
-  8  	if __name__ == "__main__":
-  9  	    n = int(sys.argv[1])
- 10  	    print(my_fun(n))
-(Pdb) n = 15
-> /Users/preethi/python_workspace/recursive.py(8)<module>()
--> if __name__ == "__main__":
-(Pdb) pp n
-*** NameError: name 'n' is not defined
-(Pdb) n
-> /Users/preethi/python_workspace/recursive.py(9)<module>()
--> n = int(sys.argv[1])
-(Pdb) n = 15
-IndexError: list index out of range
-> /Users/preethi/python_workspace/recursive.py(9)<module>()
--> n = int(sys.argv[1])
-(Pdb) pp n
-*** NameError: name 'n' is not defined
-(Pdb) s
---Return--
-> /Users/preethi/python_workspace/recursive.py(9)<module>()->None
--> n = int(sys.argv[1])
+7.5
 (Pdb) c
-Traceback (most recent call last):
-  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/pdb.py", line 1667, in main
-    pdb._runscript(mainpyfile)
-  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/pdb.py", line 1548, in _runscript
-    self.run(statement)
-  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/bdb.py", line 431, in run
-    exec(cmd, globals, locals)
-  File "<string>", line 1, in <module>
-  File "/Users/preethi/python_workspace/recursive.py", line 9, in <module>
-    n = int(sys.argv[1])
-IndexError: list index out of range
-Uncaught exception. Entering post mortem debugging
-Running 'cont' or 'step' will restart the program
-> /Users/preethi/python_workspace/recursive.py(9)<module>()->None
--> n = int(sys.argv[1])
-(Pdb) ll
-  1  	import sys
-  2  	
-  3  	def my_fun(n):
-  4  	    if n == 2:
-  5  	        return True
-  6  	    return my_fun(n/2)
-  7  	
-  8  	if __name__ == "__main__":
-  9  ->	    n = int(sys.argv[1])
- 10  	    print(my_fun(n))
-(Pdb) n
-Post mortem debugger finished. The recursive.py will be restarted
-> /Users/preethi/python_workspace/recursive.py(1)<module>()
--> import sys
-(Pdb) s
-> /Users/preethi/python_workspace/recursive.py(3)<module>()
--> def my_fun(n):
-(Pdb) s
-> /Users/preethi/python_workspace/recursive.py(8)<module>()
--> if __name__ == "__main__":
-(Pdb) s
-> /Users/preethi/python_workspace/recursive.py(9)<module>()
--> n = int(sys.argv[1])
-(Pdb) s
-IndexError: list index out of range
-> /Users/preethi/python_workspace/recursive.py(9)<module>()
--> n = int(sys.argv[1])
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
 (Pdb) pp n
-*** NameError: name 'n' is not defined
-(Pdb) b
-(Pdb) 
-(Pdb) ll
-  1  	import sys
-  2  	
-  3  	def my_fun(n):
-  4  	    if n == 2:
-  5  	        return True
-  6  	    return my_fun(n/2)
-  7  	
-  8  	if __name__ == "__main__":
-  9  ->	    n = int(sys.argv[1])
- 10  	    print(my_fun(n))
-(Pdb) s
---Return--
-> /Users/preethi/python_workspace/recursive.py(9)<module>()->None
--> n = int(sys.argv[1])
-(Pdb) ll
-  1  	import sys
-  2  	
-  3  	def my_fun(n):
-  4  	    if n == 2:
-  5  	        return True
-  6  	    return my_fun(n/2)
-  7  	
-  8  	if __name__ == "__main__":
-  9  ->	    n = int(sys.argv[1])
- 10  	    print(my_fun(n))
-(Pdb) n = 10
-IndexError: list index out of range
-> <string>(1)<module>()->None
-(Pdb) pp n
-*** NameError: name 'n' is not defined
-(Pdb) unt
---Return--
-> <string>(1)<module>()->None
-(Pdb) j 10
-*** Jump failed: line 10 comes after the current code block
-(Pdb) ll
-*** could not get source code
+3.75
 (Pdb) c
-Traceback (most recent call last):
-  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/pdb.py", line 1667, in main
-    pdb._runscript(mainpyfile)
-  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/pdb.py", line 1548, in _runscript
-    self.run(statement)
-  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/bdb.py", line 431, in run
-    exec(cmd, globals, locals)
-  File "<string>", line 1, in <module>
-  File "/Users/preethi/python_workspace/recursive.py", line 9, in <module>
-    n = int(sys.argv[1])
-IndexError: list index out of range
-Uncaught exception. Entering post mortem debugging
-Running 'cont' or 'step' will restart the program
-> /Users/preethi/python_workspace/recursive.py(9)<module>()->None
--> n = int(sys.argv[1])
-(Pdb) j 9
-> /Users/preethi/python_workspace/recursive.py(9)<module>()->None
--> n = int(sys.argv[1])
-(Pdb) ll
-  1  	import sys
-  2  	
-  3  	def my_fun(n):
-  4  	    if n == 2:
-  5  	        return True
-  6  	    return my_fun(n/2)
-  7  	
-  8  	if __name__ == "__main__":
-  9  ->	    n = int(sys.argv[1])
- 10  	    print(my_fun(n))
-(Pdb) n = 15
-Post mortem debugger finished. The recursive.py will be restarted
-> /Users/preethi/python_workspace/recursive.py(1)<module>()
--> import sys
-(Pdb) pp n
-*** NameError: name 'n' is not defined
-(Pdb) w
-  /Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/bdb.py(431)run()
--> exec(cmd, globals, locals)
-  <string>(1)<module>()
-> /Users/preethi/python_workspace/recursive.py(1)<module>()
--> import sys
-(Pdb) n
-> /Users/preethi/python_workspace/recursive.py(3)<module>()
--> def my_fun(n):
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
 (Pdb) 
-> /Users/preethi/python_workspace/recursive.py(8)<module>()
--> if __name__ == "__main__":
-(Pdb) s
-> /Users/preethi/python_workspace/recursive.py(9)<module>()
--> n = int(sys.argv[1])
-(Pdb) s
-IndexError: list index out of range
-> /Users/preethi/python_workspace/recursive.py(9)<module>()
--> n = int(sys.argv[1])
-(Pdb) d
-*** Newest frame
-(Pdb) d
-*** Newest frame
-(Pdb) w
-  /Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/bdb.py(431)run()
--> exec(cmd, globals, locals)
-  <string>(1)<module>()
-> /Users/preethi/python_workspace/recursive.py(9)<module>()
--> n = int(sys.argv[1])
-(Pdb) ll
-  1  	import sys
-  2  	
-  3  	def my_fun(n):
-  4  	    if n == 2:
-  5  	        return True
-  6  	    return my_fun(n/2)
-  7  	
-  8  	if __name__ == "__main__":
-  9  ->	    n = int(sys.argv[1])
- 10  	    print(my_fun(n))
-(Pdb) n = 10
---Return--
-> /Users/preethi/python_workspace/recursive.py(9)<module>()->None
--> n = int(sys.argv[1])
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
 (Pdb) pp n
-*** NameError: name 'n' is not defined
-(Pdb) p n
-*** NameError: name 'n' is not defined
+0.9375
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.46875
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.234375
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.1171875
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.05859375
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.029296875
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.0146484375
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.00732421875
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.003662109375
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp
+*** SyntaxError: unexpected EOF while parsing
+(Pdb) nn n
+*** SyntaxError: invalid syntax
+(Pdb) pp n
+0.0018310546875
 (Pdb) 
 
 
