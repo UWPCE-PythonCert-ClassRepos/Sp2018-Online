@@ -17,10 +17,10 @@ class DeciderTests(unittest.TestCase):
     Unit tests for the Decider class
     """
 
-
     def setUp(self):
         """
-        setUp method for running each test. Set up with default address and port.
+        setUp method for running each test. Set up with default address
+        and port.
         """
 
         self.pump = Pump('127.0.0.1', 8000)
@@ -75,7 +75,7 @@ class DeciderTests(unittest.TestCase):
     def test_pump_in_below_target(self):
         """
         Behavior 4b from the decider class: If the pump is pumping in and the
-        water level is below the target, the pump shall continue to pump in. 
+        water level is below the target, the pump shall continue to pump in.
         Since the target is 5, and if the level is at 1, it should remain on.
         """
         decider_4b = self.decider.decide(1, self.pump.PUMP_IN, self.actions)
@@ -85,7 +85,7 @@ class DeciderTests(unittest.TestCase):
     def test_pump_out_below_target(self):
         """
         Behavior 5a from the decider class. If the pump is pumping out and the
-        water level is below the target, it shall turn off. Since the target is 
+        water level is below the target, it shall turn off. Since the target is
         5 and if the water level is at 4.9, it should turn off.
         """
         decider_5a = self.decider.decide(4.9, self.pump.PUMP_OUT, self.actions)
@@ -111,7 +111,7 @@ class ControllerTests(unittest.TestCase):
 
     def setUp(self):
         """
-        setUp method for running each test. 
+        setUp method for running each test.
         """
         self.sensor = Sensor('127.0.0.1', 8000)
         self.pump = Pump('127.0.0.1', 8000)
@@ -122,32 +122,31 @@ class ControllerTests(unittest.TestCase):
             'PUMP_OUT': self.pump.PUMP_OUT,
             'PUMP_OFF': self.pump.PUMP_OFF,
         }
-        
-        self.controller = Controller(self.sensor, self.pump, self.decider)       
 
+        self.controller = Controller(self.sensor, self.pump, self.decider)
 
     def test_determine_next_state_true(self):
         """
-        Test that tick returns true when given mocked data to 
+        Test that tick returns true when given mocked data to
         yield a response of True.
         """
 
-        self.sensor.measure = MagicMock(return_value = 4)
-        self.pump.get_state = MagicMock(return_value = 0)
-        self.decider.decide = MagicMock(return_value = self.actions['PUMP_IN'])
-        self.pump.set_state = MagicMock(return_value = True)
+        self.sensor.measure = MagicMock(return_value=4)
+        self.pump.get_state = MagicMock(return_value=0)
+        self.decider.decide = MagicMock(return_value=self.actions['PUMP_IN'])
+        self.pump.set_state = MagicMock(return_value=True)
 
         self.assertEqual(self.controller.tick(), True)
 
     def test_determine_next_state_false(self):
         """
-        Test that tick returns true when given mocked data to 
+        Test that tick returns true when given mocked data to
         yield a response of True.
         """
 
-        self.sensor.measure = MagicMock(return_value = 4)
-        self.pump.get_state = MagicMock(return_value = -1)
-        self.decider.decide = MagicMock(return_value = self.actions['PUMP_OFF'])
-        self.pump.set_state = MagicMock(return_value = False)
+        self.sensor.measure = MagicMock(return_value=4)
+        self.pump.get_state = MagicMock(return_value=-1)
+        self.decider.decide = MagicMock(return_value=self.actions['PUMP_OFF'])
+        self.pump.set_state = MagicMock(return_value=False)
 
         self.assertEqual(self.controller.tick(), False)
