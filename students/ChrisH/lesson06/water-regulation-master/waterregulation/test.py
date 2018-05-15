@@ -27,8 +27,8 @@ class DeciderTests(unittest.TestCase):
         self.controller = Controller(self.sensor, self.pump, self.decider)
 
         self.actions = {'PUMP_IN': Pump.PUMP_IN,
-                   'PUMP_OFF': Pump.PUMP_OFF,
-                   'PUMP_OUT': Pump.PUMP_OUT}
+                        'PUMP_OFF': Pump.PUMP_OFF,
+                        'PUMP_OUT': Pump.PUMP_OUT}
 
     def test_decider(self):
         """
@@ -36,23 +36,41 @@ class DeciderTests(unittest.TestCase):
         """
 
         # Pump OFF, level low
-        self.assertEqual(self.decider.decide(50, self.actions['PUMP_OFF'], self.actions), self.actions['PUMP_IN'])
+        self.assertEqual(
+            self.decider.decide(50, self.actions['PUMP_OFF'],
+                                self.actions), self.actions['PUMP_IN'])
         # Pump OFF, level high
-        self.assertEqual(self.decider.decide(150, self.actions['PUMP_OFF'], self.actions), self.actions['PUMP_OUT'])
+        self.assertEqual(
+            self.decider.decide(150, self.actions['PUMP_OFF'],
+                                self.actions), self.actions['PUMP_OUT'])
         # Pump OFF, level within margin
-        self.assertEqual(self.decider.decide(100, self.actions['PUMP_OFF'], self.actions), self.actions['PUMP_OFF'])
-        self.assertEqual(self.decider.decide(102, self.actions['PUMP_OFF'], self.actions), self.actions['PUMP_OFF'])
-        self.assertEqual(self.decider.decide(98, self.actions['PUMP_OFF'], self.actions), self.actions['PUMP_OFF'])
+        self.assertEqual(
+            self.decider.decide(100, self.actions['PUMP_OFF'],
+                                self.actions), self.actions['PUMP_OFF'])
+        self.assertEqual(
+            self.decider.decide(102, self.actions['PUMP_OFF'],
+                                self.actions), self.actions['PUMP_OFF'])
+        self.assertEqual(
+            self.decider.decide(98, self.actions['PUMP_OFF'],
+                                self.actions), self.actions['PUMP_OFF'])
 
         # Pump IN, level above target
-        self.assertEqual(self.decider.decide(150, self.actions['PUMP_IN'], self.actions), self.actions['PUMP_OFF'])
+        self.assertEqual(
+            self.decider.decide(150, self.actions['PUMP_IN'],
+                                self.actions), self.actions['PUMP_OFF'])
         # Pump IN, level below target
-        self.assertEqual(self.decider.decide(50, self.actions['PUMP_IN'], self.actions), self.actions['PUMP_IN'])
+        self.assertEqual(
+            self.decider.decide(50, self.actions['PUMP_IN'],
+                                self.actions), self.actions['PUMP_IN'])
 
         # Pump OUT, level below target
-        self.assertEqual(self.decider.decide(50, self.actions['PUMP_OUT'], self.actions), self.actions['PUMP_OFF'])
+        self.assertEqual(
+            self.decider.decide(50, self.actions['PUMP_OUT'],
+                                self.actions), self.actions['PUMP_OFF'])
         # Pump OUT, level above target
-        self.assertEqual(self.decider.decide(150, self.actions['PUMP_OUT'], self.actions), self.actions['PUMP_OUT'])
+        self.assertEqual(
+            self.decider.decide(150, self.actions['PUMP_OUT'],
+                                self.actions), self.actions['PUMP_OUT'])
 
         # Test bad input to decider actions
         self.assertIsNone(self.decider.decide(100, 100, self.actions))
@@ -71,14 +89,12 @@ class DeciderTests(unittest.TestCase):
                                                 'PUMP_OFF': Pump.PUMP_OFF})
 
 
-
-
 class ControllerTests(unittest.TestCase):
     """
     Unit tests for the Controller class
     """
 
-    # TODO: write a test or tests for each of the behaviors defined for
+    # DONE: write a test or tests for each of the behaviors defined for
     #       Controller.tick
 
     def setUp(self):
@@ -104,22 +120,23 @@ class ControllerTests(unittest.TestCase):
         self.assertFalse(self.controller.tick())
 
 
-
-"""
-C:\Users\Chris\Desktop\UW_Python\Sp2018-Online\students\ChrisH\lesson06\water-regulation-master>coverage run --include=waterregulation\controller.py,waterregulation\decider.py -m unittest waterregulation\test.py
-..
-----------------------------------------------------------------------
-Ran 2 tests in 0.003s
-
-OK
-
-C:\Users\Chris\Desktop\UW_Python\Sp2018-Online\students\ChrisH\lesson06\water-regulation-master>coverage report
-Name                            Stmts   Miss  Cover
----------------------------------------------------
-waterregulation\controller.py      11      0   100%
-waterregulation\decider.py         20      0   100%
----------------------------------------------------
-TOTAL                              31      0   100%
-
-C:\Users\Chris\Desktop\UW_Python\Sp2018-Online\students\ChrisH\lesson06\water-regulation-master>
-"""
+# C:\Users\Chris\Desktop\UW_Python\Sp2018-Online\students\ChrisH\lesson06\water-regulation-master>
+# coverage run
+# --include=waterregulation\controller.py,waterregulation\decider.py
+# -m unittest waterregulation\test.py
+# ..
+# ----------------------------------------------------------------------
+# Ran 2 tests in 0.003s
+#
+# OK
+#
+# C:\Users\Chris\Desktop\UW_Python\Sp2018-Online\students\ChrisH\lesson06\water-regulation-master>
+# coverage report
+# Name                            Stmts   Miss  Cover
+# ---------------------------------------------------
+# waterregulation\controller.py      11      0   100%
+# waterregulation\decider.py         20      0   100%
+# ---------------------------------------------------
+# TOTAL                              31      0   100%
+#
+# C:\Users\Chris\Desktop\UW_Python\Sp2018-Online\students\ChrisH\lesson06\water-regulation-master>
