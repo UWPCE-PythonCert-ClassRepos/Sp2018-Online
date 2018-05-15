@@ -42,9 +42,6 @@ class Controller(object):
         current_state = self.pump.get_state()
         next_state = self.decider.decide(current_height,
                                          current_state,
-                                         {'PUMP_IN': self.pump.PUMP_IN,
-                                          'PUMP_OFF': self.pump.PUMP_OFF,
-                                          'PUMP_OUT': self.pump.Pump_OUT})
-        self.pump.set_state(next_state)
+                                         self.actions)
+        return self.pump.set_state(next_state)
 
-        return None

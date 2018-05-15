@@ -69,6 +69,6 @@ class Decider(object):
             else:
                 return actions['PUMP_OUT']
 
-        return
+        return None
 
 
