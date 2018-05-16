@@ -5,6 +5,7 @@
 """
 
 import logging
+# from datetime import date
 from peewee import *
 
 logging.basicConfig(level=logging.INFO)
@@ -40,9 +41,9 @@ class Person(BaseModel):
     logger.info('Specify the fields in our model, their lengths and if mandatory')
     logger.info('Must be a unique identifier for each person')
 
-    person_name = CharField(primary_key = True, max_length = 30)
-    lives_in_town = CharField(max_length = 40)
-    nickname = CharField(max_length = 20, null = True)
+    person_name = CharField(primary_key=True, max_length=30)
+    lives_in_town = CharField(max_length=40)
+    nickname = CharField(max_length=20, null=True)
 
 
 class Job(BaseModel):
@@ -52,29 +53,15 @@ class Job(BaseModel):
     """
 
     logger.info('Now the Job class with a simlar approach')
-    job_name = CharField(primary_key = True, max_length = 30)
+    job_name = CharField(primary_key=True, max_length=30)
     logger.info('Dates')
-    start_date = DateField(formats = 'YYYY-MM-DD')
-    end_date = DateField(formats = 'YYYY-MM-DD')
+    start_date = DateField(formats='YYYY-MM-DD')
+    end_date = DateField(formats='YYYY-MM-DD')
     logger.info('Number')
 
-    salary = DecimalField(max_digits = 7, decimal_places = 2)
+    salary = DecimalField(max_digits=7, decimal_places=2)
     logger.info('Which person had the Job')
-    person_employed = ForeignKeyField(Person, related_name='was_filled_by', null = False)
-
-
-class PersonNumKey(BaseModel):
-    """
-        This class defines Person, which maintains details of someone
-        for whom we want to research career to date.
-    """
-
-    logger.info('An alternate Person class')
-    logger.info("Note: no primary key so we're give one 'for free'")
-
-    person_name = CharField(max_length = 30)
-    lives_in_town = CharField(max_length = 40)
-    nickname = CharField(max_length = 20, null = True)
+    person_employed = ForeignKeyField(Person, related_name='was_filled_by', null=False)
 
 
 class DeptIdField(CharField):
@@ -82,6 +69,7 @@ class DeptIdField(CharField):
 
     logger.info('----------------------------------------------------')
     logger.info('Create DeptIdField class to store an alphanumerical number')
+
     def db_value(self, value):
         """Provide a value for the database."""
         if (len(value) != 4
@@ -103,7 +91,8 @@ class Department(BaseModel):
 
     logger.info('----------------------------------------------------')
     logger.info('Create the Department class')
-    logger.info('No PK here: the relationship is many-jobs-to-one-department')
+    logger.info('No PK here: a person can holder many jobs in the same department')
+    logger.info('But there is a safeguard at the level of the program against duplicate records')
     logger.info('attr: department number by using a special class')
     dept_num = DeptIdField()
 
@@ -123,7 +112,6 @@ class Department(BaseModel):
 database.create_tables([
         Job,
         Person,
-        PersonNumKey,
         Department
     ])
 
