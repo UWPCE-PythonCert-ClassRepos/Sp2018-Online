@@ -7,16 +7,13 @@ from .personjobdept_model import Department, Job
 
 
 def populate_db():
-    """
-    add department data to database
-    """
+    """Add department data to database."""
 
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
     database = SqliteDatabase('personjob.db')
 
-    logger.info('----------------------------------------------------')
     logger.info('Working with Department class')
 
     dept_num = 0
@@ -30,11 +27,11 @@ def populate_db():
         ('S002', 'Strategy', 'Bruce Willis', 'Senior business analyst'),
         ('A001', 'Administration', 'Eric Cartman', 'Admin supervisor'),
         ('A001', 'Administration', 'Eric Cartman', 'Admin manager'),
-    ]
+                  ]
 
     logger.info('Create Department records: iterate through a list of tuples')
-    logger.info('and calculate the number of days in a job by using job table')
-    logger.info('Note the use of a safeguard to prevent duplication of records')
+    logger.info('and calculate the number of days in a job by using Job table')
+    logger.info('There is also a safeguard to prevent duplication of records')
 
     def calculate_days(date1, date2):
         """Return difference in days between two dates from the db."""
@@ -45,31 +42,32 @@ def populate_db():
     try:
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
-        for department in departments:
+        for dept in departments:
             with database.transaction():
-                # Get the relevant job record by using its unique name
-                job = Job.get(Job.job_name == department[job_held])
+                # Here I get the relevant job record to calculate days in job
+                job = Job.get(Job.job_name == dept[job_held])
                 days_in_job = calculate_days(job.start_date, job.end_date)
                 # Here I check if such record already exists (since no PK here)
                 check_query = (Department
                                .select()
                                .where(
-                                   (Department.dept_num == department[dept_num]) &
-                                   (Department.dept_name == department[dept_name]) &
-                                   (Department.dept_manager_name == department[dept_manager_name]) &
+                                   (Department.dept_num == dept[dept_num]) &
+                                   (Department.dept_name == dept[dept_name]) &
+                                   (Department.dept_manager_name == dept[dept_manager_name]) &
                                    (Department.days_in_job == days_in_job) &
-                                   (Department.job_held == department[job_held])
-                                     )
+                                   (Department.job_held == dept[job_held])
+                                      )
                                )
                 if check_query.exists():
-                    logger.info('Returned from deprt populate_db() because Department record already exists')
+                    logger.info('Returned from dept populate_db() because Department record already exists')
                     return
+                # Now create the record
                 new_dept = Department.create(
-                    dept_num=department[dept_num],
-                    dept_name=department[dept_name],
-                    dept_manager_name=department[dept_manager_name],
+                    dept_num=dept[dept_num],
+                    dept_name=dept[dept_name],
+                    dept_manager_name=dept[dept_manager_name],
                     days_in_job=days_in_job,
-                    job_held=department[job_held])
+                    job_held=dept[job_held])
 
                 new_dept.save()
                 logger.info('Database add successful')
@@ -82,7 +80,7 @@ def populate_db():
                         f'Job held title: {saved_dept.job_held.job_name}')
 
     except Exception as e:
-        logger.info(f'Error creating = {department[dept_num]}')
+        logger.info(f'Error creating = {dept[dept_num]}')
         logger.info(e)
 
     finally:

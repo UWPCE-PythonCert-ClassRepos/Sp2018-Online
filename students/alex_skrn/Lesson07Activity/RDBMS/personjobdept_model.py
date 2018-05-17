@@ -1,11 +1,12 @@
-"""
-    Simple database example with Peewee ORM, sqlite and Python
-    Here we define the schema
-    Use logging for messages so they can be turned off
+"""Simple database example with Peewee ORM, sqlite and Python.
+
+Here we define the schema
+
+I only added DeptIdField class and Department class compared to the
+instructor-provided code and made minor lint-demanded corrections.
 """
 
 import logging
-# from datetime import date
 from peewee import *
 
 logging.basicConfig(level=logging.INFO)
@@ -47,10 +48,7 @@ class Person(BaseModel):
 
 
 class Job(BaseModel):
-    """
-        This class defines Job, which maintains details of past Jobs
-        held by a Person.
-    """
+    """This class defines Job, which maintains details of past Jobs held by a Person."""
 
     logger.info('Now the Job class with a simlar approach')
     job_name = CharField(primary_key=True, max_length=30)
@@ -61,13 +59,14 @@ class Job(BaseModel):
 
     salary = DecimalField(max_digits=7, decimal_places=2)
     logger.info('Which person had the Job')
-    person_employed = ForeignKeyField(Person, related_name='was_filled_by', null=False)
+    person_employed = ForeignKeyField(Person,
+                                      related_name='was_filled_by',
+                                      null=False)
 
 
 class DeptIdField(CharField):
     """Custom-define a field for Department table, to impose a restriction."""
 
-    logger.info('----------------------------------------------------')
     logger.info('Create DeptIdField class to store an alphanumerical number')
 
     def db_value(self, value):
@@ -75,37 +74,33 @@ class DeptIdField(CharField):
         if (len(value) != 4
                 or not value[0].isalpha()
                 or not value[1:].isdigit()):
-            raise TypeError("DeptID: 4 chars long and start with a letter")
-        return value
-
-    def python_value(self, value):
-        """Define a python value for the custom field."""
+            raise TypeError("DeptID to be 4 chars long + start with a letter")
         return value
 
 
 class Department(BaseModel):
-    """
-        This class defines Department, which maintains details of Departments
-        in which Jobs were held by a Person. Referenced to unique jobs.
+    """This class defines Department.
+
+    It maintains details of Departments
+    in which Jobs were held by a Person. Back-referenced to unique Jobs.
     """
 
-    logger.info('----------------------------------------------------')
     logger.info('Create the Department class')
-    logger.info('No PK here: a person can holder many jobs in the same department')
-    logger.info('But there is a safeguard at the level of the program against duplicate records')
-    logger.info('attr: department number by using a special class')
+    logger.info('No PK here: a person can hold many jobs in the same Dept')
+    logger.info('But the program has a safeguard against duplicate records')
+    logger.info('Create attr dept_number by using a custom class')
     dept_num = DeptIdField()
 
-    logger.info('attr: department name')
+    logger.info('Create attr dept_name')
     dept_name = CharField(max_length=30)
 
-    logger.info('attr: department manager name')
+    logger.info('Create attr department_manager_name')
     dept_manager_name = CharField(max_length=30)
 
-    logger.info('attr: length of job')
+    logger.info('Create attr length_of_job_in_days')
     days_in_job = IntegerField()
 
-    logger.info('attr: job held  - a ref to a unique Job in the jobs table')
+    logger.info('Create attr job_held -  a ref to Job table')
     job_held = ForeignKeyField(Job, related_name='job_held_at', null=False)
 
 
