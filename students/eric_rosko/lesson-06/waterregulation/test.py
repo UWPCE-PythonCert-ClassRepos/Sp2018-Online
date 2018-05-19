@@ -3,13 +3,6 @@
 """
 Unit tests for the water-regulation module
 
-Usage:
-    coverage run --source=waterregulation  -m unittest waterregulation/test.py; coverage report
-    coverage run --source=waterregulation  -m unittest waterregulation/test.py; coverage report
-    coverage run --source=waterregulation  -m unittest waterregulation/integrationtest.py; coverage report
-
-    coverage run --source=waterregulation  -m unittest waterregulation/integrationtest.py waterregulation/test.py; coverage report
-
 """
 
 import unittest
@@ -38,66 +31,99 @@ class DeciderTests(unittest.TestCase):
 
     def test_one(self):
         '''
-        #   1. If the pump is off and the height is below the margin region, then the
+        #   1. If the pump is off and the height is below the margin region,
+        then the
         #      pump should be turned to PUMP_IN.
         '''
-        self.assertEqual(self.decider.decide(3, Pump.PUMP_OFF, self.controller.actions), Pump.PUMP_OFF)
+        self.assertEqual(self.decider.decide(3,
+                                             Pump.PUMP_OFF,
+                                             self.controller.actions),
+                         Pump.PUMP_OFF)
 
     def test_two(self):
         '''
-        #   2. If the pump is off and the height is above the margin region, then the
+        #   2. If the pump is off and the height is above the margin region,
+        then the
         #      pump should be turned to PUMP_OUT.
         '''
-        self.assertEqual(self.decider.decide(8, Pump.PUMP_OFF, self.controller.actions), Pump.PUMP_OUT)
+        self.assertEqual(self.decider.decide(8,
+                                             Pump.PUMP_OFF,
+                                             self.controller.actions),
+                         Pump.PUMP_OUT)
 
     def test_three(self):
         '''
-        #   3. If the pump is off and the height is within the margin region or on
-        #      the exact boundary of the margin region, then the pump shall remain at
+        #   3. If the pump is off and the height is within the margin region
+         or on
+        #      the exact boundary of the margin region, then the pump shall
+        remain at
         #      PUMP_OFF.
         '''
-        self.assertEqual(self.decider.decide(3, Pump.PUMP_OFF, self.controller.actions), Pump.PUMP_OFF)
+        self.assertEqual(self.decider.decide(3,
+                                             Pump.PUMP_OFF,
+                                             self.controller.actions),
+                         Pump.PUMP_OFF)
 
     def test_three_high_level(self):
         '''
-        #   3. If the pump is off and the height is within the margin region or on
-        #      the exact boundary of the margin region, then the pump shall remain at
+        #   3. If the pump is off and the height is within the margin region
+         or on
+        #      the exact boundary of the margin region, then the pump shall
+        remain at
         #      PUMP_OFF.
         '''
-        self.assertEqual(self.decider.decide(7, Pump.PUMP_OFF, self.controller.actions), Pump.PUMP_OFF)
+        self.assertEqual(self.decider.decide(7,
+                                             Pump.PUMP_OFF,
+                                             self.controller.actions),
+                         Pump.PUMP_OFF)
 
     def test_four(self):
         '''
-        #   4. If the pump is performing PUMP_IN and the height is above the target
-        #      height, then the pump shall be turned to PUMP_OFF, otherwise the pump
+        #   4. If the pump is performing PUMP_IN and the height is above the
+         target
+        #      height, then the pump shall be turned to PUMP_OFF, otherwise
+         the pump
         #      shall remain at PUMP_IN.
         '''
-        self.assertEqual(self.decider.decide(6, Pump.PUMP_IN, self.controller.actions), Pump.PUMP_OFF)
-
+        self.assertEqual(self.decider.decide(6,
+                                             Pump.PUMP_IN,
+                                             self.controller.actions),
+                         Pump.PUMP_OFF)
 
     def test_four_no_change(self):
         '''
-        #   4. If the pump is performing PUMP_IN and the height is above the target
-        #      height, then the pump shall be turned to PUMP_OFF, otherwise the pump
+        #   4. If the pump is performing PUMP_IN and the height is above the
+         target
+        #      height, then the pump shall be turned to PUMP_OFF, otherwise
+        the pump
         #      shall remain at PUMP_IN.
         '''
-        self.assertEqual(self.decider.decide(4, Pump.PUMP_IN, self.controller.actions), Pump.PUMP_IN)
-
+        self.assertEqual(self.decider.decide(4,
+                                             Pump.PUMP_IN,
+                                             self.controller.actions),
+                         Pump.PUMP_IN)
 
     def test_five(self):
         '''
-        #   5. If the pump is performing PUMP_OUT and the height is below the target
-        #      height, then the pump shall be turned to PUMP_OFF, otherwise, the pump
+        #   5. If the pump is performing PUMP_OUT and the height is below the
+         target
+        #      height, then the pump shall be turned to PUMP_OFF, otherwise,
+        the pump
         #      shall remain at PUMP_OUT.
         '''
-        self.assertEqual(self.decider.decide(3, Pump.PUMP_OUT, self.controller.actions), Pump.PUMP_OFF)
-
+        self.assertEqual(self.decider.decide(3,
+                                             Pump.PUMP_OUT,
+                                             self.controller.actions),
+                         Pump.PUMP_OFF)
 
     def test_five_with_value_at_target(self):
         '''
         another test
         '''
-        self.assertEqual(self.decider.decide(5, Pump.PUMP_OUT, self.controller.actions), Pump.PUMP_OUT)
+        self.assertEqual(self.decider.decide(5,
+                                             Pump.PUMP_OUT,
+                                             self.controller.actions),
+                         Pump.PUMP_OUT)
 
 
 class ControllerTests(unittest.TestCase):
@@ -107,9 +133,12 @@ class ControllerTests(unittest.TestCase):
 
     def test_integration(self):
         '''
-        I can see how you could use mocks to provide data for classes that aren't
+        I can see how you could use mocks to provide data for classes that
+        aren't
         actually implemented yet.  However, since both the set_state and
-        get_state methods of pump are overridden the code doesn't seem to really
+
+        get_state methods of pump are overridden the code doesn't seem to
+         really
         test anything except that it doesn't crash.
 
         The important part, the decide method, is covered in the unit tests

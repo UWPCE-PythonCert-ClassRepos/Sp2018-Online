@@ -4,7 +4,9 @@ Module tests for the water-regulation module
 
 pylint waterregulation
 
-Usage: coverage run --source=waterregulation  -m unittest waterregulation/integrationtest.py waterregulation/test.py; coverage report
+Usage: coverage run --source=waterregulation  -m unittest
+waterregulation/integrationtest.py waterregulation/test.py;
+coverage report
 
 """
 
@@ -40,7 +42,6 @@ class ModuleTests(unittest.TestCase):
 
         controller = Controller(sensor, pump, decider)
         self.assertEqual(controller.tick(), True)
-
 
     def test_sanity(self):
         '''

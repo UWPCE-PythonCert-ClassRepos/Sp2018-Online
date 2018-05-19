@@ -30,12 +30,12 @@ class Controller(object):
             'PUMP_OFF': pump.PUMP_OFF,
         }
 
-
     def tick(self):
         '''
         query all objects and set appropriate state
         '''
         current_height = self.sensor.measure()
         current_action = self.pump.get_state()
-        new_state = self.decider.decide(current_height, current_action, self.actions)
+        new_state = self.decider.decide(current_height,
+                                        current_action, self.actions)
         return self.pump.set_state(new_state)
