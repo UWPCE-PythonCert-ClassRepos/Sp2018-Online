@@ -2,23 +2,17 @@
 
 """Mailroom - Lesson 7 Adv Python - using a relational database.
 
-I had to remove challenge/projection functionality because it was taking me
-ages to make this program work at all.
+To use the mailroom module, a db must be already set up. It should now be in
+directory Lesson07Assignment. If not, first run models.py (which will create
+an empty db and will be enough for the mailroom to work) and
+then add_data.py to include several donors and donations as an example.
 
-Otherwise, I have in essense modified only a few methods to interact directly
-with DB instead of the self.donor(s) variables that used to maintain
-the details of donors and their donations.
-
-The main idea behind modifications is that when I want to add a donor
-or donations, I insert data directly into DB. And when I want to manipulate
-existing data, such as running  a report, I collect data from DB and
-convert it into an instance of my Donors class so that I can use
-my class methods to manipulate data.
-
-The modified methods include:
-    SingleDonor.add_donation(): save a new gift for an existing donor in the db
-    Donors.append(): create a new donor in db and a corresponding donation
-    StartMenu.donors(): query data from FB; return it as a Donors class object
+Minimal changes were done to tests because I still don't have a clear picture
+about how to deal with the fact that the source of data is a db compared
+to program variables. I think I need a way to provide sample data
+for my tests. Now I have @pytest.fixture to provide a sample Donors class
+object with data for tests, so I think I need something similar as
+a sample sql db.
 """
 
 import os
@@ -53,17 +47,7 @@ class SingleDonor():
     @property
     def donations(self):
         """Provide a getter method for the donations property."""
-        person = (Person
-                  .select()
-                  .where(Person.person_name == self.name)
-                  .prefetch(Donation)
-                  )
-        res = []
-        for p in person:
-            for g in p.donations:
-                res.append(float(g.donation))
-        return res
-        # return self._donations
+        return self._donations
 
     def sort_by_total(self):
         """Provide a sort_key for sorting by total donations."""
