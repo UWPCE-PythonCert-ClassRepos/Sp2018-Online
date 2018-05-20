@@ -2,9 +2,12 @@
 
 """Mailroom - Lesson 7 Adv Python - using a relational database.
 
-I have in essense modified only a few methods to interact directly with DB
-instead of the self.donor(s) variables that used to maintain the details
-of donors and their donations.
+I had to remove challenge/projection functionality because it was taking me
+ages to make this program work at all.
+
+Otherwise, I have in essense modified only a few methods to interact directly
+with DB instead of the self.donor(s) variables that used to maintain
+the details of donors and their donations.
 
 The main idea behind modifications is that when I want to add a donor
 or donations, I insert data directly into DB. And when I want to manipulate
@@ -50,7 +53,17 @@ class SingleDonor():
     @property
     def donations(self):
         """Provide a getter method for the donations property."""
-        return self._donations
+        person = (Person
+                  .select()
+                  .where(Person.person_name == self.name)
+                  .prefetch(Donation)
+                  )
+        res = []
+        for p in person:
+            for g in p.donations:
+                res.append(float(g.donation))
+        return res
+        # return self._donations
 
     def sort_by_total(self):
         """Provide a sort_key for sorting by total donations."""
@@ -93,60 +106,6 @@ class SingleDonor():
     def get_last_donation(self):
         """Return the last donation."""
         return self._donations[-1]
-
-    def multiplier_factory(self, factor, min_donation, max_donation):
-        """Create the multiplier function for use in challenge method.
-
-        Args:
-            factor (float): the multiplier to be locked in
-                            the return function
-            min_donation (float or None): a condition to be locked in
-            max_donation (None or float): a condition to be locked in
-         Returns:
-            a function which will multiply its argument by factor
-            subject to conditions.
-        """
-        # Several safeguards
-        if type(factor) is str or factor <= 1:
-            raise ValueError("Factor must be a number > 1")
-        elif type(min_donation) is str or type(max_donation) is str:
-            raise ValueError("Input must be a number")
-        elif min_donation is not None and max_donation is not None:
-            raise ValueError("Min and max must not be both defined")
-
-        def func(x):
-            def subject_to_increase(x):
-                """Decide if the donation (i.e. x) must be increased."""
-                if min_donation is not None:
-                    return x > min_donation
-                elif max_donation is not None:
-                    return x < max_donation
-                else:
-                    return True
-
-            if subject_to_increase(x):
-                return factor * x
-            else:
-                return x
-
-        return func
-
-    def challenge(self,
-                  factor,
-                  min_donation,
-                  max_donation,
-                  projection):
-        """Return an updated SingleDonor object or a projected contribution."""
-        multiplier = self.multiplier_factory(factor,
-                                             min_donation,
-                                             max_donation)
-        updated_donations = list(map(multiplier, self.donations))
-
-        # projected contribution = increased donations minus old donations
-        if projection:
-            return sum(updated_donations) - sum(self.donations)
-        else:
-            return SingleDonor(self.name, updated_donations)
 
 
 ##############
@@ -225,28 +184,6 @@ class Donors():
         report += "\n"
         print(report)
 
-    def challenge(self,
-                  factor,
-                  min_donation,
-                  max_donation,
-                  projection):
-        """Return a new Donors class object or a projected sum."""
-        result = [donor.challenge(factor,
-                                  min_donation,
-                                  max_donation,
-                                  projection
-                                  )
-                  for donor in self._donors
-                  ]
-        if projection:
-            return sum(result)
-        else:
-            return Donors(result)
-
-    def get_total(self):
-        """Return the aggregate amount of donations for all donors."""
-        return sum([sum(donor.donations) for donor in self._donors])
-
 
 ##################
 # START MENU CLASS
@@ -308,9 +245,7 @@ class StartMenu(object):
         return {"1": self.send_thank_you_sub_menu,
                 "2": self.create_report,
                 "3": self.send_all_sub_menu,
-                "4": self.challenge,
-                "5": self.run_projection,
-                "6": self.remove_donor,
+                "4": self.remove_donor,
                 "0": self.quit,
                 }
 
@@ -320,9 +255,7 @@ class StartMenu(object):
                 "\n1 - Send a Thank You\n"
                 "2 - Create a Report\n"
                 "3 - Send letters to everyone\n"
-                "4 - Match donations\n"
-                "5 - Run a projection\n"
-                "6 - Delete a donor from the db\n"
+                "4 - Delete a donor from the db\n"
                 "0 - Quit\n"
                 ">> "
                 )
@@ -503,72 +436,6 @@ class StartMenu(object):
 
         print("\nAll letters saved in {}\n".format(target_dir))
 
-    # Matching donations
-    def validate_user_input(self, msg, factor=False):
-        """Helper functon for challenge method to get factor, min or max."""
-        while True:
-            value = input(msg)
-            if value == "" and not factor:  # User hits Enter to skip min/max
-                return None
-            else:
-                try:
-                    value = float(value)
-                except ValueError:
-                    print("Input must be a number")
-                else:
-                    if value == 0:  # User chooses to quit
-                        return False
-                    elif value <= 1 and factor:
-                        print("Factor must be greater than 1")
-                    else:
-                        return value
-
-    def challenge(self, projection=False):
-        """Update self.donors or return total projected contibution.
-
-        Increase some or all of donations by a factor, subj. to min or max.
-        If run in projection mode, return total expected contribution.
-        """
-        if projection:
-            print("(This is a projection)")
-        else:
-            print("(This is NOT a projection!)")
-        # factor: False or float > 1
-        factor = self.validate_user_input(("Type a matching factor > 1 "
-                                           "or 0 to quit >>> "),
-                                          factor=True)
-        if factor is False:  # User chooses to quit this sub-menu
-            return False
-
-        # minim: False, None, or float (except 0.0)
-        minim = self.validate_user_input(("Type MIN donation, "
-                                          "0 to quit, "
-                                          "or Enter to skip >>> "))
-        if minim is False:  # User chooses to quit this sub-menu
-            return False
-
-        if minim is None:  # User may choose only min or max, not both
-            maxim = self.validate_user_input(("Type MAX donation, "
-                                              "0 to quit, "
-                                              "or Enter to skip >>> "))
-            if maxim is False:  # User chooses to quit this sub-menu
-                return False
-        else:
-            maxim = None
-
-        # result: a number or a Donors class object
-        result = self.donors().challenge(factor, minim, maxim, projection)
-
-        if projection:
-            return result
-        else:
-            self.donors = result
-
-    def run_projection(self):
-        """Get user input and return a projected amount of donations."""
-        estimate = self.challenge(projection=True)
-        if estimate > 0:
-            print("\nYour contribution would total ${:.2f}".format(estimate))
 
     def remove_donor(self):
         """Prompt use for donor name to delete and delete the record."""
