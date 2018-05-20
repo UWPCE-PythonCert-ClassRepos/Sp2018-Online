@@ -255,13 +255,12 @@ class StartMenu(object):
     """Provide a class for user ineraction via prompts and menus."""
 
     def __init__(self):
-        """Instantiate with donors and launch main menu."""
-        # self.donors = donors
+        """Launch main menu."""
         self.menu_selection(self.main_menu_prompt(), self.main_menu_dispatch())
 
-    # lOADING/SAVING DONOR DATABASE
+    # lOADING DONOR DATABASE
     def donors(self):
-        """Load donors from db and return it within a Donors class object."""
+        """Load donors from db and return it as a Donors class object."""
         try:
             # Get donor info from db and convert it into Donors class which
             # a create_report() method to generate the report
@@ -311,6 +310,7 @@ class StartMenu(object):
                 "3": self.send_all_sub_menu,
                 "4": self.challenge,
                 "5": self.run_projection,
+                "6": self.remove_donor,
                 "0": self.quit,
                 }
 
@@ -322,6 +322,7 @@ class StartMenu(object):
                 "3 - Send letters to everyone\n"
                 "4 - Match donations\n"
                 "5 - Run a projection\n"
+                "6 - Delete a donor from the db\n"
                 "0 - Quit\n"
                 ">> "
                 )
@@ -568,6 +569,25 @@ class StartMenu(object):
         estimate = self.challenge(projection=True)
         if estimate > 0:
             print("\nYour contribution would total ${:.2f}".format(estimate))
+
+    def remove_donor(self):
+        """Prompt use for donor name to delete and delete the record."""
+        while True:
+            response = input("Type donor you want to delete or 0 to go back > ")
+            if response == "0":
+                break
+            else:
+                query = Person.select().where(Person.person_name == response)
+                if query.exists():
+                    try:
+                        name = Person.get(Person.person_name == response)
+                        if name.delete_instance() == 1:
+                            print("{} deleted successfully".format(response))
+                            break
+                    except Exception as e:
+                        print('Problem deleting this record because', e)
+                else:
+                    print("No such donor. Try again or 0 to go to Main Menu")
 
 
 if __name__ == "__main__":
