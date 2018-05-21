@@ -1,9 +1,5 @@
 """
-    Learning persistence with Peewee and sqlite
-    delete the database file to start over
-        (but running this program does not require it)
-
-        populate the DB with data
+     Building the DB with data
 """
 
 import logging
@@ -13,7 +9,7 @@ from dbase_model import Person, Job, Department
 
 def main():
     """
-    add person data to database
+    Add person data to database
     """
 
     logging.basicConfig(level=logging.INFO)
@@ -118,12 +114,14 @@ def main():
     days_on_job = 3
     job_name = 4
 
+
+    # Set the days on job value default to 0
     depts = [
-        ('IN01', 'Intelligence Division', 'Susan Lee', None, 'Analyst'),
-        ('IN02', 'Intelligence Division Lead', 'Burt Reynolds', None, 'Senior analyst'),
-        ('BR01', 'Finance Department Lead', 'Dolly Parton', None, 'Senior business analyst'),
-        ('HR01', 'Human Resources Lead', 'Chris Watkins', None, 'Admin supervisor'),
-        ('HR02', 'Human Resources Manager', 'Heather Locklear', None, 'Admin manager')
+        ('IN01', 'Intelligence Division', 'Susan Lee', 0, 'Analyst'),
+        ('IN02', 'Intelligence Division Lead', 'Burt Reynolds', 0, 'Senior analyst'),
+        ('BR01', 'Finance Department Lead', 'Dolly Parton', 0, 'Senior business analyst'),
+        ('HR01', 'Human Resources Lead', 'Chris Watkins', 0, 'Admin supervisor'),
+        ('HR02', 'Human Resources Manager', 'Heather Locklear', 0, 'Admin manager')
     ]
 
     try:
