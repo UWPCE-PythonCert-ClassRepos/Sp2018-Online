@@ -72,7 +72,7 @@ class Department(BaseModel):
 
     logger.info('A Department class')
 
-    dept_num = CharField(primary_key = True, max_length = 10)
+    dept_num = CharField(primary_key = True, max_length = 4)
     dept_name = CharField(max_length = 40)
     dept_mgr_name = CharField(max_length = 30)
     days_on_job = IntegerField(null=True)

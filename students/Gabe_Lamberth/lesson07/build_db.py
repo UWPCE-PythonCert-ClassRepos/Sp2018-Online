@@ -50,12 +50,12 @@ def main():
                     lives_in_town=person[lives_in_town],
                     nickname=person[nickname])
                 new_person.save()
-                logger.info('Database add successful')
+                logger.info('Add to Person table successful')
 
-        logger.info('Print the Person records we saved...')
-        for saved_person in Person:
-            logger.info(f'{saved_person.person_name} lives in {saved_person.lives_in_town} ' + \
-                        f'and likes to be known as {saved_person.nickname}')
+        # logger.info('Print the Person records we saved...')
+        # for saved_person in Person:
+        #     logger.info(f'{saved_person.person_name} lives in {saved_person.lives_in_town} ' + \
+        #                 f'and likes to be known as {saved_person.nickname}')
 
     except Exception as e:
         logger.info(f'Error creating = {person[person_name]}')
@@ -95,10 +95,11 @@ def main():
                     salary = job[salary],
                     person_employed = job[person_employed])
                 new_job.save()
+                logger.info('Add to Job table successful')
 
-        logger.info('Reading and print all Job rows (note the value of person)...')
-        for job in Job:
-            logger.info(f'{job.job_name} : {job.start_date} to {job.end_date} for {job.person_employed}')
+        # logger.info('Reading and print all Job rows (note the value of person)...')
+        # for job in Job:
+        #     logger.info(f'{job.job_name} : {job.start_date} to {job.end_date} for {job.person_employed}')
 
     except Exception as e:
         logger.info(f'Error creating = {job[job_name]}')
@@ -111,44 +112,46 @@ def main():
     logger.info('Working with Department class')
     logger.info('Creating Department records: just like Jobs. We use the foreign key')
 
-    job_name = 0
-    start_date = 1
-    end_date = 2
-    salary = 3
-    person_employed = 4
+    dept_num = 0
+    dept_name = 1
+    dept_mgr_name = 2
+    days_on_job = 3
+    job_name = 4
 
-    jobs = [
-        ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew'),
-        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew'),
-        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew'),
-        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter'),
-        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter')
+    depts = [
+        ('IN01', 'Intelligence Division', 'Susan Lee', None, 'Analyst'),
+        ('IN02', 'Intelligence Division Lead', 'Burt Reynolds', None, 'Senior analyst'),
+        ('BR01', 'Finance Department Lead', 'Dolly Parton', None, 'Senior business analyst'),
+        ('HR01', 'Human Resources Lead', 'Chris Watkins', None, 'Admin supervisor'),
+        ('HR02', 'Human Resources Manager', 'Heather Locklear', None, 'Admin manager')
     ]
 
     try:
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
-        for job in jobs:
+        for dept in depts:
             with database.transaction():
-                new_job = Job.create(
-                    job_name = job[job_name],
-                    start_date = job[start_date],
-                    end_date = job[end_date],
-                    salary = job[salary],
-                    person_employed = job[person_employed])
-                new_job.save()
+                new_dept = Department.create(
+                    dept_num = dept[dept_num],
+                    dept_name = dept[dept_name],
+                    dept_mgr_name = dept[dept_mgr_name],
+                    days_on_job = dept[days_on_job],
+                    job_name = dept[job_name])
+                new_dept.save()
+                logger.info('Add to Department table successful')
 
-        logger.info('Reading and print all Job rows (note the value of person)...')
-        for job in Job:
-            logger.info(f'{job.job_name} : {job.start_date} to {job.end_date} for {job.person_employed}')
+        # logger.info('Reading and print all Job rows (note the value of person)...')
+        # for dept in Department:
+        #     logger.info(f'{job.job_name} : {job.start_date} to {job.end_date} for {job.person_employed}')
 
     except Exception as e:
-        logger.info(f'Error creating = {job[job_name]}')
+        logger.info(f'Error creating = {dept[dept_num]}')
         logger.info(e)
 
     finally:
         logger.info('database closes')
         database.close()
+
 
 if __name__ == '__main__':
     main()
