@@ -1,4 +1,6 @@
-"""Provide pytest unit tests for the oo-mailroom assignment."""
+"""Provide pytest unit tests for the oo-mailroom assignment.
+
+These are just old test which skip all-relational-db-related things"""
 import pytest
 import builtins
 import datetime
