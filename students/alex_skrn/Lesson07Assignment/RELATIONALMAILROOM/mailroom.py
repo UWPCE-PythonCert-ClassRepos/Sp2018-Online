@@ -3,16 +3,9 @@
 """Mailroom - Lesson 7 Adv Python - using a relational database.
 
 To use the mailroom module, a db must be already set up. It should now be in
-directory Lesson07Assignment. If not, first run models.py (which will create
-an empty db and will be enough for the mailroom to work) and
+directory Lesson07Assignment - mailroom.db. If not, first run models.py
+(which will create an empty db and will be enough for the mailroom to work) and
 then add_data.py to include several donors and donations as an example.
-
-Minimal changes were done to tests because I still don't have a clear picture
-about how to deal with the fact that the source of data is a db compared
-to program variables. I think I need a way to provide sample data
-for my tests. Now I have @pytest.fixture to provide a sample Donors class
-object with data for tests, so I think I need something similar as
-a sample sql db.
 """
 
 import os
