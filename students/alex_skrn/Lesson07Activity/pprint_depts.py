@@ -13,7 +13,7 @@ shows all of the departments a person worked in for every job they ever had."
 In this exercise, I wrote pprint_depts.py  and populate_debt_db.py
 and modified personjobdept_model.py.
 """
-from peewee import *
+import peewee
 
 from RDBMS.personjobdept_model import Person, Job, Department
 from RDBMS.populate_person_db import populate_db as populate_people
@@ -51,7 +51,7 @@ def pretty_print_person_job_dept(query):
 people = Person.select().order_by(Person.person_name)
 positions = Job.select().order_by(Job.job_name)
 org_units = Department.select().order_by(Department.dept_name)
-query1 = prefetch(people, positions, org_units)
+query1 = peewee.prefetch(people, positions, org_units)
 
 # QUERY 2: using join() - only people with jobs are included
 query2 = (Person
@@ -65,8 +65,8 @@ query2 = (Person
 # QUERY 3: using join() - all people are included with JOIN.LEFT_OUTER
 query3 = (Person
           .select(Person, Job, Department)
-          .join(Job, JOIN.LEFT_OUTER)
-          .join(Department, JOIN.LEFT_OUTER)
+          .join(Job, peewee.JOIN.LEFT_OUTER)
+          .join(Department, peewee.JOIN.LEFT_OUTER)
           .group_by(Person)
           .order_by(Person.person_name)
           )
