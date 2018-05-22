@@ -8,6 +8,8 @@
 
 '''
 mailroom menu for interacting with user
+Known Issues:
+2. Donors with zero donations will break the Screen Reporting feature
 '''
 
 import sys
@@ -26,38 +28,37 @@ def add_donor(don_name, address="None", town="None"):
     :returns:
     """
 
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
+    # Add valid number check for gift amount
+    first_gift = input("Please enter donation AMOUNT or 'main' for the menu: ")
+    if first_gift.lower() == "main":
+        return
+    else:
+        logging.basicConfig(level=logging.INFO)
+        logger = logging.getLogger(__name__)
+        database = SqliteDatabase('donor.db')
 
-    database = SqliteDatabase('donor.db')
-    try:
-        database.connect()
-        database.execute_sql('PRAGMA foreign_keys = ON;')
 
-        logger.info('Add and display a new donor name...')
+        try:
+            database.connect()
+            database.execute_sql('PRAGMA foreign_keys = ON;')
 
-        new_person = Donor.create(
-            donor_name = don_name,
-            home_address = address,
-            town_and_zip = town)
-        new_person.save()
+            logger.info('Add and display a new donor name...')
+            new_person = Donor.create(
+                donor_name = don_name,
+                home_address = address,
+                town_and_zip = town)
+            new_person.save()
+            logger.info('Show new donor name')
+            aperson = Donor.get(Donor.donor_name == don_name)
+            logger.info(f'We just created {aperson.donor_name}')
 
-        logger.info('Show new donor name')
-        aperson = Donor.get(Donor.donor_name == don_name)
 
-        logger.info(f'We just created {aperson.donor_name}')
-        logger.info(f'Who lives at {aperson.home_address}, in the town {aperson.town_and_zip}')
-        logger.info('Reading and print all Donor records...')
+        except Exception as e:
+            logger.info(e)
 
-        for person in Donor:
-            logger.info(
-                f"{person.donor_name} lives at {person.home_address} in the town {person.town_and_zip}")
-
-    except Exception as e:
-        logger.info(e)
-
-    finally:
-        database.close()
+        finally:
+            database.close()
+            create_gift_record(first_gift, don_name)
 
 
 def delete_donor(don_name):
@@ -77,23 +78,14 @@ def delete_donor(don_name):
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
 
-        logger.info('Display the donor and then delete him...')
         aperson = Donor.get(Donor.donor_name == don_name)
-
         # Add error check for SQL record not found
 
-        logger.info(f'We just found {aperson.donor_name}')
-        logger.info(f'Who lives at {aperson.home_address}, in the town {aperson.town_and_zip}')
-        logger.info('and now we will delete the donor...')
+        # aperson.delete_instance()
+        print('WARNING: Donor record not deleted to keep database integrity')
 
-        # Delete and Gift Records too for data integrity?
-
-        aperson.delete_instance()
-        logger.info('Reading and print all Person records for confirmation...')
-
-        for person in Donor:
-            logger.info(
-                f"{person.donor_name} lives at {person.home_address} in the town {person.town_and_zip}")
+        # Need Pythonic method for deleting donation records
+        # database.execute('DELETE FROM Gift WHERE donor_name = don_name')
 
     except Exception as e:
         logger.info(e)
@@ -119,23 +111,14 @@ def update_donor_address(address, don_name):
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
 
-        logger.info('Display the donor and then delete him...')
         aperson = Donor.get(Donor.donor_name == don_name)
 
         # Add error check for SQL record not found
 
-        logger.info(f'We just found {aperson.donor_name}')
-        logger.info(f'Who lives at {aperson.home_address}, in the town {aperson.town_and_zip}')
-        logger.info('and now we will update donor ADDRESS...')
-
         aperson.home_address = address
         aperson.save()
 
-        logger.info('Reading and print all Person records for confirmation...')
-
-        for person in Donor:
-            logger.info(
-                f"{person.donor_name} lives at {person.home_address} in the town {person.town_and_zip}")
+        print(f"{aperson.donor_name} now lives at {aperson.home_address}!")
 
     except Exception as e:
         logger.info(e)
@@ -147,6 +130,7 @@ def update_donor_address(address, don_name):
 def create_gift_record(amount, don_name):
     """"
     Create new donation Gift record
+    gift_key uses 'name+date+time' for unique value
 
     :param: amount, name of donor
 
@@ -164,17 +148,14 @@ def create_gift_record(amount, don_name):
         logger.info('Creating gift record with associated Donor name...')
         now = date.today()
         theday = str(now.month) + "-" + str(now.day) + "-" + str(now.year)
+        key_name = don_name.replace(" ", "")
 
         new_gift = Gift.create(
-            gift_key = don_name + theday + time.strftime("%H:%M:%S"),
+            gift_key = key_name + theday + time.strftime("%H:%M:%S"),
             gift_date = theday,
             gift_amount = amount,
             donor_name = don_name)
         new_gift.save()
-
-        for gift in Gift:
-            logger.info(f'Key {gift.gift_key} on date {gift.gift_date}')
-            logger.info(f'for amount {gift.gift_amount} from {gift.donor_name}')
 
     except Exception as e:
         logger.info(e)
@@ -200,11 +181,39 @@ def screen_report():
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
 
-        logger.info('Reading and print all Person records for confirmation...')
+        '''
+        # test code for listing all donation records
+        query_test = (Donor
+                 .select(Donor, Gift)
+                 .join(Gift, JOIN.INNER)
+                )
+        for donor in query_test:
+            print(f'{donor.donor_name} gave {donor.gift.gift_amount} on {donor.gift.gift_key}')
+        '''
 
-        for person in Donor:
-            logger.info(
-                f"{person.donor_name} lives at {person.home_address} in the town {person.town_and_zip}")
+        query_sum = (Donor
+                 .select(Donor, fn.SUM(Gift.gift_amount).alias('gift_totals'),
+                         fn.COUNT(Gift.gift_amount).alias('gift_count'))
+                 .join(Gift, JOIN.LEFT_OUTER)
+                 .group_by(Donor)
+                 .order_by(Donor.donor_name))
+
+        '''
+        # test code for showing donation total values
+        for donor in query_sum:
+            print(f'{donor.donor_name} gave {donor.gift_totals} dollars')
+        '''
+
+        print('')
+        print('{:20}{:>15}{:>10}{:>10}'.format('Donor Name (SQL)', '| Total Gifts', '| Num Gifts', '| Ave Gift'))
+        print('-' * 55)
+        for donor in query_sum:
+            name = donor.donor_name
+            num_gifts = donor.gift_count
+            total_gifts = "{:.2f}".format(donor.gift_totals)
+            avg_gift = "{:.2f}".format(donor.gift_totals/donor.gift_count)
+
+            print('{:20}{:>15}{:>10}{:>10}'.format(name, total_gifts, num_gifts, avg_gift))
 
     except Exception as e:
         logger.info(e)
@@ -255,7 +264,7 @@ def get_user_choice():
     print("""
     MailRoom SQL Programming Menu Options
     1) Add Donor Name To Database
-    2) Delete Donor Name to Database
+    2) Delete Donor Record & Donations!
     3) Update Donor Mailing Address
     4) Add Financial Gift ($)
     5) Create Screen Report
