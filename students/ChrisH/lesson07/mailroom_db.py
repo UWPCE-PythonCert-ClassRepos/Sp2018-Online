@@ -5,6 +5,53 @@ import time
 from create_mailroom_db import Donor, Donation
 
 
+def get_first(name):
+    name_sp = name.split()
+    if len(name_sp) == 1:
+        return ''
+    else:
+        return name_sp[0]
+
+
+def get_last(name):
+    name_sp = name.split()
+    if len(name_sp) == 1:
+        return name
+    else:
+        return ' '.join(name_sp[1:])
+
+
+def generate_letter(name):
+    """
+    Generates a Thank You letter to send to a donor. Uses the last value in their donations list to
+    mention their last donation amount.
+    :param donor: a donor dictionary entry
+    :return: string containing the text of the Thank You letter.
+    """
+    format_string = """
+Dear {first_name} {last_name},
+
+   Thank you for your donation of ${last_donation:.2f}.
+
+            Warmest Regards,
+                Local Charity
+"""
+    query = (Donor
+             .select(Donor.name, Donor.last, Donor.first, fn.MAX(Donation.id).alias('last_don_id'), Donation.amount)
+             .join(Donation, JOIN.LEFT_OUTER)
+             )
+
+    result = None
+
+    for d in query:
+        result = format_string.format(
+            last_donation=float(d.donation.amount),
+            first_name=d.first,
+            last_name=d.last
+        )
+
+    return result
+
 
 def send_thank_you_menu(database):
     """
@@ -20,8 +67,8 @@ def send_thank_you_menu(database):
         elif name == 'list':
             database.connect()
             database.execute_sql('PRAGMA foreign_keys = ON;')
-            for dname in Donor.select(Donor.donor_name):
-                print(dname.donor_name)
+            for d in Donor.select(Donor.name):
+                print(d.name)
             database.close()
             continue
         else:
@@ -29,8 +76,9 @@ def send_thank_you_menu(database):
                 database.connect()
                 database.execute_sql('PRAGMA foreign_keys = ON;')
                 with database.transaction():
-                    new_donor = Donor.create(donor_name=name)
+                    new_donor = Donor.create(name=name, first=get_first(name), last=get_last(name))
                     new_donor.save()
+
             except Exception as e:
                 print(e)
 
@@ -39,19 +87,24 @@ def send_thank_you_menu(database):
 
             break
 
-    # while True:
-    #     try:
-    #         amount = float(input(f"Enter a donation amount for {donor.name} : "))
-    #         if amount <= 0:
-    #             print('Amount donated must be a positive number.')
-    #         else:
-    #             break
-    #     except ValueError:
-    #         print('Please enter a numerical value.')
-    #
-    # donor.add_donation(amount)
-    # print(donor.generate_letter())
+    while True:
+        try:
+            amount = float(input(f"Enter a donation amount for {name} : "))
+            if amount <= 0:
+                print('Amount donated must be a positive number.')
+            else:
+                break
+        except ValueError:
+            print('Please enter a numerical value.')
 
+    database.connect()
+    database.execute_sql('PRAGMA foreign_keys = ON;')
+    with database.transaction():
+        new_donation = Donation.create(donor=name, amount=amount)
+        new_donation.save()
+    database.close()
+
+    print(generate_letter(name))
 
 
 def menu(menu_data):

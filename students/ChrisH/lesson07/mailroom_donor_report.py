@@ -27,7 +27,6 @@ def print_donor_report(database):
              )
 
     for d in query:
-        # print(f'aggregate {d.donor_name} {d.ccount} {d.csum} {d.cavg}')
         print(f"{d.name:{name_max}}  $ {d.csum:>10.2f}   {d.ccount:>9}  ${d.cavg:>12.2f}")
 
     database.close()
