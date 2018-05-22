@@ -29,11 +29,11 @@ class ModuleTests(TestCase):
         self.actions = {'PUMP_IN': self.pump.PUMP_IN,
                         'PUMP_OUT': self.pump.PUMP_OUT,
                         'PUMP_OFF': self.pump.PUMP_OFF,
-                    }
+                        }
 
     def test_module_true(self):
-        '''True state: Write an integration test that combines controller and decider,
-        using a MOCKED sensor and pump.
+        '''True state: Write an integration test that combines
+        controller and decider, using a MOCKED sensor and pump.
         '''
         self.sensor.measure = MagicMock()
         self.pump.get_state = MagicMock()
@@ -42,8 +42,8 @@ class ModuleTests(TestCase):
         self.assertTrue(self.controller.tick())
 
     def test_module_false(self):
-        '''False state: Write an integration test that combines controller and decider,
-        using a MOCKED sensor and pump.
+        '''False state: Write an integration test that combines
+        controller and decider, using a MOCKED sensor and pump.
         '''
         self.sensor.measure = MagicMock()
         self.pump.get_state = MagicMock()

@@ -1,0 +1,5 @@
+﻿[MASTER]
+
+optimize-ast=no
+
+disable=too-few-public-methods, inconsistent-return-statements, too-many-return-statements, duplicate-code, bad-continuation

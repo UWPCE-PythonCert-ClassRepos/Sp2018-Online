@@ -38,8 +38,8 @@ class DeciderTests(TestCase):
         self.assertEqual(self.decider.margin, 0.05)
 
     def test_decider_one(self):
-        '''Case 1. If the pump is off and the height is below the margin region, then the
-        #pump should be turned to PUMP_IN
+        '''Case 1. If the pump is off and the height is below the
+        margin region, then the pump should be turned to PUMP_IN
 
         Parameters: (current_height, current_action, actions)
         Return: return_action
@@ -48,15 +48,16 @@ class DeciderTests(TestCase):
                                              self.actions), self.pump.PUMP_IN)
 
     def test_decider_two(self):
-        '''Case 2. If the pump is off and the height is above the margin region, then the
-        pump should be turned to PUMP_OUT
+        '''Case 2. If the pump is off and the height is above the
+        margin region, then the pump should be turned to PUMP_OUT
         '''
         self.assertEqual(self.decider.decide(110, self.pump.PUMP_OFF,
                                              self.actions), self.pump.PUMP_OUT)
 
     def test_decider_three(self):
-        '''Case 3. If the pump is off and the height is within the margin region or on
-        the exact boundary of the margin region, then the pump shall remain at PUMP_OFF.
+        '''Case 3. If the pump is off and the height is within the
+        margin region or on the exact boundary of the margin region,
+        then the pump shall remain at PUMP_OFF.
         '''
         self.assertEqual(self.decider.decide(102, self.pump.PUMP_OFF,
                                              self.actions), self.pump.PUMP_OFF)
@@ -64,9 +65,9 @@ class DeciderTests(TestCase):
                                              self.actions), self.pump.PUMP_OFF)
 
     def test_decider_four(self):
-        '''Case 4. If the pump is performing PUMP_IN and the height is above the target
-        height, then the pump shall be turned to PUMP_OFF, otherwise the pump
-        shall remain at PUMP_IN.
+        '''Case 4. If the pump is performing PUMP_IN and the height
+        is above the target height, then the pump shall be turned to
+        PUMP_OFF, otherwise the pump shall remain at PUMP_IN.
         '''
         self.assertEqual(self.decider.decide(105, self.pump.PUMP_IN,
                                              self.actions), self.pump.PUMP_OFF)
@@ -74,9 +75,9 @@ class DeciderTests(TestCase):
                                              self.actions), self.pump.PUMP_IN)
 
     def test_decider_five(self):
-        '''Case 5. If the pump is performing PUMP_OUT and the height is below the target
-        height, then the pump shall be turned to PUMP_OFF, otherwise, the pump
-        shall remain at PUMP_OUT.
+        '''Case 5. If the pump is performing PUMP_OUT and the height
+        is below the target height, then the pump shall be turned to
+        PUMP_OFF, otherwise, the pump shall remain at PUMP_OUT.
         '''
         self.assertEqual(self.decider.decide(99, self.pump.PUMP_OUT,
                                              self.actions), self.pump.PUMP_OFF)
@@ -103,7 +104,7 @@ class ControllerTests(TestCase):
         self.actions = {'PUMP_IN': self.pump.PUMP_IN,
                         'PUMP_OUT': self.pump.PUMP_OUT,
                         'PUMP_OFF': self.pump.PUMP_OFF,
-                    }
+                        }
 
     def test_my_controller(self):
         '''
@@ -138,4 +139,3 @@ class ControllerTests(TestCase):
 
         self.pump.set_state = MagicMock(return_value=False)
         self.assertFalse(self.controller.tick())
-
