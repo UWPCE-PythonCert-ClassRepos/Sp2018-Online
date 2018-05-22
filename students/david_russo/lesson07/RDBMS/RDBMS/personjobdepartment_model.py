@@ -50,16 +50,10 @@ class Job(BaseModel):
         This class defines Job, which maintains details of past Jobs
         held by a Person.
     """
-
-    logger.info('Now the Job class with a simlar approach')
     job_name = CharField(primary_key = True, max_length = 30)
-    logger.info('Dates')
     start_date = DateField(formats = 'YYYY-MM-DD')
     end_date = DateField(formats = 'YYYY-MM-DD')
-    logger.info('Number')
-
     salary = DecimalField(max_digits = 7, decimal_places = 2)
-    logger.info('Which person had the Job')
     person_employed = ForeignKeyField(Person, related_name='was_filled_by', null = False)
 
 
@@ -76,11 +70,48 @@ class PersonNumKey(BaseModel):
     lives_in_town = CharField(max_length = 40)
     nickname = CharField(max_length = 20, null = True)
 
+class DepartmentID(Field):
+    """
+    This class defines a custom Department ID field. The first character
+    must be a letter, and the DepartmentID must be 4 characters long. 
+    """
+
+    logger.info('A custom field for the department class.')
+    logger.info('The field forces DepartmentID to be 4 characters long.')
+    logger.info('The field forces DepartmentID to start with an alpha')
+
+    def db_value(self, value):
+        """
+        Ensure that value has 4 characters where the first character is numeric. 
+        """
+        if len(value) != 4 or not value[0].isalpha():
+            raise TypeError(
+                "DepartmentID must be 4 characters long and start with an alpha. "
+                )
+        return value
+
+class Department(BaseModel):
+    """
+    This class defines Department, which maintains details of the 
+    departments in which a person has held a job.
+    """
+
+    logger.info('Now we define the Department class')
+
+    logger.info('First we enter the custom DepartmentID')
+    department_number = DepartmentID()
+
+    logger.info('Now we populate departmet name, manager, job duration, and title')
+    department_name = CharField(max_length = 30)
+    department_manager_name = CharField(max_length = 30)
+    job_duration = IntegerField()
+    job_title = ForeignKeyField(Job, related_name = 'title_of_job', null = False)
+
 
 database.create_tables([
         Job,
         Person,
-        PersonNumKey
+        Department
     ])
 
 database.close()
