@@ -3,13 +3,14 @@
 # -------------------------------------------------#
 # Title: mailroom menu
 # Dev: Scott Luse
-# Date: 05/20/2018
+# Date: 05/21/2018
 # -------------------------------------------------#
 
 '''
 mailroom menu for interacting with user
 Known Issues:
-2. Donors with zero donations will break the Screen Reporting feature
+1. Deleting donor records is not working, I'm still trying to
+delete associated gift records to maintain db integrity
 '''
 
 import sys
