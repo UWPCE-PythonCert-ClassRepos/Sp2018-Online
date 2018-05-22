@@ -79,8 +79,8 @@ def send_thank_you_menu(database):
                     new_donor = Donor.create(name=name, first=get_first(name), last=get_last(name))
                     new_donor.save()
 
-            except Exception as e:
-                print(e)
+            except IntegrityError as e:
+                print("Donor already exists, adding donations to existing donor.")
 
             finally:
                 database.close()
