@@ -6,8 +6,6 @@ from create_mailroom_db import Donor, Donation
 
 
 
-
-
 def send_thank_you_menu(database):
     """
     Prompts for donor name, if not present, adds user to data. Prompts for donation
