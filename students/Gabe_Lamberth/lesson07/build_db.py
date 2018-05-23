@@ -5,6 +5,12 @@
 import logging
 from peewee import *
 from dbase_model import Person, Job, Department
+from datetime import datetime
+
+def num_days(d1, d2):
+    d1 = datetime.strptime(d1, "%Y-%m-%d")
+    d2 = datetime.strptime(d2, "%Y-%m-%d")
+    return abs((d2 - d1).days)
 
 
 def main():
@@ -73,10 +79,10 @@ def main():
 
     jobs = [
         ('Analyst', '2001-09-22', '2003-01-30', 65500, 'Andrew'),
-        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Andrew'),
-        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Andrew'),
-        ('Admin supervisor', '2012-10-01', '2014-11,10', 45900, 'Peter'),
-        ('Admin manager', '2014-11-14', '2018-01,05', 45900, 'Peter')
+        ('Senior analyst', '2003-02-01', '2006-10-22', 70000, 'Susan'),
+        ('Senior business analyst', '2006-10-23', '2016-12-24', 80000, 'Steven'),
+        ('Admin supervisor', '2012-10-01', '2014-11-10', 45900, 'Pam'),
+        ('Admin manager', '2014-11-14', '2018-01-05', 45900, 'Peter')
     ]
 
     try:
@@ -111,17 +117,16 @@ def main():
     dept_num = 0
     dept_name = 1
     dept_mgr_name = 2
-    days_on_job = 3
-    job_name = 4
+    job_name = 3
 
 
     # Set the days on job value default to 0
     depts = [
-        ('IN01', 'Intelligence Division', 'Susan Lee', 0, 'Analyst'),
-        ('IN02', 'Intelligence Division Lead', 'Burt Reynolds', 0, 'Senior analyst'),
-        ('BR01', 'Finance Department Lead', 'Dolly Parton', 0, 'Senior business analyst'),
-        ('HR01', 'Human Resources Lead', 'Chris Watkins', 0, 'Admin supervisor'),
-        ('HR02', 'Human Resources Manager', 'Heather Locklear', 0, 'Admin manager')
+        ('IN01', 'Intelligence Division', 'Susan Lee', 'Analyst'),
+        ('IN02', 'Intelligence Division Lead', 'Burt Reynolds', 'Senior analyst'),
+        ('BR01', 'Finance Department Lead', 'Dolly Parton', 'Senior business analyst'),
+        ('HR01', 'Human Resources Lead', 'Chris Watkins', 'Admin supervisor'),
+        ('HR02', 'Human Resources Manager', 'Heather Locklear', 'Admin manager')
     ]
 
     try:
@@ -129,11 +134,13 @@ def main():
         database.execute_sql('PRAGMA foreign_keys = ON;')
         for dept in depts:
             with database.transaction():
+                job = Job.get(Job.job_name == dept[job_name])
+                duration = num_days(job.start_date, job.end_date)
                 new_dept = Department.create(
                     dept_num = dept[dept_num],
                     dept_name = dept[dept_name],
                     dept_mgr_name = dept[dept_mgr_name],
-                    days_on_job = dept[days_on_job],
+                    days_on_job = duration,
                     job_name = dept[job_name])
                 new_dept.save()
                 logger.info('Add to Department table successful')
