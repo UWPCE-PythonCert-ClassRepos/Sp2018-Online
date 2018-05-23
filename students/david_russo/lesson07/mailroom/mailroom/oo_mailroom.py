@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import sys
-import oo_mailroom as oo_mr
 
 class Donor():
 
@@ -104,38 +103,38 @@ class DonorList():
 			file.write("Best, The Donation Foundation")
 			file.close()
 
-if __name__ == '__main__':
-	# Create a switch dictionary
+# if __name__ == '__main__':
+# 	# Create a switch dictionary
 
-	the_cb = Donor("Griffin")
-	the_cb.add_donation(50)
-	the_cb.add_donation(100)
+# 	the_cb = Donor("Griffin")
+# 	the_cb.add_donation(50)
+# 	the_cb.add_donation(100)
 
-	the_fs = Donor("Earl")
-	the_fs.add_donation(50)
-	the_fs.add_donation(200)
+# 	the_fs = Donor("Earl")
+# 	the_fs.add_donation(50)
+# 	the_fs.add_donation(200)
 
-	the_rb = Donor("Carson")
-	the_rb.add_donation(600)
-	the_rb.add_donation(400)
+# 	the_rb = Donor("Carson")
+# 	the_rb.add_donation(600)
+# 	the_rb.add_donation(400)
 
-	donor_list = DonorList()
-	donor_list.add_donor(the_cb)
-	donor_list.add_donor(the_fs)
-	donor_list.add_donor(the_rb)
+# 	donor_list = DonorList()
+# 	donor_list.add_donor(the_cb)
+# 	donor_list.add_donor(the_fs)
+# 	donor_list.add_donor(the_rb)
 
-	switch_response_dictionary = {
-	1: donor_list.send_a_thank_you,
-	2: donor_list.create_a_report,
-	3: donor_list.send_letters_to_everyone,
- 	4: sys.exit
-	}
-	while True:
-		try:
-			switch_response_dictionary.get(donor_list.prompt_user())()
-		except TypeError:
-			print("You must enter a positive integer from one of 1, 2, 3, or 4.")
-			continue
+# 	switch_response_dictionary = {
+# 	1: donor_list.send_a_thank_you,
+# 	2: donor_list.create_a_report,
+# 	3: donor_list.send_letters_to_everyone,
+#  	4: sys.exit
+# 	}
+# 	while True:
+# 		try:
+# 			switch_response_dictionary.get(donor_list.prompt_user())()
+# 		except TypeError:
+# 			print("You must enter a positive integer from one of 1, 2, 3, or 4.")
+# 			continue
 
 
 

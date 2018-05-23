@@ -16,7 +16,7 @@ logger.info('First name and connect to a database (sqlite here)')
 
 logger.info('The next 3 lines of code are the only database specific code')
 
-database = SqliteDatabase('donor.db')
+database = SqliteDatabase('donor_donation.db')
 database.connect()
 database.execute_sql('PRAGMA foreign_keys = ON;') # needed for sqlite only
 
@@ -39,7 +39,8 @@ class Donor(BaseModel):
 	and number of donations, and let peewee do that work for us in the
 	report creation.
 	"""
-	name = CharField(primary_key=True, max_length=30)
+	donor_name = CharField(primary_key=True, max_length=30)
+	donor_occupation = CharField(max_length=30)
 
 class Donation(BaseModel):
 	"""
@@ -48,6 +49,13 @@ class Donation(BaseModel):
 	"""
    
 	donation_amount = DecimalField(max_digits=5, decimal_places=2)
-	donating_party = ForeignKeyField(Donor, related_name = 'donator', null = False)
+	donor_name = ForeignKeyField(Donor, related_name = 'donator', null = False)
 
+
+database.create_tables([
+        Donor,
+        Donation
+    ])
+
+database.close()
 
