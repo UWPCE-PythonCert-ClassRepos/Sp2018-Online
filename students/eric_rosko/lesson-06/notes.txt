@@ -1,0 +1,28 @@
+
+I used this line to get my coverage results:
+coverage run --source=waterregulation  -m unittest waterregulation/integrationtest.py waterregulation/test.py; coverage report
+
+(venv) Todi:water-regulation-master erosko$ coverage run --source=waterregulation  -m unittest waterregulation/integrationtest.py waterregulation/test.py; coverage report
+...........
+----------------------------------------------------------------------
+Ran 11 tests in 0.003s
+
+OK
+Name                                 Stmts   Miss  Cover
+--------------------------------------------------------
+waterregulation/__init__.py              0      0   100%
+waterregulation/controller.py           12      0   100%
+waterregulation/decider.py              18      1    94%
+waterregulation/integrationtest.py      26      0   100%
+waterregulation/test.py                 39      0   100%
+--------------------------------------------------------
+TOTAL                                   95      1    99%
+
+
+I edited the .pylintrc to get rid of some annoying problems: line-too-long, too-few-public-methods, duplicate-code.
+
+Thanks.
+
+This assignment was a bit annoying since I actually spend quite a lot of time trying to get a basic http client and server going with python -m http.server 8000.  However, it then occurred to me that using mocks would make it so they didn’t need to actually work which was probably the point of the assignment.
+
+Eric
