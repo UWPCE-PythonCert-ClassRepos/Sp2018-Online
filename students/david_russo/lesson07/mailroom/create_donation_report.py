@@ -28,27 +28,12 @@ try:
 	database.connect()
 	database.execute_sql('PRAGMA foreign_keys = ON;')
 	query = (Donor
-		.select(Donor, Donation)
+		.select(Donor, Donation,
+		fn.Sum(Donation.donation_amount).alias('total_donations'),
+		fn.Count(Donor.donor_name).alias('num_gifts'),
+		fn.Avg(Donation.donation_amount).alias('mean_gift_size'))
 		.join(Donation, JOIN.INNER)
-		)
-
-	logger.info('View records in the joined donor table')
-	for donor in query:
-		logger.info(f'\nDonor: {donor.donor_name}' + \
-			f'\nDonor job: {donor.donor_occupation}' +\
-			f'\nDonation amount: {donor.donation.donation_amount}')
-
-	logger.info('Create DonorList object and populate it with' + \
-		' Objects of class Donor')
-	donor_list = oo_mr.DonorList()
-	for donor in query:
-		donor_to_add = oo_mr.Donor(donor.donor_name)
-		for donations in query.where(donor.donor_name == donor_to_add.name):
-			donor_to_add.add_donation(donor.donation.donation_amount)
-		print(donor_to_add.name)
-		print(donor_to_add.total_donations)
-		print(donor_to_add.number_of_donations)
-		donor_list.add_donor(donor_to_add)
+		.group_by(Donor.donor_name))
 
 except Exception as e:
 	logger.info(e)
@@ -57,7 +42,11 @@ finally:
 	logger.info('database closes')
 	database.close()
 
-donor_list.create_a_report()
+for donor in query:
+	print(f'Donor: {donor.donor_name}\t' + \
+		  f'Total Donations: {donor.total_donations}\t' + \
+		  f'Number of Donations: {donor.num_gifts}\t' + \
+		  f'Average gift size: {donor.mean_gift_size}\t')
 
 
 
