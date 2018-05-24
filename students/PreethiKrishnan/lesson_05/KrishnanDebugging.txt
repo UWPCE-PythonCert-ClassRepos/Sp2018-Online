@@ -1,0 +1,108 @@
+What is wrong with our logic?
+Answer: There is return True only if n value is 2, if not it will keep calling the function and no return value until 2 is reached.
+
+Why doesn't the function stop calling itself?
+Answer: The function is called recursively and there is no condition for the function to stop calling it.
+
+What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+Answer: The value of n becomes smaller or divided by 2 as the functions gets deeper into recursion.
+
+Debugging Output:
+=================
+
+Preethis-MacBook-Pro:python_workspace preethi$ python -m pdb recursive.py 15
+> /Users/preethi/python_workspace/recursive.py(1)<module>()
+-> import sys
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(3)<module>()
+-> def my_fun(n):
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(8)<module>()
+-> if __name__ == "__main__":
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(9)<module>()
+-> n = int(sys.argv[1])
+(Pdb) b 6
+Breakpoint 1 at /Users/preethi/python_workspace/recursive.py:6
+(Pdb) condition 1 n != 2
+New condition set for breakpoint 1.
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(10)<module>()
+-> print(my_fun(n))
+(Pdb) pp n
+15
+(Pdb) c
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+15
+(Pdb) c
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+7.5
+(Pdb) c
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+3.75
+(Pdb) c
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) 
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.9375
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.46875
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.234375
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.1171875
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.05859375
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.029296875
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.0146484375
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.00732421875
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp n
+0.003662109375
+(Pdb) n
+> /Users/preethi/python_workspace/recursive.py(6)my_fun()
+-> return my_fun(n/2)
+(Pdb) pp
+*** SyntaxError: unexpected EOF while parsing
+(Pdb) nn n
+*** SyntaxError: invalid syntax
+(Pdb) pp n
+0.0018310546875
+(Pdb) 
+
+

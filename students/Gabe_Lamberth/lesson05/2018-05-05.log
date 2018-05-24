@@ -1,0 +1,2 @@
+2018-05-05 14:10:33,949 debugfun.py:57   WARNING The value of i is 50.
+2018-05-05 14:10:33,949 debugfun.py:62   ERROR Tried to divide by zero. Var i was 50. Recovered gracefully
