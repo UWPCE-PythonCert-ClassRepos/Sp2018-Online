@@ -1,0 +1,87 @@
+The function keeps calling itself and calling itself and it can't stop because
+it's a Tuesday today and Tuesdays are bad for recursion.
+
+What is wrong with our logic?
+Missing a break condition/condition where the function returns False.
+
+Why doesn't the function stop calling itself?
+If the function is not a power of 2, then n/2 never equals 2 and n
+continues to divide itself by 2 forever. There is no break condition or
+condition for which when n/2 is not equal to 2 and is less than 2, that
+we return False.
+
+What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+n approaches 0
+
+Below is my debugging log:
+
+Shaynas-MacBook-Air:lesson05 shaynaanderson-hill$ python3 -m pdb recursive.py 15
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(1)<module>()
+-> import sys
+(Pdb) ll
+  1  ->	import sys
+  2
+  3  	def my_fun(n):
+  4  	    if n == 2:
+  5  	        return True
+  6
+  7  	    return my_fun(n/2)
+  8
+  9  	if __name__ == '__main__':
+ 10  	    n = float(sys.argv[1])
+ 11  	    print(my_fun(n))
+(Pdb) n
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(3)<module>()
+-> def my_fun(n):
+(Pdb) n
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(9)<module>()
+-> if __name__ == '__main__':
+(Pdb) s
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(10)<module>()
+-> n = float(sys.argv[1])
+(Pdb) s
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(11)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) s
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) s
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+7.5
+(Pdb) s
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) s
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+3.75
+(Pdb) s
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) s
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(7)my_fun()
+-> return my_fun(n/2)
+(Pdb) s
+--Call--
+> /Users/shaynaanderson-hill/UWPythonCert/Sp2018-Online/students/shayna_andersonhill/lesson05/recursive.py(3)my_fun()
+-> def my_fun(n):
+(Pdb) pp n
+1.875
+
+
+
