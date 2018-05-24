@@ -1,0 +1,45 @@
+
+The exit condition of the recursive function only detects a specific value, which is only
+encountered when n is a power of two. Given a number that is not a power of two, n will keep
+dividing in half until the maximum recursion depth is reached without ever hitting the return
+condition. The function should have another exit condition to test when n is
+less than two, and return with False.
+
+
+$ python -m pdb recursive.py 15
+> c:\users\chris\desktop\uw_python\sp2018-online\students\chrish\lesson05\recursive.py(2)<module>()
+-> import sys
+(Pdb) ll
+  1
+  2  -> import sys
+  3
+  4     def my_fun(n):
+  5         if n == 2:
+  6             return True
+  7
+  8         return my_fun(n/2)
+  9
+ 10
+ 11     if __name__ == "__main__":
+ 12         n = int(sys.argv[1])
+ 13         print(my_fun(n))
+(Pdb) b 5
+Breakpoint 1 at c:\users\chris\desktop\uw_python\sp2018-online\students\chrish\lesson05\recursive.py:5
+(Pdb) condition 1 n <= 2.0
+New condition set for breakpoint 1.
+(Pdb) c
+> c:\users\chris\desktop\uw_python\sp2018-online\students\chrish\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) c
+> c:\users\chris\desktop\uw_python\sp2018-online\students\chrish\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.9375
+(Pdb) c
+> c:\users\chris\desktop\uw_python\sp2018-online\students\chrish\lesson05\recursive.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.46875
+(Pdb)

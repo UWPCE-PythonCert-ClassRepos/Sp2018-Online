@@ -1,0 +1,58 @@
+{
+    "__obj_type": "Donors",
+    "donorlist": [
+        {
+            "__obj_type": "Donor",
+            "name": "Al Donor1",
+            "donations": [
+                10.0,
+                20.0,
+                30.0,
+                40.0,
+                50.0
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Bert Donor2",
+            "donations": [
+                10.0
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Connie Donor3",
+            "donations": [
+                10.0,
+                10.0,
+                10.01
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Dennis Donor4",
+            "donations": [
+                10.0,
+                20.0,
+                20.0
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Egbert Donor5",
+            "donations": [
+                10.39,
+                20.21,
+                10.59,
+                4000.4
+            ]
+        },
+        {
+            "__obj_type": "Donor",
+            "name": "Albert Knog",
+            "donations": [
+                123.0
+            ]
+        }
+    ]
+}

@@ -1,0 +1,2 @@
+2018-05-07 19:43:22,873 Logging_mod5.py:34   WARNING The value of i is 50.
+2018-05-07 19:43:22,873 Logging_mod5.py:38   ERROR Tried to divide by zero. Var i was 50. Recovered gracefully.

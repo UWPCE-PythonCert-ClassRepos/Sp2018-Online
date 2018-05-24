@@ -1,0 +1,24 @@
+What is wrong with our logic?
+	a) There is no return other than true. There should be a return of false if n==2 is not true.
+	b) The function will keep looping unless n==2...not termination if it does not ==2.
+
+Why doesn't the function stop calling itself?
+	the function will keep looping until n==2..there is not termination or catch for any other case.
+
+
+What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+	The value keeps getting cut in half..
+
+
+The examples for the pdb were not working for me. used pycharm to debug.
+It showed that n was returning a value lower than 2...
+When I stepped through the code with a value of 19, there was an exception when n was equal to 1.348485..
+
+
+
+
+
+
+
+
+
