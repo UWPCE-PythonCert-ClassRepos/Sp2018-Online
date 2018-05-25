@@ -8,7 +8,7 @@
 
 import logging
 from peewee import *
-from db_schema import Person
+from v00_personjob_model import Person
 
 
 def populate_db():
@@ -19,7 +19,7 @@ def populate_db():
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-    database = SqliteDatabase('personjob.db')
+    database = SqliteDatabase('../data/personjob.db')
 
     logger.info('Working with Person class')
     logger.info('Note how I use constants and a list of tuples as a simple schema')
