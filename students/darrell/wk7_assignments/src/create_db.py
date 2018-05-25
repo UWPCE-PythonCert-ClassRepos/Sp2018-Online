@@ -29,6 +29,16 @@ class BaseModel(Model):
     class Meta:
         database = database
 
+
+class Department(BaseModel):
+    """
+        This is the department class
+    """
+    logger.info('Department Table')
+    department_name = CharField(max_length=30, null=False)
+    department_number = CharField(max_length=4, primary_key=True)
+    department_manager = CharField(max_length=30, null=False)
+
 class Person(BaseModel):
     """
         This class defines Person, which maintains details of someone
@@ -43,18 +53,7 @@ class Person(BaseModel):
     person_name = CharField(primary_key = True, max_length = 30)
     lives_in_town = CharField(max_length = 40)
     nickname = CharField(max_length = 20, null = True)
-
-
-class Department(BaseModel):
-    """
-        This is the department class
-    """
-    logger.info('Department Table')
-    department_name = CharField(max_length=30, null=False)
-    department_number = CharField(max_length=4, primary_key=True)
-    department_manager = CharField(max_length=30, null=False)
-    # works, but foriegn key is wrong.
-    person_in_department = ForeignKeyField(Person, related_name='in_department', null=False)
+    department = ForeignKeyField(Department, related_name='belongs_to_department', null=False)
 
 
 class Job(BaseModel):

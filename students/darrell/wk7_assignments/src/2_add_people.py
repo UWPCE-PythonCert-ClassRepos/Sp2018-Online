@@ -8,7 +8,7 @@
 
 import logging
 from peewee import *
-from v00_personjob_model import Person
+from create_db import Person
 
 
 def populate_db():
@@ -28,13 +28,14 @@ def populate_db():
     person_name = 0
     lives_in_town = 1
     nickname = 2
+    department_id = 3
 
     people = [
-        ('Andrew', 'Sumner', 'Andy'),
-        ('Peter', 'Seattle', None),
-        ('Susan', 'Boston', 'Beannie'),
-        ('Pam', 'Coventry', 'PJ'),
-        ('Steven', 'Colchester', None),
+        ('Andrew', 'Sumner', 'Andy','a0001'),
+        ('Peter', 'Seattle', None,'a0002'),
+        ('Susan', 'Boston', 'Beannie','a0003'),
+        ('Pam', 'Coventry', 'PJ','a0001'),
+        ('Steven', 'Colchester', None,'a0001'),
     ]
 
     logger.info('Creating Person records: iterate through the list of tuples')
@@ -49,7 +50,9 @@ def populate_db():
                 new_person = Person.create(
                     person_name=person[person_name],
                     lives_in_town=person[lives_in_town],
-                    nickname=person[nickname])
+                    nickname=person[nickname],
+                    department_id=person[department_id]
+                )
                 new_person.save()
                 logger.info('Database add successful')
 

@@ -7,7 +7,7 @@
 """
 
 from peewee import *
-from src.v00_personjob_model import Person, Job
+from create_db import Person, Job, Department
 
 import logging
 
@@ -33,13 +33,20 @@ def join_classes():
         database.connect()
         database.execute_sql('PRAGMA foreign_keys = ON;')
         query = (Person
-                 .select(Person, Job)
-                 .join(Job, JOIN.INNER)
+                 .select(Person, Job, Department)
+                 .join(Job)
+                 .switch(Person)  # Needed to do this to join Person to Department
+                 .join(Department)
                 )
 
         logger.info('View matching records from both tables')
         for person in query:
-            logger.info(f'Person {person.person_name} had job {person.job.job_name}')
+            print(f'Person {person.person_name} '
+                        f'in department {person.department.department_name} '
+                        f'had job {person.job.job_name} '
+                        f'from {person.job.start_date} '
+                        f'to {person.job.end_date}'
+                  )
 
     except Exception as e:
         logger.info(f'Error creating = {job[JOB_NAME]}')

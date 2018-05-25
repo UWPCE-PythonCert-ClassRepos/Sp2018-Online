@@ -7,7 +7,7 @@
 """
 
 from peewee import *
-from v00_personjob_model import Person, Job, Department
+from create_db import Person, Job, Department
 
 import logging
 
@@ -31,9 +31,9 @@ def populate_db():
     person_in_department_id = 3
 
     departments = [
-        ('a0001', 'Sales', 'Mgr Bob','Andrew'),
-        ('a0002', 'Finance', 'Scrouge', 'Susan'),
-        ('a0003', 'Engineering', "Bill Gates", 'Pam')
+        ('a0001', 'Sales', 'Mgr Bob'),
+        ('a0002', 'Finance', 'Scrouge'),
+        ('a0003', 'Engineering', "Bill Gates")
         ]
 
     try:
@@ -44,8 +44,7 @@ def populate_db():
                 new_dept = Department.create(
                     department_number = dept[department_number],
                     department_name = dept[department_name],
-                    department_manager = dept[department_manager],
-                    person_in_department_id = dept[person_in_department_id])
+                    department_manager = dept[department_manager])
                 new_dept.save()
 
         logger.info('Reading and print all Department rows (note the value of person)...')

@@ -7,7 +7,7 @@
 """
 
 from peewee import *
-from v00_personjob_model import Person, Job, Department
+from create_db import Person, Job
 
 import logging
 
