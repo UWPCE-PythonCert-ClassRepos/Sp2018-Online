@@ -54,6 +54,7 @@ logger.addHandler(create_handler('syslog','ERROR',['%(filename)s',
                                                     '%(message)s',
                                                     ]))
 
+
 def my_fun(n):
     for i in range(0, n):
         logging.debug(i)
@@ -63,6 +64,7 @@ def my_fun(n):
             i / (5 - i)
         except ZeroDivisionError:
             logging.error("Tried to divide by zero. Var i was {}. Recovered gracefully.".format(i))
+
 
 if __name__ == "__main__":
     my_fun(10)
