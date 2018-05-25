@@ -53,6 +53,7 @@ class Department(BaseModel):
     department_name = CharField(max_length=30, null=False)
     department_number = CharField(max_length=4, primary_key=True)
     department_manager = CharField(max_length=30, null=False)
+    # works, but foriegn key is wrong.
     person_in_department = ForeignKeyField(Person, related_name='in_department', null=False)
 
 
