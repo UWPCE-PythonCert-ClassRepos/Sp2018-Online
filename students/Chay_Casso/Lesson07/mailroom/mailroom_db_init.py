@@ -9,7 +9,7 @@ from functools import partial
 import logging
 import peewee
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 logger.info('One off program to build the classes from the model in the database')
 

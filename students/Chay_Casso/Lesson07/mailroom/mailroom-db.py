@@ -7,9 +7,9 @@ import sys
 import math
 import logging
 import peewee
+import datetime
 from textwrap import dedent
 from mailroom_db_init import Donor_Person, Donation
-from functools import partial
 
 # Utility so we have data to test with, etc.
 def get_sample_data():
@@ -94,7 +94,11 @@ class Donor():
         if amount <= 0.0:
             raise ValueError("Donation must be greater than zero")
         self.donations.append(amount)
-
+        query = Donation.insert({
+            Donation.gift_value: amount,
+            Donation.gift_donor: self.name,
+            Donation.gift_date: datetime.datetime.today().strftime("%Y-%m-%d")
+        })
 
 class DonorDB():
     """
@@ -162,6 +166,10 @@ class DonorDB():
         """
         donor = Donor(name)
         self.donor_data[donor.norm_name] = donor
+        query = Donor_Person.insert({
+            Donor_Person.person_name: donor,
+            Donor_Person.email_address: "test@test.test"
+        })
         return donor
 
     def gen_letter(self, donor):
@@ -229,12 +237,6 @@ class DonorDB():
             filename = donor.name.replace(" ", "_") + ".txt"
             open(filename, 'w').write(letter)
 
-    def save_database(self):
-        """
-        Saves content of DB to mailroom.db file.
-        :return: nothing
-        """
-
 # User-interaction code
 # Above this is all the logic code
 #  The stuff you'd need if you had a totally different UI.different
@@ -250,6 +252,10 @@ class DonorDB():
 # from mailroom import model
 
 # create a DB with the sample data
+database = peewee.SqliteDatabase('mailroom.db')
+database.connect()
+database.execute_sql('PRAGMA foreign_keys = ON;') # needed for sqlite only
+
 db = DonorDB(get_sample_data())
 
 
@@ -263,8 +269,7 @@ def main_menu_selection():
       1 - Send a Thank You
       2 - Create a Report
       3 - Send letters to everyone
-      4 - Save data to database
-      5 - Quit
+      4 - Quit
 
       > '''))
     return action.strip()
@@ -323,6 +328,7 @@ def print_donor_report():
 
 
 def quit():
+    database.close()
     sys.exit(0)
 
 
@@ -330,8 +336,7 @@ def main():
     selection_dict = {"1": send_thank_you,
                       "2": print_donor_report,
                       "3": db.save_letters_to_disk,
-                      "4": db.save_database
-                      "5": quit}
+                      "4": quit}
 
     while True:
         selection = main_menu_selection()
