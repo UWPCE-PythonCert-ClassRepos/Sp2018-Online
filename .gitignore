@@ -105,3 +105,6 @@ ENV/
 
 # .idea
 .idea/
+
+# secrets
+.config/
