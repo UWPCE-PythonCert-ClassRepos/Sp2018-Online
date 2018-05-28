@@ -186,7 +186,7 @@ def add_data():
                     # cyph = "CREATE (c:'%s' {donation: '%d'})" % (node, donation)
                     # hence string concatenation below
                     cyph = ("CREATE (c:" + node_name + "{donation: " + str(value)
-                            + ", id: " + str(index+1) + "})")
+                            + ", id: " + str(index) + "})")
                     # print
                     session.run(cyph)
 
