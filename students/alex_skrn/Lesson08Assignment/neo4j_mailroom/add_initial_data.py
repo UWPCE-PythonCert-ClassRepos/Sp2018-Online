@@ -23,10 +23,6 @@ graphenedb_user = config["configuration"]["user"]
 graphenedb_pass = config["configuration"]["pw"]
 graphenedb_url = "bolt://hobby-bjkmfeabkpihgbkeddhdlgbl.dbs.graphenedb.com:24786"
 
-# graphenedb_user = "alex"
-# graphenedb_pass = "b.gOOzoa8woNDL.1rsSQmh8X4RGHICi"
-# graphenedb_url = "bolt://hobby-bjkmfeabkpihgbkeddhdlgbl.dbs.graphenedb.com:24786"
-
 driver = GraphDatabase.driver(graphenedb_url,
                               auth=basic_auth(graphenedb_user, graphenedb_pass))
 
@@ -241,11 +237,47 @@ def add_data():
             except Exception as e:
                 print(f"Error getting donations for {combined_person_name}: {e}")
 
-    # #  Print out donations from the db
+    # # #  Print out donations from the db
+    # # Step 1: Get people names from db.
+    # # Step 2: Get donoations for each person
+    # # Step 3: Convert into a dict
     # with driver.session() as session:
-    #     all_names = [f'{first} {last}' for first, last in sample_donors]
-    #     for name in all_names:
-    #         print(name, get_all_donations_for_person(name))
+    #     # Step 1:
+    #     try:
+    #         people_names = []
+    #         cyph = """MATCH (p:Person)
+    #                   RETURN p.person_name as person_name
+    #                   """
+    #         result = session.run(cyph)
+    #         for donor in result:
+    #             people_names.append(donor['person_name'])
+    #         # print(people_names)
+    #     except Exception as e:
+    #         print("Failed to query for people in the db: ", e)
+    #
+    #     # Step 2:
+    #     try:
+    #         people_donations = []
+    #         for name in people_names:
+    #             cyph = """
+    #               MATCH (p:Person {person_name: '%s'})
+    #                     -[:HAS_DONATIONS]->(personDonations)
+    #               RETURN personDonations
+    #               ORDER by personDonations.id
+    #               """ % (name)
+    #             result = session.run(cyph)
+    #             a_list_gifts = []
+    #             for rec in result:
+    #                 for donation in rec.values():
+    #                     a_list_gifts.append(float(donation['donation']))
+    #             people_donations.append(a_list_gifts)
+    #         # print(people_donations)
+    #     except Exception as e:
+    #         print("Failed to query for donations in the db: ", e)
+    #
+    #     # Step 3:
+    #     dict_people_gifts = dict(zip(people_names, people_donations))
+    #     # print(dict_people_gifts)
 
 
 if __name__ == "__main__":
