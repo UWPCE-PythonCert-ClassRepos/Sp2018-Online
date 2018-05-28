@@ -1,20 +1,26 @@
 #!/usr/bin/env python3
 
-"""Mailroom - Lesson 7 Adv Python - using a relational database.
-
-To use the mailroom module, a db must be already set up. It should now be in
-directory Lesson07Assignment - mailroom.db. If not, first run models.py
-(which will create an empty db and will be enough for the mailroom to work) and
-then add_data.py to include several donors and donations as an example.
-"""
+"""Mailroom - Lesson 8 Adv Python - using a neo4j cloud db."""
 
 import os
 import datetime
 import tkinter as tk
 from tkinter import filedialog
-import peewee
-from models import Person, Donation
+# import login_database
+import configparser
+from pathlib import Path
+from neo4j.v1 import GraphDatabase, basic_auth
 
+# GETTING USER AND PASSWORD DATA FROM CONFIG FILE
+config_file = Path(__file__).parent.parent / '.config/config'
+config = configparser.ConfigParser()
+config.read(config_file)
+graphenedb_user = config["configuration"]["user"]
+graphenedb_pass = config["configuration"]["pw"]
+graphenedb_url = "bolt://hobby-bjkmfeabkpihgbkeddhdlgbl.dbs.graphenedb.com:24786"
+
+driver = GraphDatabase.driver(graphenedb_url,
+                              auth=basic_auth(graphenedb_user, graphenedb_pass))
 
 ####################
 # SINGLE DONOR CLASS
@@ -176,18 +182,43 @@ class StartMenu(object):
     def donors(self):
         """Load donors from db and return it as a Donors class object."""
         try:
-            # Get donor info from db and convert it into Donors class which
-            # a create_report() method to generate the report
-            dict_donors_gifts = {}
-            donors = Person.select().order_by(Person.person_name)
-            donations = Donation.select()
-            query = peewee.prefetch(donors, donations)
-            # Iterate over the query and collect all data into a dict
-            # with donors as keys and donations as lists of values
-            for donor in query:
-                dict_donors_gifts[donor.person_name] = []
-                for gift in donor.donations:
-                    dict_donors_gifts[donor.person_name].append(float(gift.donation))
+            # Get donor info from db and convert it into Donors class
+            with driver.session() as session:
+                # Step 1: Get people names from db.
+                try:
+                    people_names = []
+                    cyph = """MATCH (p:Person)
+                              RETURN p.person_name as person_name
+                              """
+                    result = session.run(cyph)
+                    for donor in result:
+                        people_names.append(donor['person_name'])
+                    # print(people_names)
+                except Exception as e:
+                    print("Failed to query for people in the db: ", e)
+
+                # Step 2: Get donations for each person from S.1
+                try:
+                    people_donations = []
+                    for name in people_names:
+                        cyph = """
+                          MATCH (p:Person {person_name: '%s'})
+                                -[:HAS_DONATIONS]->(personDonations)
+                          RETURN personDonations
+                          ORDER by personDonations.id
+                          """ % (name)
+                        result = session.run(cyph)
+                        a_list_gifts = []
+                        for rec in result:
+                            for donation in rec.values():
+                                a_list_gifts.append(float(donation['donation']))
+                        people_donations.append(a_list_gifts)
+                    # print(people_donations)
+                except Exception as e:
+                    print("Failed to query for donations in the db: ", e)
+
+                # Step 3: Convert results from S.1 and S.2 into a dict
+                dict_donors_gifts = dict(zip(people_names, people_donations))
 
             # Convert the dict with donors as keys and donations as values into
             # a Donors class object
