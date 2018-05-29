@@ -82,9 +82,30 @@ class SingleDonor():
                 )
 
     def add_donation(self, amount):
-        """Add a donation."""
-        # Reminder: Model.create() means 'instantiate-then-save'
-        Donation.create(person_name=self.name, donation=amount)
+        """Add a donation directly to db."""
+        with driver.session() as session:
+            node_name = "".join(self.name.split()) + "Donation"
+            new_gift_id = len(self.donations)
+
+            cyph = ("CREATE (c:" + node_name + "{donation: " + str(amount)
+                    + ", id: " + str(new_gift_id) + "})")
+
+            session.run(cyph)
+
+            # # Checking tha the donation is in the db
+            # cyph = ("MATCH (c:" + node_name + ")"
+            #         + "RETURN c.donation as donation" + "\n"
+            #         + "ORDER by c.id")
+            # result = session.run(cyph)
+            # resulting_donations = []
+            # for record in result:
+            #     resulting_donations.append(record['donation'])
+            # if resulting_donations[-1] != amount:
+            #     print("Something wrong with adding a donation")
+            # else:
+            #     print("Donated added alright", resulting_donations[-1])
+
+
 
     def get_last_donation(self):
         """Return the last donation."""
