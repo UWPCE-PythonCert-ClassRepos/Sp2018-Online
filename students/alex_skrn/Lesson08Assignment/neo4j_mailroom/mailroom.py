@@ -153,8 +153,6 @@ class Donors():
                     + "RETURN h" + "\n")
             session.run(cyph)
 
-
-
     def print_donor_names(self):
         """Print existing donor names on screen in alphabetical order."""
         donors_L = [donor.name for donor in sorted(self._donors,
@@ -470,25 +468,27 @@ class StartMenu(object):
 
         print("\nAll letters saved in {}\n".format(target_dir))
 
-
     def remove_donor(self):
-        """Prompt use for donor name to delete and delete the record."""
+        """Prompt user for donor name to delete and delete the record."""
         while True:
             response = input("Type donor you want to delete or 0 to go back > ")
             if response == "0":
                 break
             else:
-                query = Person.select().where(Person.person_name == response)
-                if query.exists():
-                    try:
-                        name = Person.get(Person.person_name == response)
-                        if name.delete_instance() == 1:
-                            print("{} deleted successfully".format(response))
-                            break
-                    except Exception as e:
-                        print('Problem deleting this record because', e)
-                else:
-                    print("No such donor. Try again or 0 to go to Main Menu")
+                with driver.session() as session:
+                    cyph = """MATCH (p:Person {person_name: '%s'})
+                              RETURN p.person_name as person_name
+                              """ % (response)
+                    results = session.run(cyph)
+                    if not list(results):
+                        print("No such name. Try again or 0 to go to Main Menu")
+                    else:
+                        cyph = """MATCH (p:Person {person_name: '%s'})
+                                  DETACH DELETE p
+                                  """ % (response)
+                        session.run(cyph)
+                        print("{} deleted successfully".format(response))
+                        break
 
 
 if __name__ == "__main__":
