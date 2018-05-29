@@ -82,30 +82,23 @@ class SingleDonor():
                 )
 
     def add_donation(self, amount):
-        """Add a donation directly to db."""
+        """Add a donation directly to db and a relation to donor."""
         with driver.session() as session:
             node_name = "".join(self.name.split()) + "Donation"
             new_gift_id = len(self.donations)
 
+            #  Create the node for donation
             cyph = ("CREATE (c:" + node_name + "{donation: " + str(amount)
                     + ", id: " + str(new_gift_id) + "})")
 
             session.run(cyph)
 
-            # # Checking tha the donation is in the db
-            # cyph = ("MATCH (c:" + node_name + ")"
-            #         + "RETURN c.donation as donation" + "\n"
-            #         + "ORDER by c.id")
-            # result = session.run(cyph)
-            # resulting_donations = []
-            # for record in result:
-            #     resulting_donations.append(record['donation'])
-            # if resulting_donations[-1] != amount:
-            #     print("Something wrong with adding a donation")
-            # else:
-            #     print("Donated added alright", resulting_donations[-1])
-
-
+            #  Establish a relationship between donor and donoation node
+            cyph = ("MATCH (a:Person), (b:" + node_name + ")" + "\n"
+                    + "WHERE a.person_name = " + "'" + self.name + "'" + "\n"
+                    + "CREATE  (a)-[h:HAS_DONATIONS]->(b) " + "\n"
+                    + "RETURN h" + "\n")
+            session.run(cyph)
 
     def get_last_donation(self):
         """Return the last donation."""
