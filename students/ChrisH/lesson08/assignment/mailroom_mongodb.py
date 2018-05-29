@@ -1,5 +1,5 @@
 
-from mailroom_donor_report import print_donor_report
+from mailroom_donor_report_mongodb import print_donor_report
 import time
 import login_database
 import uuid
