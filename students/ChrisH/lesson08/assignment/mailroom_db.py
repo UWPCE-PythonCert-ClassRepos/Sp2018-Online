@@ -1,8 +1,8 @@
 
-from peewee import *
 from mailroom_donor_report import print_donor_report
 import time
-from create_mailroom_db import Donor, Donation
+import login_database
+import uuid
 
 
 def get_first(name):
@@ -21,7 +21,7 @@ def get_last(name):
         return ' '.join(name_sp[1:])
 
 
-def generate_letter(name):
+def generate_letter(donor_doc):
     """
     Generates a Thank You letter to send to a donor. Uses the last value in their donations list to
     mention their last donation amount.
@@ -36,19 +36,11 @@ Dear {first_name} {last_name},
             Warmest Regards,
                 Local Charity
 """
-    query = (Donor
-             .select(Donor.name, Donor.last, Donor.first, fn.MAX(Donation.id).alias('last_don_id'), Donation.amount)
-             .join(Donation, JOIN.LEFT_OUTER)
-             )
-
-    result = None
-
-    for d in query:
-        result = format_string.format(
-            last_donation=float(d.donation.amount),
-            first_name=d.first,
-            last_name=d.last
-        )
+    result = format_string.format(
+        first_name=get_first(donor_doc['donor_name']),
+        last_name=get_last(donor_doc['donor_name']),
+        last_donation=donor_doc['donations'][-1]
+    )
 
     return result
 
@@ -65,26 +57,16 @@ def send_thank_you_menu(database):
         if name == 'q' or name == '':
             return
         elif name == 'list':
-            database.connect()
-            database.execute_sql('PRAGMA foreign_keys = ON;')
-            for d in Donor.select(Donor.name):
-                print(d.name)
-            database.close()
+            cursor = database.find({})
+            for doc in cursor:
+                print(doc['donor_name'])
             continue
         else:
-            try:
-                database.connect()
-                database.execute_sql('PRAGMA foreign_keys = ON;')
-                with database.transaction():
-                    new_donor = Donor.create(name=name, first=get_first(name), last=get_last(name))
-                    new_donor.save()
-
-            except IntegrityError as e:
+            result = database.find({'donor_name': name})
+            if result.count() == 0:
+                database.insert({'uuid': str(uuid.uuid4()), 'donor_name': name})
+            else:
                 print("Donor already exists, adding donations to existing donor.")
-
-            finally:
-                database.close()
-
             break
 
     while True:
@@ -97,14 +79,11 @@ def send_thank_you_menu(database):
         except ValueError:
             print('Please enter a numerical value.')
 
-    database.connect()
-    database.execute_sql('PRAGMA foreign_keys = ON;')
-    with database.transaction():
-        new_donation = Donation.create(donor=name, amount=amount)
-        new_donation.save()
-    database.close()
+    database.update({'donor_name': name}, {'$push': {'donations': amount}})
 
-    print(generate_letter(name))
+    cursor = database.find({'donor_name': name})
+    for doc in cursor:
+        print(generate_letter(doc))
 
 
 def menu(menu_data):
@@ -134,24 +113,26 @@ def menu(menu_data):
 
 if __name__ == "__main__":
 
-    database = SqliteDatabase('./mailroom.db')
+    with login_database.login_mongodb_cloud() as client:
+        db = client['dev']
+        mdb_mailroom = db['mailroom']
 
-    menu_functions = [
-        ('Send a Thank You', send_thank_you_menu, database),
-        ('Print a report', print_donor_report, database),
-        #('Send letters to everyone', dl.send_letters_all, None),
-        #('Make donation projections', make_projections, dl),
-        ('Quit', exit, None),
-    ]
-    while True:
-        try:
-            menu_fn, param = menu(menu_functions)
-            if param:
-                menu_fn(param)
-            else:
-                menu_fn()
-        except TypeError:
-            continue
-        except ValueError:
-            continue
+        menu_functions = [
+            ('Send a Thank You', send_thank_you_menu, mdb_mailroom),
+            ('Print a report', print_donor_report, mdb_mailroom),
+            #('Send letters to everyone', dl.send_letters_all, None),
+            #('Make donation projections', make_projections, dl),
+            ('Quit', exit, None),
+        ]
+        while True:
+            try:
+                menu_fn, param = menu(menu_functions)
+                if param:
+                    menu_fn(param)
+                else:
+                    menu_fn()
+            except TypeError:
+                continue
+            except ValueError:
+                continue
 
