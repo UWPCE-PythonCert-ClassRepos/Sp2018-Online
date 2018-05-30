@@ -26,9 +26,9 @@ def add_donors():
         for donor in donors:
             with database.transaction():
                 new_donor = Donor.create(
-                    donor_first_name=donor[donor_first_name],
-                    donor_last_name=donor[donor_last_name],
-                    donor_city=donor[donor_city]
+                    first_name=donor[donor_first_name],
+                    last_name=donor[donor_last_name],
+                    city=donor[donor_city]
                 )
                 new_donor.save()
         logger.info('Added Donors.....')
@@ -65,7 +65,7 @@ def add_donations():
         for donation in donations:
             with database.transaction():
                 new_donation = Donation.create(
-                    donation_amount=donation[donation_amount],
+                    amount=donation[donation_amount],
                     donor=donation[donor]
                 )
                 new_donation.save()
