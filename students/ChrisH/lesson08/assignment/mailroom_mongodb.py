@@ -86,6 +86,50 @@ def send_thank_you_menu(database):
         print(generate_letter(doc))
 
 
+def modify_donor(database):
+    donor_uuid = ""
+    while True:
+        name = input("Enter a Full Name ('list' to show list of donors, 'q' to quit) > ")
+        if name == 'q' or name == '':
+            return
+        elif name == 'list':
+            cursor = database.find({})
+            for doc in cursor:
+                print(doc['donor_name'])
+            continue
+        else:
+            result = database.find({'donor_name': name})
+        if result.count() == 0:
+            print("Donor not found.")
+        else:
+            for doc in result:
+                print(f"Donor found: \n\tUUID: {doc['uuid']}\n\tDonor Name:{doc['donor_name']}")
+                donor_uuid = doc['uuid']
+            break
+
+    while True:
+        choice = (input("(D)elete donor, (R)ename donor, (Q)uit > ")).lower()
+        if choice == 'q' or choice == '':
+            return
+        elif choice == 'd':
+            try:
+                doc = database.delete_one({'uuid': donor_uuid})
+                print("Deleted count: ", doc.deleted_count)
+                return
+            except Exception as e:
+                print(str(e))
+
+        elif choice == 'r':
+            try:
+                name = input("New name > ")
+                result = database.update_one({'uuid': donor_uuid}, {'$set':{'donor_name': name}})
+                print("matched: ", result.matched_count)
+                print("modified: ", result.modified_count)
+            except Exception as e:
+                print(str(e))
+            return
+
+
 def menu(menu_data):
     """
     Prints the main user menu & retrieves user selection.
@@ -120,6 +164,7 @@ if __name__ == "__main__":
         menu_functions = [
             ('Send a Thank You', send_thank_you_menu, mdb_mailroom),
             ('Print a report', print_donor_report, mdb_mailroom),
+            ('Modify Donor', modify_donor, mdb_mailroom),
             #('Send letters to everyone', dl.send_letters_all, None),
             #('Make donation projections', make_projections, dl),
             ('Quit', exit, None),
