@@ -46,13 +46,15 @@ def run_example(furniture_items):
 
         log.info('Step 5: Find and print all red products.')
         query = {'color': 'Red'}
-        results = furniture.find_one(query)
-        pprint.pprint(results)
+        results = furniture.find(query)
+        for doc in results:
+            pprint.pprint(doc)
 
         log.info('Step 6: Find and print all couches.')
         query = {'product_type': 'Couch'}
-        results = furniture.find_one(query)
-        pprint.pprint(results)
+        results = furniture.find(query)
+        for doc in results:
+            pprint.pprint(doc)
 
         log.info(
             'Step 7: Find multiple documents, iterate though the results and print')
@@ -62,7 +64,7 @@ def run_example(furniture_items):
         log.info('Notice how we parse out the data from the document')
 
         for doc in cursor:
-            print(f"Cost: {doc['monthly_rental_cost']} product name: {doc['product']} Stock: {doc['in_stock_quantity']}")
+            print(f"Cost: {doc['monthly_rental_cost']} product name: {doc['product_type']} Stock: {doc['in_stock_quantity']}")
 
         log.info('Step 8: Delete the collection so we can start over')
         db.drop_collection('furniture')
