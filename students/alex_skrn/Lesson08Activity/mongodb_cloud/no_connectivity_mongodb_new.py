@@ -1,6 +1,9 @@
 """This code attempts to establish connection with my mongo cloud db.
 
 I can't establish connection.
+
+PS. As of 3 June 2018. A person from mongodb.com emailed me trying
+to help with my connection error. I replied with more delails.
 """
 
 import configparser
