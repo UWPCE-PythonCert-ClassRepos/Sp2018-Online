@@ -1,10 +1,30 @@
 #!/usr/bin/env python
 
-"""
-Regular synchronous script to see how much a given word is mentioned in the
-news today
+""" Threading script to see how much a given word is mentioned in the
+news today.
 
-Took about 21 seconds for me.
+With 1 thread:
+trump found 52 times in 564 articles
+Process took 37 seconds
+
+With 2 threads:
+trump found 52 times in 564 articles
+Process took 19 seconds
+
+With 3 threads:
+trump found 52 times in 565 articles
+Process took 14 seconds
+
+4 threads:
+trump found 52 times in 565 articles
+Process took 10 seconds
+
+Then I ran into <Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many request
+s recently. Developer accounts are limited to 1,000 requests over a 24 hour peri
+od (250 requests available every 6 hours). Please upgrade to a paid plan if you
+need more requests."}
+
 
 Uses data from the NewsAPI:
 
@@ -66,6 +86,7 @@ def get_articles(source):
 
 
 def count_word(word, titles):
+    """Return number of occurrences of word in titles."""
     word = word.lower()
     count = 0
     for title in titles:
@@ -75,7 +96,7 @@ def count_word(word, titles):
 
 
 def main_func(sources):
-
+    """Return number of occurrences of "trump" and number of articles."""
     art_count = 0
     word_count = 0
     for source in sources:
@@ -86,11 +107,11 @@ def main_func(sources):
     return (word_count, art_count)
 
 
-start = time.time()
+start = time.time()  # Measure time
 
-sources = get_sources()
+sources = get_sources()  # Sources of data
 
-results = queue.Queue()
+results = queue.Queue()  # Use a queue to put results of main_func execution
 
 
 def putting_on_queue(*args):
@@ -98,16 +119,21 @@ def putting_on_queue(*args):
     results.put(main_func(*args))
 
 
-num_threads = 1
+# Break work (i.e. sources) into chunks and put each into a thread
+num_threads = 4  # Number of threads to use
+dx = int(len(sources) / num_threads)  # Width of the chunk of sources
 for i in range(num_threads):
-    x0 = 0
-    x1 = -1
+    x0 = int(dx * i)  # Get indices to index into the source of data
+    if num_threads != 1 and i == num_threads - 1 and len(sources) % 2 != 0:
+        x1 = int(x0 + dx + 1)  # If num of elements is odd, last chunk + 1 item
+    else:
+        x1 = int(x0 + dx)
     thread = threading.Thread(target=putting_on_queue,
                               args=(sources[x0:x1],)
                               )
     thread.start()
 
-# Putting together results
+# Putting together results from the queue
 word_count = 0
 art_count = 0
 for i in range(num_threads):
