@@ -15,10 +15,11 @@ NOTE: you need to register with the web site to get a KEY.
 import time
 import requests
 import threading
+import queue
 
 WORD = "trump"
 
-NEWS_API_KEY = "84d0483394c44f288965d7b366e54a74"
+NEWS_API_KEY = "149a8dc71fff41bdbb24a186ac089667"
 
 base_url = 'https://newsapi.org/v1/'
 
@@ -73,9 +74,7 @@ def count_word(word, titles):
     return count
 
 
-def main_func():
-    start = time.time()
-    sources = get_sources()
+def main_func(sources):
 
     art_count = 0
     word_count = 0
@@ -84,9 +83,38 @@ def main_func():
         art_count += len(titles)
         word_count += count_word('trump', titles)
 
-    print(WORD, "found {} times in {} articles".format(word_count, art_count))
-    print("Process took {:.0f} seconds".format(time.time() - start))
+    return (word_count, art_count)
 
 
-thread = threading.Thread(target=main_func)
-thread.start()
+start = time.time()
+
+sources = get_sources()
+
+results = queue.Queue()
+
+
+def putting_on_queue(*args):
+    """Put things on queue to retrieve later."""
+    results.put(main_func(*args))
+
+
+num_threads = 1
+for i in range(num_threads):
+    x0 = 0
+    x1 = -1
+    thread = threading.Thread(target=putting_on_queue,
+                              args=(sources[x0:x1],)
+                              )
+    thread.start()
+
+# Putting together results
+word_count = 0
+art_count = 0
+for i in range(num_threads):
+    result = results.get()
+    word_count += result[0]
+    art_count += result[1]
+print(WORD, "found {} times in {} articles".format(word_count, art_count))
+
+
+print("Process took {:.0f} seconds".format(time.time() - start))
