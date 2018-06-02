@@ -2,11 +2,18 @@
 
 I can't establish connection.
 """
+""""
+This info is contained in my redis db account. Don't know if it matters
+dbname = "mailroom"
+endpoint = "redis-18488.c16.us-east-1-2.ec2.cloud.redislabs.com:18488"
+user = "alex
 
-# This info is contained in my redis db account. Don't know if it matters
-# dbname = "mailroom"
-# endpoint = "redis-18488.c16.us-east-1-2.ec2.cloud.redislabs.com:18488"
-# user = "alex
+PS. After a sample config file was added to the lesson repo, I understood
+the meaning of the above info, i.e. host and port parameters.
+
+Now my redis db connection is fine, but I am not sure that in the remaining
+week I'll have time to complete the redis-related part of the assignment.
+"""
 
 import configparser
 from pathlib import Path
@@ -17,8 +24,10 @@ config_file = Path(__file__).parent.parent / '.config/config'
 config = configparser.ConfigParser()
 config.read(config_file)
 pw = config["configuration"]["pw"]
-host = 'localhost' # Is this the correct way to do it? Don't I have to set it up somehow?
-port = 6379 # Is this the correct way to do it? Don't I have to set it up somehow
+# host = 'localhost' # Is this the correct way to do it? Don't I have to set it up somehow?
+host = "redis-18488.c16.us-east-1-2.ec2.cloud.redislabs.com"
+# port = 6379 # Is this the correct way to do it? Don't I have to set it up somehow
+port = 18488
 r = redis.StrictRedis(host=host, port=port, password=pw, decode_responses=True)
 r.set('foo', 'bar')
 """
