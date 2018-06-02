@@ -14,6 +14,7 @@ NOTE: you need to register with the web site to get a KEY.
 """
 import time
 import requests
+import threading
 
 WORD = "trump"
 
@@ -72,15 +73,20 @@ def count_word(word, titles):
     return count
 
 
-start = time.time()
-sources = get_sources()
+def main_func():
+    start = time.time()
+    sources = get_sources()
 
-art_count = 0
-word_count = 0
-for source in sources:
-    titles = get_articles(source)
-    art_count += len(titles)
-    word_count += count_word('trump', titles)
+    art_count = 0
+    word_count = 0
+    for source in sources:
+        titles = get_articles(source)
+        art_count += len(titles)
+        word_count += count_word('trump', titles)
 
-print(WORD, "found {} times in {} articles".format(word_count, art_count))
-print("Process took {:.0f} seconds".format(time.time() - start))
+    print(WORD, "found {} times in {} articles".format(word_count, art_count))
+    print("Process took {:.0f} seconds".format(time.time() - start))
+
+
+thread = threading.Thread(target=main_func)
+thread.start()
