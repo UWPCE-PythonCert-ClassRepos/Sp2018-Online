@@ -7,23 +7,23 @@
 """
 
 from peewee import *
-from db_schema import Person, Job, Department
+from create_db import Person, Job
 
 import logging
 
 
 def populate_db():
-    """.
+    """
         add job data to database
     """
 
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-    database = SqliteDatabase('personjob.db')
+    database = SqliteDatabase('../data/personjob.db')
 
-    logger.info('Working with Job class')
-    logger.info('Creating Job records: just like Person. We use the foreign key')
+    logger.info('Working with Department class')
+    logger.info('Creating Department records: just like Person. We use the foreign key')
 
     job_name = 0
     start_date = 1
