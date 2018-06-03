@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+
+import mdb_data
+import login_database
+import pprint
+import pickle
+import utilities
+import json
+
+"""
+    I only focused on pymongo and the persistent data. Trying to learn the particulars of nosql
+    search criteria for the other nosql db's was just brain scrambling. I love pymongos dot notation
+    """
+
+
+def mongo_ex():
+
+    log = utilities.configure_logger('default', '../logs/mongodb_script.log')
+    log.info("Mongodb data from Furniture module, so get it")
+    furniture_items = mdb_data.get_furniture_data()
+
+    with login_database.login_mongodb_cloud() as client:
+        log.info('Step 1: We are going to use a database called dev')
+        log.info('But if it doesnt exist mongodb creates it')
+        db = client['dev']
+
+        log.info('And in that database use a collection called furniture')
+        log.info('If it doesnt exist mongodb creates it')
+
+        furniture = db['furniture']
+
+        log.info('Step 2: Now we add data from the dictionary above')
+        furniture.insert_many(furniture_items)
+
+        log.info('Step 3: Find the products that are described as plastic')
+        result1 = furniture.find({'product.type': 'couch'}, {'_id': 0})
+
+        log.info('Step 4: Print the Couch products')
+        print('Couch products')
+        # pprint.pprint(results)
+        for doc in result1:
+            pprint.pprint(doc)
+
+        log.info('Step 5: Print only the red couch items')
+        result2 = furniture.find({'product.type': 'couch', 'product.color': 'red'}, {'_id': 0})
+        print('\nPrinting only the couch items that are colored red')
+        #pprint.pprint(result2)
+        for doc in result2:
+            pprint.pprint(doc)
+
+        log.info('Step 6: Delete the collection so we can start over')
+        db.drop_collection('furniture')
+
+
+def serial_pers():
+    """
+    Write and read with pickle
+    """
+    log = utilities.configure_logger('default', '../logs/mongodb_script.log')
+    log.info("\n\n====")
+    log.info('Step 1: Demonstrate persistence with pickle')
+    log.info('Write a pickle file with the furniture data')
+    furniture_items = mdb_data.get_furniture_data()
+
+    pickle.dump(furniture_items, open('../data/data.pkl', 'wb'))
+
+    log.info('Step 2: Now read it back from the pickle file')
+    read_data = pickle.load(open('../data/data.pkl', 'rb'))
+    log.info('Step 3: Show that the write and read were successful')
+    assert read_data == furniture_items
+    log.info("and print the data")
+    pprint.pprint(read_data)
+
+    log.info("\n\n======================================")
+    data = ''
+    log.info("Step 1: Look at working with json data")
+    log.info("Write furniture items to .json file")
+    with open('../data/file.txt', 'w') as outfile:
+        json.dump(furniture_items, outfile)
+
+    log.info("Step 2: Read json file and print items")
+    log.info("Reading from json file")
+    log.info('Step 3: Show that the write and read is successful')
+    with open('../data/file.txt') as json_file:
+        data = json.load(json_file)
+
+    pprint.pprint(data)
+
+
+def main():
+    mongo_ex()
+    serial_pers()
+
+
+if __name__ == "__main__":
+    main()
