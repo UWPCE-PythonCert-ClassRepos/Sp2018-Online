@@ -25,6 +25,29 @@ s recently. Developer accounts are limited to 1,000 requests over a 24 hour peri
 od (250 requests available every 6 hours). Please upgrade to a paid plan if you
 need more requests."}
 
+PS. After 6 hours I tried again.
+
+10 threads
+trump found 63 times in 567 articles
+Process took 5 seconds
+
+15 threads:
+trump found 63 times in 567 articles
+Process took 4 seconds
+
+20 threads:
+trump found 63 times in 567 articles
+Process took 3 seconds
+
+30 threads:
+trump found 63 times in 567 articles
+Process took 3 seconds
+
+Then I ran into Response 429 again. At this point I checked how much
+time it takes to run the async version, and the result was as follows:
+trump found 62 times in 567 articles
+Process took 2 seconds
+
 
 Uses data from the NewsAPI:
 
@@ -120,7 +143,7 @@ def putting_on_queue(*args):
 
 
 # Break work (i.e. sources) into chunks and put each into a thread
-num_threads = 4  # Number of threads to use
+num_threads = 40  # Number of threads to use
 dx = int(len(sources) / num_threads)  # Width of the chunk of sources
 for i in range(num_threads):
     x0 = int(dx * i)  # Get indices to index into the source of data
