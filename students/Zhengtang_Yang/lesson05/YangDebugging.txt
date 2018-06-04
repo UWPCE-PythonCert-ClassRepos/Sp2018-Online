@@ -1,0 +1,36 @@
+The function does not have termination condition for false case. It keeps calling itself with smaller entry when the entry is not a power of two. 
+
+Below is my debugging log:
+$ python -m pdb recursive.py 7
+> c:\users\candy yang\desktop\lesson05\recursive.py(1)<module>()
+-> import sys
+(Pdb) l
+  1  -> import sys
+  2
+  3     def my_fun(n):
+  4             if n == 2:
+  5                     return True
+  6
+  7             return my_fun(n/2)
+  8
+  9     if __name__ == '__main__':
+ 10             n = int(sys.argv[1])
+ 11             print(my_fun(n))
+(Pdb) b 4
+Breakpoint 1 at c:\users\candy yang\desktop\lesson05\recursive.py:4
+(Pdb) c
+> c:\users\candy yang\desktop\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+7
+(Pdb) c
+> c:\users\candy yang\desktop\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+3.5
+(Pdb) c
+> c:\users\candy yang\desktop\lesson05\recursive.py(4)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.75
+(Pdb)
