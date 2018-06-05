@@ -1,0 +1,11 @@
+# Ignore everything in this directory
+*
+
+# ignore the config.ini
+config.ini
+
+# Except this file
+!.gitignore
+
+# and don't ignore a readme files
+!README.md
