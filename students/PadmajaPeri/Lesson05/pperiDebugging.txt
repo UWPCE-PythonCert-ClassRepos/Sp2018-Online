@@ -1,0 +1,82 @@
+The function goes into an infinite loop when the argument provided as input is not a power of 2.
+Each call to the function reduces the value of n by 2. When n is not a power of 2, the argument becomes
+1 at some point. Since 1/2 is 0, and 0/2 is 0, from then the function keeps calling itself without comingout of the loop. It would never hit the criteria which occurs when n=2
+
+
+The following is debugging log:
+def my_fun(n):
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/bdb.py", line 51, in trace_dispatch
+    return self.dispatch_call(frame, arg)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/bdb.py", line 77, in dispatch_call
+    if not (self.stop_here(frame) or self.break_anywhere(frame)):
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/bdb.py", line 152, in break_anywhere
+    return self.canonic(frame.f_code.co_filename) in self.breaks
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/bdb.py", line 30, in canonic
+    if filename == "<" + filename[1:-1] + ">":
+RuntimeError: maximum recursion depth exceeded in cmp
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> /System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/bdb.py(30)canonic()
+-> if filename == "<" + filename[1:-1] + ">":
+(Pdb) quit()
+Post mortem debugger finished. The recursive.py will be restarted
+> /private/tmp/recursive.py(1)<module>()
+-> import sys
+(Pdb) clear
+Clear all breaks? b
+(Pdb) quit
+sjc-mpvyv:tmp pperi$ python -m pdb recursive.py 15
+> /private/tmp/recursive.py(1)<module>()
+-> import sys
+(Pdb) l
+  1  ->	import sys
+  2  	
+  3  	def my_fun(n):
+  4  	    if n == 2:
+  5  	        return True
+  6  	
+  7  	    return my_fun(n / 2)
+  8  	
+  9  	
+ 10  	if __name__ == "__main__":
+ 11  	    n = int(sys.argv[1])
+(Pdb) b 7
+Breakpoint 1 at /private/tmp/recursive.py:7
+(Pdb) condition 1 n!=2
+(Pdb) c
+> /private/tmp/recursive.py(7)my_fun()
+-> return my_fun(n / 2)
+(Pdb) n
+> /private/tmp/recursive.py(7)my_fun()
+-> return my_fun(n / 2)
+(Pdb) pp n
+7
+(Pdb) n
+> /private/tmp/recursive.py(7)my_fun()
+-> return my_fun(n / 2)
+(Pdb) pp n
+3
+(Pdb) n
+> /private/tmp/recursive.py(7)my_fun()
+-> return my_fun(n / 2)
+(Pdb) pp n
+1
+(Pdb) n
+> /private/tmp/recursive.py(7)my_fun()
+-> return my_fun(n / 2)
+(Pdb) pp n
+0
+(Pdb) n
+> /private/tmp/recursive.py(7)my_fun()
+-> return my_fun(n / 2)
+(Pdb) n
+> /private/tmp/recursive.py(7)my_fun()
+-> return my_fun(n / 2)
+(Pdb) pp n
+0
+(Pdb) n
+> /private/tmp/recursive.py(7)my_fun()
+-> return my_fun(n / 2)
+(Pdb) pp n
+0
+(Pdb) 

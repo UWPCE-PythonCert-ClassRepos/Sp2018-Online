@@ -1,0 +1,8 @@
+2018-05-14 17:55:24,716 simple_preethi.py:44   WARNING The value of i is 50.
+2018-05-14 17:55:24,716 simple_preethi.py:49   ERROR Tried to divide by zero. Var i was 50. Recovered gracefully
+2018-05-14 17:59:11,923 simple_preethi.py:44   WARNING The value of i is 50.
+2018-05-14 17:59:11,923 simple_preethi.py:49   ERROR Tried to divide by zero. Var i was 50. Recovered gracefully
+2018-05-14 18:02:51,977 simple_preethi.py:44   WARNING The value of i is 50.
+2018-05-14 18:02:51,978 simple_preethi.py:49   ERROR Tried to divide by zero. Var i was 50. Recovered gracefully
+2018-05-14 18:08:49,289 simple_preethi.py:45   WARNING The value of i is 50.
+2018-05-14 18:08:49,292 simple_preethi.py:50   ERROR Tried to divide by zero. Var i was 50. Recovered gracefully

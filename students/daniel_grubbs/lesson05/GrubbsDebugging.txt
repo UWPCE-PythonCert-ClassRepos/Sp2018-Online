@@ -1,0 +1,280 @@
+1. In very general terms, use a couple of sentences to address the problem with our code. For example, give your best guess or insight on the following questions:
+
+- What is wrong with our logic?
+There isn't necessarily an issue with the logic per se but there is an issue in that there is no condition for breaking out of the function call. In this case, once the value of 'n' becomes lower than 2 we will not hit a point that stops the recursion until the limit set by Python has been met. The way the function is setup it will keep returning True so a condtion to return False should be made otherwise we will keep getting a recusrion error when we run this function with a number that is not a power of 2. 
+
+- Why doesn't the function stop calling itself?
+The function doesn't stop calling itself because we have set no limits on it so that if it reaches a certain conditional it will stop and/or break out of the my_fun() call. When the number goes below 2 the value of 'n' just keeps being cut in half until it reaches the recursion limit set by Python. Without the recursion limit it would keep going. 
+
+- What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+As mentioned above, the value of 'n' keeps on getting cut in half each time through the recursion. 
+
+
+2. A copy-and-paste of your terminal debugging activity.
+
+Terminal Debugging Activity
+---------------------------------------------------------------------------
+(uw) C:\code\uw220>python -m pdb recursion.py 15
+> c:\code\uw220\recursion.py(12)<module>()
+-> """
+(Pdb) ll
+  1     """
+  2     In the lesson content, we asked you to spend 5-10 minutes on your own debugging the recursion error exercise code. After doing so, please provide:
+  3
+  4     1. In very general terms, use a couple of sentences to address the problem with our code. For example, give your best guess or insight on the following
+questions:
+  5
+  6     - What is wrong with our logic?
+  7     - Why doesn't the function stop calling itself?
+  8     - What's happening to the value of 'n' as the function gets deeper and deeper into recursion?
+  9
+ 10     2. A copy-and-paste of your terminal debugging activity.
+ 11
+ 12  -> """
+ 13     import sys
+ 14
+ 15
+ 16     def my_fun(n):
+ 17         if n == 2:
+ 18             return True
+ 19
+ 20         return my_fun(n / 2)
+ 21
+ 22     if __name__ == '__main__':
+ 23         n = int(sys.argv[1])
+ 24         print(my_fun(n))
+ 25
+(Pdb) n
+> c:\code\uw220\recursion.py(13)<module>()
+-> import sys
+(Pdb) n
+> c:\code\uw220\recursion.py(16)<module>()
+-> def my_fun(n):
+(Pdb) n
+> c:\code\uw220\recursion.py(22)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> c:\code\uw220\recursion.py(23)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> c:\code\uw220\recursion.py(24)<module>()
+-> print(my_fun(n))
+(Pdb) pp n
+15
+(Pdb) s
+--Call--
+> c:\code\uw220\recursion.py(16)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\code\uw220\recursion.py(17)my_fun()
+-> if n == 2:
+(Pdb) pp n
+15
+(Pdb) ll
+ 16     def my_fun(n):
+ 17  ->     if n == 2:
+ 18             return True
+ 19
+ 20         return my_fun(n / 2)
+(Pdb) n
+> c:\code\uw220\recursion.py(20)my_fun()
+-> return my_fun(n / 2)
+(Pdb) s
+--Call--
+> c:\code\uw220\recursion.py(16)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\code\uw220\recursion.py(17)my_fun()
+-> if n == 2:
+(Pdb) pp n
+7.5
+(Pdb) ll
+ 16     def my_fun(n):
+ 17  ->     if n == 2:
+ 18             return True
+ 19
+ 20         return my_fun(n / 2)
+(Pdb) n
+> c:\code\uw220\recursion.py(20)my_fun()
+-> return my_fun(n / 2)
+(Pdb) s
+--Call--
+> c:\code\uw220\recursion.py(16)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\code\uw220\recursion.py(17)my_fun()
+-> if n == 2:
+(Pdb) pp n
+3.75
+(Pdb) ll
+ 16     def my_fun(n):
+ 17  ->     if n == 2:
+ 18             return True
+ 19
+ 20         return my_fun(n / 2)
+(Pdb) n
+> c:\code\uw220\recursion.py(20)my_fun()
+-> return my_fun(n / 2)
+(Pdb) s
+--Call--
+> c:\code\uw220\recursion.py(16)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\code\uw220\recursion.py(17)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) ll
+ 16     def my_fun(n):
+ 17  ->     if n == 2:
+ 18             return True
+ 19
+ 20         return my_fun(n / 2)
+(Pdb) n
+> c:\code\uw220\recursion.py(20)my_fun()
+-> return my_fun(n / 2)
+(Pdb) s
+--Call--
+> c:\code\uw220\recursion.py(16)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\code\uw220\recursion.py(17)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.9375
+(Pdb) ll
+ 16     def my_fun(n):
+ 17  ->     if n == 2:
+ 18             return True
+ 19
+ 20         return my_fun(n / 2)
+(Pdb) n
+> c:\code\uw220\recursion.py(20)my_fun()
+-> return my_fun(n / 2)
+(Pdb) s
+--Call--
+> c:\code\uw220\recursion.py(16)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\code\uw220\recursion.py(17)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.46875
+(Pdb) ll
+ 16     def my_fun(n):
+ 17  ->     if n == 2:
+ 18             return True
+ 19
+ 20         return my_fun(n / 2)
+(Pdb) n
+> c:\code\uw220\recursion.py(20)my_fun()
+-> return my_fun(n / 2)
+(Pdb) s
+--Call--
+> c:\code\uw220\recursion.py(16)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\code\uw220\recursion.py(17)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.234375
+(Pdb) ll
+ 16     def my_fun(n):
+ 17  ->     if n == 2:
+ 18             return True
+ 19
+ 20         return my_fun(n / 2)
+(Pdb) n
+> c:\code\uw220\recursion.py(20)my_fun()
+-> return my_fun(n / 2)
+(Pdb) s
+--Call--
+> c:\code\uw220\recursion.py(16)my_fun()
+-> def my_fun(n):
+(Pdb) n
+> c:\code\uw220\recursion.py(17)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.1171875
+(Pdb) c
+< some output omitted >
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 20, in my_fun
+    return my_fun(n / 2)
+  File "c:\code\uw220\recursion.py", line 17, in my_fun
+    if n == 2:
+RecursionError: maximum recursion depth exceeded in comparison
+Uncaught exception. Entering post mortem debugging
+Running 'cont' or 'step' will restart the program
+> c:\code\uw220\recursion.py(17)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.4334929180209442e-297
+(Pdb)

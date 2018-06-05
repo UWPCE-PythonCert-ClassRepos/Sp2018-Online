@@ -1,0 +1,101 @@
+The function loops through itself, dividing by two every time.
+If the value of n ever becomes equal to 2, the function returns True.
+However, if the original value of n is not an exponential of base 2,
+the loop will continue forever approaching zero.
+
+
+Below is my debugging log:
+
+ubuntushark@DESKTOP-OIQGFQ2:/mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/s
+tudents/John_Sekora/lesson05$ python3 Lesson_05_Activity.py 16
+True
+ubuntushark@DESKTOP-OIQGFQ2:/mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/s
+tudents/John_Sekora/lesson05$ python3 -m pbdb Lesson_05_Activity.py 15
+/usr/bin/python3: No module named pbdb
+ubuntushark@DESKTOP-OIQGFQ2:/mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/s
+tudents/John_Sekora/lesson05$ clear
+ubuntushark@DESKTOP-OIQGFQ2:/mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05$ python3 Lesson_05_Activity.py 16
+True
+ubuntushark@DESKTOP-OIQGFQ2:/mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05$ python3 -m pdb Lesson_05_Activity.py 15
+> /mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05/Lesson_05_Activity.py(2)<module>()
+-> import sys
+(Pdb) ll
+  1
+  2  -> import sys
+  3
+  4     def my_fun(n):
+  5         if n == 2:
+  6             return True
+  7
+  8         return my_fun(n/2)
+  9
+ 10     if __name__ == '__main__':
+ 11         n = int(sys.argv[1])
+ 12         print(my_fun(n))
+(Pdb) n
+> /mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05/Lesson_05_Activity.py(4)<module>()
+-> def my_fun(n):
+(Pdb) n
+> /mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05/Lesson_05_Activity.py(10)<module>()
+-> if __name__ == '__main__':
+(Pdb) n
+> /mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05/Lesson_05_Activity.py(11)<module>()
+-> n = int(sys.argv[1])
+(Pdb) n
+> /mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05/Lesson_05_Activity.py(12)<module>()
+-> print(my_fun(n))
+(Pdb) s
+--Call--
+> /mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05/Lesson_05_Activity.py(4)my_fun()
+-> def my_fun(n):
+(Pdb) ll
+  4  -> def my_fun(n):
+  5         if n == 2:
+  6             return True
+  7
+  8         return my_fun(n/2)
+(Pdb) n
+> /mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05/Lesson_05_Activity.py(5)my_fun()
+-> if n == 2:
+(Pdb) ll
+  4     def my_fun(n):
+  5  ->     if n == 2:
+  6             return True
+  7
+  8         return my_fun(n/2)
+(Pdb) b 5
+Breakpoint 1 at /mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05/Lesson_05_Activity.py:5
+(Pdb) ll
+  4     def my_fun(n):
+  5 B->     if n == 2:
+  6             return True
+  7
+  8         return my_fun(n/2)
+(Pdb) c
+> /mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05/Lesson_05_Activity.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+7.5
+(Pdb) c
+> /mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05/Lesson_05_Activity.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+3.75
+(Pdb) c
+> /mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05/Lesson_05_Activity.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+1.875
+(Pdb) pp n
+1.875
+(Pdb) c
+> /mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05/Lesson_05_Activity.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.9375
+(Pdb) c
+> /mnt/c/Users/John Sekora/Documents/UWPythonCert/Sp2018-Online/students/John_Sekora/lesson05/Lesson_05_Activity.py(5)my_fun()
+-> if n == 2:
+(Pdb) pp n
+0.46875
+(Pdb)

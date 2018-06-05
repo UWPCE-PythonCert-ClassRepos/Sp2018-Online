@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 # Creating recursive function to print a factorial of 5
 
 def factorial_recurssion(num):
@@ -25,6 +24,10 @@ def main():
     print('The result of factorial 5 with recursion function is =', factorial_recurssion(5))
     print()
     print('The result of factorial 5 with range function is =', factorial_range(5))
+
+    # Running a couple assert functions.
+    assert factorial_recurssion(5) == 120
+    assert factorial_recurssion(4) == 24
 
 
 if __name__ == "__main__":
