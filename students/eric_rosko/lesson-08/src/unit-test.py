@@ -6,17 +6,14 @@ Usage: 1.) navigate into src/ first
 python3 -m unittest unit-test.py -v
 
 python3 -m unittest -v unit-test.py unit-test.MongoTests
-
-
 '''
 
 # from unittest import unittest
 from unittest import TestCase
-# from learn_data import *
-from mongodb_script import *
 from login_database import *
+import login_database
 import learn_data
-
+import pprint
 import redis_script
 import neo4j_script
 import simple_script
@@ -217,6 +214,7 @@ class Neo4jTests(TestCase):
 
 
 class RedisTests(TestCase):
+
 
     def setUp(self):
         self.driver = login_database.login_neo4j_cloud()
