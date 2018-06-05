@@ -30,24 +30,18 @@ def rec_fib_inner_rec_func(n):
 
 
 def iter_fib(n):
-    """Calculate nth fib number using iteration."""
-    if n == 0 or n == 1:
-        return n
-    else:
-        previous_fib = 0
-        current_fib = 1
-        for iteration in range(1, n):
-            next_fib = current_fib + previous_fib
-            previous_fib = current_fib
-            current_fib = next_fib
-    return current_fib
+    """Calculate nth fib number using iteration -- for loop."""
+    a, b = 0, 1
+    for i in range(1, n):
+        a, b = b, a + b
+    return b
 
 
 def iter_fib2(n):
-    """Calculate nth fib number using iteration - another implementation."""
+    """Calculate nth fib number using iteration -- while loop."""
     a, b = 0, 1
     while n > 0:
-        a, b = b, a+b
+        a, b = b, a + b
         n -= 1
     return a
 
@@ -179,7 +173,7 @@ print(timer(
             )
       )
 
-print("\n\niterative_fib")
+print("\n\niterative_fib_with_for_loop")
 # print("check the fib num is always the same:", iter_fib(fib_num))
 print(timer(
     """iterative_fib = iter_fib(fib_num)""",
@@ -188,7 +182,7 @@ print(timer(
             )
       )
 
-print("\n\niterative_fib2")
+print("\n\niterative_fib2_with_while_loop")
 # print("check the fib num is always the same:", iter_fib2(fib_num))
 print(timer(
     """iterative_fib2 = iter_fib2(fib_num)""",
