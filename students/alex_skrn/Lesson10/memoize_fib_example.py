@@ -47,7 +47,7 @@ def iter_fib2(n):
 
 
 def gen_fib(n):
-    """Calculate nth fib number using a generator."""
+    """Calculate nth fib number using a generator and a for loop."""
     def fib():
         a, b = 1, 1
         while True:
@@ -83,27 +83,6 @@ def rec_fib_ext_memo(n):
     return fib_memo[n]
 
 
-# def memoize(fn):
-#     """Create a closure to encapsulate the memoization mechanism."""
-#     memo = {}
-#
-#     def memoizer(*args, **kwargs):
-#         # can't memoize if there are named args
-#         if kwargs:
-#             return fn(*args, **kwargs)
-#         try:
-#             # try using the memo or update it
-#             try:
-#                 return memo[args]
-#             except KeyError:
-#                 memo[args] = result = fn(*kwargs)
-#                 return result
-#         except TypeError:
-#             # bypass
-#             return fn(*args)
-#     return memoizer
-
-
 def memoize(f):
     """Create a closure to encapsulate the memoization mechanism."""
     memo = {}
@@ -116,12 +95,11 @@ def memoize(f):
 
 
 @memoize
-def rec_fib(n):
-    """Calculate nth fib number using simple recursion."""
-    if n == 0 or n == 1:
-        return n
-    else:
-        return rec_fib(n-1) + rec_fib(n-2)
+def rec_fib_inner_rec_func_decorator(n):
+    """Calculate nth fib number using recursion - a better implementation."""
+    def fib_help(a, b, n):
+        return fib_help(b, a+b, n-1) if n > 0 else a
+    return fib_help(0, 1, n)
 
 
 class Memoize:
@@ -138,12 +116,11 @@ class Memoize:
 
 
 @Memoize
-def rec_fib_class(n):
-    """Calculate nth fib number using simple recursion."""
-    if n == 0 or n == 1:
-        return n
-    else:
-        return rec_fib_class(n-1) + rec_fib_class(n-2)
+def rec_fib_inner_rec_func_decorator_class(n):
+    """Calculate nth fib number using recursion - a better implementation."""
+    def fib_help(a, b, n):
+        return fib_help(b, a+b, n-1) if n > 0 else a
+    return fib_help(0, 1, n)
 
 
 print("\n\nrecursive_fib_simple")
@@ -164,7 +141,7 @@ print(timer(
             )
       )
 
-print("\n\ngenerator_fib")
+print("\n\ngenerator_and_for_loop_fib")
 # print("check the fib num is always the same:", gen_fib(fib_num))
 print(timer(
     """generator_fib = gen_fib(fib_num)""",
@@ -182,7 +159,7 @@ print(timer(
             )
       )
 
-print("\n\niterative_fib2_with_while_loop")
+print("\n\niterative_fib_with_while_loop")
 # print("check the fib num is always the same:", iter_fib2(fib_num))
 print(timer(
     """iterative_fib2 = iter_fib2(fib_num)""",
@@ -191,7 +168,7 @@ print(timer(
             )
       )
 
-print("\n\nrecursive_fib_inner_memo")
+print("\n\nrecursive_fib_internal_memo")
 # print("check the fib num is always the same:", rec_fib_inner_memo(fib_num))
 print(timer(
     """recursive_fib_inner_memo = rec_fib_inner_memo(fib_num)""",
@@ -200,7 +177,7 @@ print(timer(
             )
       )
 
-print("\n\nrecursive_fib_ext_memo")
+print("\n\nrecursive_fib_external_memo")
 # print("check the fib num is always the same:", rec_fib_ext_memo(fib_num))
 print(timer(
     """recursive_fib_ext_memo = rec_fib_ext_memo(fib_num)""",
@@ -209,19 +186,19 @@ print(timer(
             )
       )
 
-print("\n\nrecursive_fib_memo_decorator_memoize")
-# print("check the fib num is always the same:", rec_fib(fib_num))
+print("\n\nrecursive_fib_memo_decorator_function")
+# print("check the fib num is always the same:", rec_fib_inner_rec_func_decorator(fib_num))
 print(timer(
-    """recursive_fib_memo_decorator_memoize = rec_fib(fib_num)""",
+    """recursive_fib_memo_decorator_memoize = rec_fib_inner_rec_func_decorator(fib_num)""",
     globals=globals(),
     number=repititions
             )
       )
 
-print("\n\nrecursive_fib_memo_decorator_memoize_using_class")
-# print("check the fib num is always the same:", rec_fib_class(fib_num))
+print("\n\nrecursive_fib_memo_decorator_class")
+# print("check the fib num is always the same:", rec_fib_inner_rec_func_decorator_class(fib_num))
 print(timer(
-    """recursive_fib_memo_use_class = rec_fib_class(fib_num)""",
+    """recursive_fib_memo_use_class = rec_fib_inner_rec_func_decorator_class(fib_num)""",
     globals=globals(),
     number=repititions
             )
