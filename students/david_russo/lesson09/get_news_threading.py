@@ -73,7 +73,7 @@ def count_word(word, titles):
             count += 1
     return count
 
-
+# start the timer
 start = time.time()
 
 # create queue for threading 
@@ -86,20 +86,42 @@ sources = get_sources()
 # given a list of sources, this function initializes 
 # the article count and word count at zero, and then
 # gets articles from each source and counts the 
-# occurences of the word 'trump'
-def search_all_atricles():
+# occurences of the word 'trump'. This replaces the
+# integrate function from the integration example. 
+def search_atricles(source_chunk):
     art_count = 0
     word_count = 0
     for source in sources:
         titles = get_articles(source)
         art_count += len(titles)
         word_count += count_word('trump', titles)
+    return (word_count, art_count)
 
 # the worker function puts the results into the queue
 def worker(*args):
-    results.put(search_all_aritcles(*args))
+    results.put(search_atricles(*args))
+
+def is_odd(val):
+    return False if val % 2 == 0 else True
 
 
+# set number of threads 
+thread_count = 50
+chunk_size = int(len(sources)/thread_count)
+for i in range(thread_count):
+    start_index = i * chunk_size
+    end_index = start_index + chunk_size
+    thread = threading.Thread(target  = worker, args = (sources[start_index:end_index],))
+    thread.start()
+    print("Thread %s started" % thread.name)
 
-print(WORD, "found {} times in {} articles".format(word_count, art_count))
+total_articles = 0
+total_word_occurrences = 0
+for i in range(thread_count):
+    thread_result = results.get()
+    total_word_occurrences = thread_result[0]
+    total_articles = thread_result[1]
+
+
+print(WORD, "found {} times in {} articles".format(total_word_occurrences, total_articles))
 print("Process took {:.0f} seconds".format(time.time() - start))
