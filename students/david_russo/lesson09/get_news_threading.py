@@ -101,9 +101,6 @@ def search_atricles(source_chunk):
 def worker(*args):
     results.put(search_atricles(*args))
 
-def is_odd(val):
-    return False if val % 2 == 0 else True
-
 
 # set number of threads 
 thread_count = 50
