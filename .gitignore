@@ -111,5 +111,3 @@ __pycache__/
 # .idea
 .idea/
 
-# secrets
-.config/
