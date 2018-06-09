@@ -5,7 +5,6 @@ from mailroom_model import Donor, Donation
 import random
 from uuid import uuid4
 from datetime import date
-import pprint
 
 
 def display_donor():
@@ -48,7 +47,7 @@ def add_donor():
     z = random.randrange(1, 9)
     value = str(x) + str(y) + str(z)
 
-    pri_ID = int(value) # will be inserted as first value of new record for Donor and Donation
+    donor_ID = int(value) # will be inserted as first value of new record for Donor and Donation
     donor = [] # Used to hold user input
 
     first_name = 0
@@ -80,7 +79,7 @@ def add_donor():
 
                 logger.info('Add and display a new donor name...')
                 new_person = Donor.create(
-                    donor_ID=pri_ID,
+                    donor_ID=donor_ID,
                     first_name=donor[first_name],
                     last_name=donor[last_name],
                     state=donor[state],
@@ -88,8 +87,9 @@ def add_donor():
                 )
                 new_person.save()
                 logger.info('Show new donor name')
-                a_person = Donor.get(Donor.donor_ID == pri_ID)
+                a_person = Donor.get(Donor.donor_ID == donor_ID)
                 logger.info(f'We just created {a_person.first_name}, {a_person.last_name}')
+                add_donation(donor_ID)
 
             except Exception as e:
                 logger.info(e)
@@ -97,14 +97,15 @@ def add_donor():
             finally:
                 database.close()
 
-def add_donation(pri_key):
+
+def add_donation(donor_ID):
     # Create variables to provide random 3 digit id for Donor primary key
     x = random.randrange(1, 9)
     y = random.randrange(1, 9)
     z = random.randrange(1, 9)
     value = str(x) + str(y) + str(z)
 
-    pri_id = int(value)  # will be inserted as first value of new record for Donor and Donation
+    money_ID = int(value)  # will be inserted as first value of new record for Donation
 
     now = str(date.today())
 
@@ -113,23 +114,22 @@ def add_donation(pri_key):
 
     while True:
         amount = input("""
-                           Enter donation amount and any notes in the following format:
-                           '0.00, ex: 200.50                          
+                           Enter donation amount: ex: 200.50                          
                            Enter input here >>  """)
         notes = input("Enter any notes for donation >> ")
 
         try:
             logger.info('Adding donation...')
             new_person = Donation.create(
-                money_ID=pri_id,
-                donor_ID=pri_key,
+                money_ID=money_ID,
+                donor_ID=donor_ID,
                 amount="%.2f" % amount,
                 date=now,
                 notes=notes,
             )
             new_person.save()
             logger.info('Show new donor name')
-            a_donation = Donation.get(Donation.money_ID == pri_id)
+            a_donation = Donation.get(Donation.money_ID == money_ID)
             logger.info(f'We just created new record with ID: {a_donation.money_ID}')
 
         except Exception as e:
