@@ -1,0 +1,23 @@
+% coverage run --source=waterregulation -m unittest waterregulation/integrationtest.py waterregulation/tests.py; coverage report
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.004s
+
+OK
+Name                                 Stmts   Miss  Cover
+--------------------------------------------------------
+waterregulation/__init__.py              0      0   100%
+waterregulation/controller.py           11      0   100%
+waterregulation/decider.py              21      0   100%
+waterregulation/integrationtest.py      22      0   100%
+waterregulation/tests.py                43      0   100%
+--------------------------------------------------------
+TOTAL                                   97      0   100%
+
+% pylint waterregulation
+Using config file /Users/sirisham/projects/course2/Sp2018-Online/students/msirisha/lesson06/water-regulation/.pylintrc
+
+-------------------------------------------------------------------
+Your code has been rated at 10.00/10 (previous run: 9.90/10, +0.10)
+
+disabled duplicate-code, too-few-public-methods
