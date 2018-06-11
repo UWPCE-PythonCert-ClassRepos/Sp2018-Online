@@ -22,7 +22,7 @@ class DonorNeo4j(object):
 
 class DonorListNeo4j(object):
     """
-    Stores the list of donors in a dictionary and connects with a Mongodo database.
+    Stores the list of donors in a dictionary and connects with a Neo4j database.
     Generates reports and sends thank you letters
     """
 
@@ -104,19 +104,8 @@ class DonorListNeo4j(object):
             input_key = input("Please enter a Full Name or type 'list' to see a list of donors: ")
             if input_key == 'list':
                 print("\nHere is a list of the current donors:\n")
-                try:
-                    with nosql_mailroom_login.login_mongodb_cloud() as client:
-                        log.info('Initializing an existing database called dev')
-                        db = client['dev']
-                        donor_list_mongodb = db['donor_list_mongodb']
-
-                        cursor = donor_list_mongodb.find()
-                        for don in cursor:
-                            print(
-                                f"Cost: Donor Name: {don['person']}    Donations: {don['donations']}")
-
-                except Exception as e:
-                    log.info(e)
+                for key, val in self.donor_list.items():
+                    print(f"{key:20} $  {val}")
 
             elif input_key in self.donor_list.keys():
                 while True:
@@ -149,19 +138,11 @@ class DonorListNeo4j(object):
         """
         Prints a report with the Donor Name, Donations, and Total Donations.
         """
-        try:
-            with nosql_mailroom_login.login_mongodb_cloud() as client:
-                log.info('Initializing an existing database called dev')
-                db = client['dev']
-                donor_list_mongodb = db['donor_list_mongodb']
-
-                cursor = donor_list_mongodb.find()
-                for don in cursor:
-                    print(
-                        f"Donor Name: {don['person']}, Donations: {don['donations']}, Total: {sum(don['donations'])}")
-
-        except Exception as e:
-            log.info(e)
+        """ Prints a report with the Donor Name, Total Given, Number of Gifts, and Average Gift. """
+        print("Donor Name                | Total Given | Num Gifts | Average Gift")
+        print("------------------------------------------------------------------")
+        for key, val in self.donor_list.items():
+            print(f"{key:25} $ {float(sum(val)):>12.2f}  {len(val):>8}  $ {float(sum(val))/len(val):>11.2f}")
 
     def letters(self):
         """

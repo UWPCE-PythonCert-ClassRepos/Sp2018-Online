@@ -22,7 +22,7 @@ class DonorRedis(object):
 
 class DonorListRedis(object):
     """
-    Stores the list of donors in a dictionary and connects with a Mongodo database.
+    Stores the list of donors in a dictionary and connects with a Redis database.
     Generates reports and sends thank you letters
     """
 
