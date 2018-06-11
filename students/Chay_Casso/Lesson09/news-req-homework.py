@@ -3,7 +3,7 @@ import threading
 import queue
 import time
 
-WORD = "war"
+WORD = "Trump"
 NEWS_API_KEY = 'd622dd804f1c44a78a0c8bcab6f387c9'
 base_url = 'https://newsapi.org/v1/'
 
@@ -40,12 +40,11 @@ def get_articles(source):
     return titles
 
 
-def count_word(word, titles):
+def count_word(word, title):
     word = word.lower()
     count = 0
-    for title in titles:
-        if word in title.lower():
-            count += 1
+    if word in title.lower():
+        count += 1
     return count
 
 
@@ -82,8 +81,8 @@ while output_thread.empty() is not True:
     results.append(output_thread.get())
 
 for element in results:
-    print(element)
-    art_count += len(element)
+    # print(element)
+    art_count += 1
     word_count += count_word(WORD, element)
 
 print(f'found {WORD}, {word_count} times in {art_count} articles')
