@@ -51,11 +51,6 @@ class DonorListNeo4j(object):
                 cyph = "CREATE (n:Donor_List {donor:'%s', donations: '%.2f'})" % (donor, donations)
                 session.run(cyph)
 
-            log.info("Step 3: Get all donors in the DB:")
-            cyph = """MATCH (p:Donor_List)
-                      RETURN p.donor as donor, p.donations as donations
-                    """
-
     def add_donor(self, donor):
         """
         Adds donor and donation
@@ -65,38 +60,40 @@ class DonorListNeo4j(object):
             self.donor_list[donor.name].append(donor.donation)
             print("Donation Added to existing Donor")
 
-            try:
+            log.info("Adding donation for donor to neo4j database")
+            driver = nosql_mailroom_login.login_neo4j_cloud()
+            with driver.session() as session:
+                cyph = "CREATE (n:Donation {donations:'%.2f'})" % (donor.donation)
+                session.run(cyph)
 
-                with nosql_mailroom_login.login_mongodb_cloud() as client:
-                    log.info('Initializing an existing database called dev')
-                    db = client['dev']
-                    donor_list_mongodb = db['donor_list_mongodb']
-                    log.info('And in that database use a collection called donor_list_mongodb')
-                    log.info('For an existing donor, add a new donation')
-                    db.donor_list_mongodb.insert({'person': donor.name, 'donations': donor.donation})
-
-                    log.info('Just saved a donation of {} from {} to the database'.format(donor.donation, donor.name))
-
-            except Exception as e:
-                log.info(e)
+                log.info('Creating associations between Donor and new Donation')
+                cyph = """
+                          MATCH (p1:Donation {donations: str(donor.donation)})
+                          CREATE (p1)-[association:Associate]->(p2:Donor {donor:'%s', donations:'%.2f'})
+                          RETURN p1
+                        """ % (donor.name)
+                session.run(cyph)
 
         else:
+            print("Adding new donor:  {}".format(donor))
             self.donor_list[donor.name] = donor.donation
+            print("Donation Added to existing Donor")
 
-            try:
+            log.info("Adding new donor and donation to neo4j database")
+            driver = nosql_mailroom_login.login_neo4j_cloud()
+            with driver.session() as session:
+                cyph = "CREATE (n:Donor {donor:'%s'})" % (donor.name)
+                session.run(cyph)
+                cyph = "CREATE (n:Donation {donations:'%.2f'})" % (donor.donation)
+                session.run(cyph)
 
-                with nosql_mailroom_login.login_mongodb_cloud() as client:
-                    log.info('Initializing an existing database called dev')
-                    db = client['dev']
-                    donor_list_mongodb = db['donor_list_mongodb']
-                    log.info('And in that database use a collection called donor_list_mongodb')
-                    log.info('For an existing donor, add a new donation')
-                    db.donor_list_mongodb.insert({'person': donor.name, 'donations': donor.donation})
-
-                    log.info('Just saved a donation of {} from {} to the database'.format(donor.donation, donor.name))
-
-            except Exception as e:
-                log.info(e)
+                log.info('Creating associations between New Donor and New Donation')
+                cyph = """
+                          MATCH (p1:Donation {donations: str(donor.donation)})
+                          CREATE (p1)-[association:Associate]->(p2:Donor {donor:'%s', donations:'%.2f'})
+                          RETURN p1
+                        """ % (donor.name)
+                session.run(cyph)
 
     def thank_you(self):
         """

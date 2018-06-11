@@ -1,5 +1,5 @@
 """
-    Object Oriented Mail Room with Mongodb Database
+    Object Oriented Mail Room with Redis Database
 """
 
 
