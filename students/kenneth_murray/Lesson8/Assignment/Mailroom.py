@@ -6,6 +6,10 @@ This is an object oriented version
 import sys
 import math
 from textwrap import dedent
+from memory_profiler import profile
+
+
+
 
 
 # Utility so we have data to test with, etc.
@@ -167,6 +171,8 @@ class DonorDB():
                                 -The Team
               '''.format(donor.name, donor.last_donation)
                       )
+@profile()
+
 
     @staticmethod
     def sort_key(item):
@@ -317,5 +323,5 @@ def main():
             print("error: menu selection is invalid!")
 
 if __name__ == "__main__":
-
+@profile()
     main()
