@@ -3,7 +3,7 @@
 # -------------------------------------------------#
 # Title: get_news_threads.py
 # Dev: Scott Luse
-# Date: 06/10/2018
+# Date: 06/11/2018
 # Assignment: Get the news sources from newsapi.org
 # and determine how many times a keyword is used in
 # in article titles; use multiple threads
@@ -15,20 +15,28 @@
 # Step-4: worker function updates global title list
 # Step-5: main thread waits for worker threads
 # Step-6: count key WORD after threads join main
+#
+# Update 6/11/2018: code is updated but newsAPI request
+# limitation is blocking full testing. However, the
+# output.txt file shows the results using 4 threads
+# doesn't help the speed
 # -------------------------------------------------#
 
 import time
 import requests
 import threading
-# import utilities
-
-# log = utilities.configure_logger('default', 'newsapi.log')
 
 WORD = "trump"
 NEWS_API_KEY = "29a5f72c3ba04484921a19d5aad8af48"
 base_url = 'https://newsapi.org/v1/'
 
 titles = []
+
+
+def split_list_many(alist, wanted_parts):
+    length = len(alist)
+    return [ alist[i*length // wanted_parts: (i+1)*length // wanted_parts]
+             for i in range(wanted_parts) ]
 
 def split_list(a_list):
     half = int(len(a_list)/2)
@@ -105,29 +113,31 @@ def main():
     global titles
     start = time.time()
     sources = get_sources()
-    sources1, sources2 = split_list(sources)
-    # split two lists down to about 15 items each
-    # newsapi limits the number of requests per 24 hours
-    sources3, sources4 = split_list(sources2)
+    list_sources = split_list_many(sources, wanted_parts=4)
 
     lock = threading.Lock()
 
-    # create threads and fill title list
-    t1 = threading.Thread(target=worker, args=(lock, sources3,), name='t1')
-    t2 = threading.Thread(target=worker, args=(lock, sources4,), name='t2')
+    threads = []
+    for i in range(4):
+        thread = threading.Thread(target=worker, args=(lock, list_sources[i],))
+        thread.start()
+        threads.append(threads)
+        thread.join()
 
-    t1.start()
-    t2.start()
-
-    t1.join()
-    t2.join()
+    '''
+    <Response [429]> is blocking development and code is not tested
+    {"status":"error","code":"rateLimited","message":"You have made too many
+    requests recently. Developer accounts are limited to 1,000 requests over
+    a 24 hour period (250 requests available every 6 hours). Please upgrade
+    to a paid plan if you need more requests."}
+    '''
 
     # create reports from title list
     art_count = 0
     word_count = 0
     art_count += len(titles)
     word_count += count_word('trump', titles)
-    print("===Given this number of sources: " + str(len(sources3) + len(sources4)) + "===")
+    print("===Given this number of sources: " + str(len(sources)) + "===")
     print(WORD, "found {} times in {} articles".format(word_count, art_count))
     print("Process took {:.0f} seconds".format(time.time() - start))
 
