@@ -25,7 +25,7 @@ def generate_report(data):
     print('{:25} |{:^15} |{:^15}'.format(*header))
     print('-' * 75)
     for key in data:
-        print(f"{key['name']['first']:<30}, {key['name']['last']:<30}: ${sum(value):^,.2f}")
+        print(f"{key['name']['first']:<30}, {key['name']['last']:<30}: ${sum['donation']:^,.2f}")
 
     print('-- Report Finished --\n')
 
