@@ -1,0 +1,252 @@
+C:/Users/Scott/Documents/GitHub/Sp2018/students/ScottL/lesson09/get_news_threads.py
+all the sources
+['abc-news-au', 'al-jazeera-english', 'ars-technica', 'associated-press', 'bbc-news', 'bbc-sport', 'bloomberg', 'breitbart-news', 'business-insider', 'business-insider-uk', 'buzzfeed', 'cnbc', 'cnn', 'daily-mail', 'engadget', 'entertainment-weekly', 'espn', 'espn-cric-info', 'financial-times', 'football-italia', 'fortune', 'four-four-two', 'fox-sports', 'google-news', 'hacker-news', 'ign', 'independent', 'mashable', 'metro', 'mirror', 'mtv-news', 'mtv-news-uk', 'national-geographic', 'new-scientist', 'newsweek', 'new-york-magazine', 'nfl-news', 'polygon', 'recode', 'reddit-r-all', 'reuters', 'talksport', 'techcrunch', 'techradar', 'the-economist', 'the-guardian-au', 'the-guardian-uk', 'the-hindu', 'the-huffington-post', 'the-lad-bible', 'the-new-york-times', 'the-next-web', 'the-sport-bible', 'the-telegraph', 'the-times-of-india', 'the-verge', 'the-wall-street-journal', 'the-washington-post', 'time', 'usa-today']
+hello from thread Thread-1
+requesting:abc-news-au, thread Thread-1
+something went wrong with abc-news-au
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:al-jazeera-english, thread Thread-1
+something went wrong with al-jazeera-english
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:ars-technica, thread Thread-1
+something went wrong with ars-technica
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:associated-press, thread Thread-1
+something went wrong with associated-press
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:bbc-news, thread Thread-1
+something went wrong with bbc-news
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:bbc-sport, thread Thread-1
+something went wrong with bbc-sport
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:bloomberg, thread Thread-1
+something went wrong with bloomberg
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:breitbart-news, thread Thread-1
+something went wrong with breitbart-news
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:business-insider, thread Thread-1
+something went wrong with business-insider
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:business-insider-uk, thread Thread-1
+something went wrong with business-insider-uk
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:buzzfeed, thread Thread-1
+something went wrong with buzzfeed
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:cnbc, thread Thread-1
+something went wrong with cnbc
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:cnn, thread Thread-1
+something went wrong with cnn
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:daily-mail, thread Thread-1
+something went wrong with daily-mail
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:engadget, thread Thread-1
+something went wrong with engadget
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+hello from thread Thread-2
+requesting:entertainment-weekly, thread Thread-2
+something went wrong with entertainment-weekly
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:espn, thread Thread-2
+something went wrong with espn
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:espn-cric-info, thread Thread-2
+something went wrong with espn-cric-info
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:financial-times, thread Thread-2
+something went wrong with financial-times
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:football-italia, thread Thread-2
+something went wrong with football-italia
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:fortune, thread Thread-2
+something went wrong with fortune
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:four-four-two, thread Thread-2
+something went wrong with four-four-two
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:fox-sports, thread Thread-2
+something went wrong with fox-sports
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:google-news, thread Thread-2
+something went wrong with google-news
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:hacker-news, thread Thread-2
+something went wrong with hacker-news
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:ign, thread Thread-2
+something went wrong with ign
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:independent, thread Thread-2
+something went wrong with independent
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:mashable, thread Thread-2
+something went wrong with mashable
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:metro, thread Thread-2
+something went wrong with metro
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:mirror, thread Thread-2
+something went wrong with mirror
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+hello from thread Thread-3
+requesting:mtv-news, thread Thread-3
+something went wrong with mtv-news
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:mtv-news-uk, thread Thread-3
+something went wrong with mtv-news-uk
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:national-geographic, thread Thread-3
+something went wrong with national-geographic
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:new-scientist, thread Thread-3
+something went wrong with new-scientist
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:newsweek, thread Thread-3
+something went wrong with newsweek
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:new-york-magazine, thread Thread-3
+something went wrong with new-york-magazine
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:nfl-news, thread Thread-3
+something went wrong with nfl-news
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:polygon, thread Thread-3
+something went wrong with polygon
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:recode, thread Thread-3
+something went wrong with recode
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:reddit-r-all, thread Thread-3
+something went wrong with reddit-r-all
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:reuters, thread Thread-3
+something went wrong with reuters
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:talksport, thread Thread-3
+something went wrong with talksport
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:techcrunch, thread Thread-3
+something went wrong with techcrunch
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:techradar, thread Thread-3
+something went wrong with techradar
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:the-economist, thread Thread-3
+something went wrong with the-economist
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+hello from thread Thread-4
+requesting:the-guardian-au, thread Thread-4
+something went wrong with the-guardian-au
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:the-guardian-uk, thread Thread-4
+something went wrong with the-guardian-uk
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:the-hindu, thread Thread-4
+something went wrong with the-hindu
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:the-huffington-post, thread Thread-4
+something went wrong with the-huffington-post
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:the-lad-bible, thread Thread-4
+something went wrong with the-lad-bible
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:the-new-york-times, thread Thread-4
+something went wrong with the-new-york-times
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:the-next-web, thread Thread-4
+something went wrong with the-next-web
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:the-sport-bible, thread Thread-4
+something went wrong with the-sport-bible
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:the-telegraph, thread Thread-4
+something went wrong with the-telegraph
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:the-times-of-india, thread Thread-4
+something went wrong with the-times-of-india
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:the-verge, thread Thread-4
+something went wrong with the-verge
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:the-wall-street-journal, thread Thread-4
+something went wrong with the-wall-street-journal
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:the-washington-post, thread Thread-4
+something went wrong with the-washington-post
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:time, thread Thread-4
+something went wrong with time
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+requesting:usa-today, thread Thread-4
+something went wrong with usa-today
+<Response [429]>
+{"status":"error","code":"rateLimited","message":"You have made too many requests recently. Developer accounts are limited to 1,000 requests over a 24 hour period (250 requests available every 6 hours). Please upgrade to a paid plan if you need more requests."}
+===Given this number of sources: 60===
+trump found 0 times in 0 articles
+Process took 30 seconds
+
+Process finished with exit code 0

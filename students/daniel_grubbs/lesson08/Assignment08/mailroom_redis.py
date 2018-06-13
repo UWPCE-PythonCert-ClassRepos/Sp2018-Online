@@ -1,23 +1,24 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
-This is an object oriented version
+Object-oriented Mailroom - Working with NoSQL Databases - MongoDB
 """
 
 import sys
 import math
 from textwrap import dedent
-from memory_profiler import profile
 
+import login_database
+import utilities
+from donor_report_mongodb import create_donor_report
 
-
+# Setup logging for mailroom
+log = utilities.configure_logger('default', 'logs/log_mailroom_mongodb.log')
 
 
 # Utility so we have data to test with, etc.
 def get_sample_data():
     """
     returns a list of donor objects to use as sample data
-
-
     """
     return [Donor("William Gates III", [653772.32, 12.17]),
             Donor("Jeff Bezos", [877.33]),
@@ -34,9 +35,7 @@ class Donor():
     def __init__(self, name, donations=None):
         """
         create a new Donor object
-
         :param name: the full name of the donor
-
         :param donations=None: iterable of past donations
         """
 
@@ -51,7 +50,6 @@ class Donor():
     def normalize_name(name):
         """
         return a normalized version of a name to use as a comparison key
-
         simple enough to not be in a method now, but maybe you'd want to make it fancier later.
         """
         return name.lower().strip().replace(" ", "")
@@ -92,7 +90,6 @@ class DonorDB():
     def __init__(self, donors=None):
         """
         Initialize a new donor database
-
         :param donors=None: iterable of Donor objects
         """
         if donors is None:
@@ -120,7 +117,6 @@ class DonorDB():
     def list_donors(self):
         """
         creates a list of the donors as a string, so they can be printed
-
         Not calling print from here makes it more flexible and easier to
         test
         """
@@ -132,9 +128,7 @@ class DonorDB():
     def find_donor(self, name):
         """
         find a donor in the donor db
-
         :param: the name of the donor
-
         :returns: The donor data structure -- None if not in the self.donor_data
         """
         return self.donor_data.get(Donor.normalize_name(name))
@@ -142,9 +136,7 @@ class DonorDB():
     def add_donor(self, name):
         """
         Add a new donor to the donor db
-
         :param: the name of the donor
-
         :returns: the new Donor data structure
         """
         donor = Donor(name)
@@ -154,25 +146,18 @@ class DonorDB():
     def gen_letter(self, donor):
         """
         Generate a thank you letter for the donor
-
         :param: donor tuple
-
         :returns: string with letter
-
         note: This doesn't actually write to a file -- that's a separate
               function. This makes it more flexible and easier to test.
         """
         return dedent('''Dear {0:s},
-
               Thank you for your very kind donation of ${1:.2f}.
               It will be put to very good use.
-
                              Sincerely,
                                 -The Team
               '''.format(donor.name, donor.last_donation)
                       )
-@profile()
-
 
     @staticmethod
     def sort_key(item):
@@ -182,7 +167,6 @@ class DonorDB():
     def generate_donor_report(self):
         """
         Generate the report of the donors and amounts donated.
-
         :returns: the donor report as a string.
         """
         # First, reduce the raw data into a summary list view
@@ -219,41 +203,30 @@ class DonorDB():
             open(filename, 'w').write(letter)
 
 
-# User-interaction code
-# Above this is all the logic code
-#  The stuff you'd need if you had a totally different UI.different
-#  below is code only for the command line interface.
-
-
-# import sys
-# import math
-
-# # handy utility to make pretty printing easier
-# from textwrap import dedent
-
-# from mailroom import model
-
 # create a DB with the sample data
-db = DonorDB(get_sample_data())
+# db = DonorDB(get_sample_data())
 
 
+##################################################
+# The menu system                                #
+##################################################
 def main_menu_selection():
     """
     Print out the main application menu and then read the user input.
     """
     action = input(dedent('''
       Choose an action:
-
       1 - Send a Thank You
       2 - Create a Report
       3 - Send letters to everyone
-      4 - Quit
-
+      4 - Update Donor Record
+      5 - Remove Donor Record
+      6 - Quit
       > '''))
     return action.strip()
 
 
-def send_thank_you():
+def send_thank_you(database):
     """
     Record a donation and generate a thank you message.
     """
@@ -263,7 +236,10 @@ def send_thank_you():
         name = input("Enter a donor's name"
                      "(or 'list' to see all donors or 'menu' to exit)> ").strip()
         if name == "list":
-            print(db.list_donors())
+            cursor = database.find({})
+            for d in cursor:
+                print(d['donor'])
+            # continue
         elif name == "menu":
             return
         else:
@@ -290,30 +266,30 @@ def send_thank_you():
         else:
             break
 
-    # If this is a new user, ensure that the database has the necessary
-    # data structure.
-    donor = db.find_donor(name)
-    if donor is None:
-        donor = db.add_donor(name)
+    database.update({'donor': name}, {'$push': {'donations': amount}})
 
-    # Record the donation
-    donor.add_donation(amount)
-    print(db.gen_letter(donor))
+    # print out letter for donor/donation
+    cursor = database.find({'donor': name})
+    for d in cursor:
+        print(DonorDB.gen_letter(d))
 
 
-def print_donor_report():
-    print(db.generate_donor_report())
+# def print_donor_report():
+#     print(create_donor_report())
 
 
 def quit():
-    sys.exit(0)
+    """Function for exiting the mailroom program."""
+    return sys.exit("Logging out of Donation Management System")
 
 
 def main():
-    selection_dict = {"1": send_thank_you,
-                      "2": print_donor_report,
-                      "3": db.save_letters_to_disk,
-                      "4": quit}
+    selection_dict = {"1": send_thank_you(donor_db),
+                      "2": create_donor_report,
+                      "3": DonorDB.save_letters_to_disk,
+                      "4": update_donor_record,
+                      "5": remove_donor_from_db,
+                      "6": quit}
 
     while True:
         selection = main_menu_selection()
@@ -322,6 +298,18 @@ def main():
         except KeyError:
             print("error: menu selection is invalid!")
 
+
+def update_donor_record():
+    """Function for updating a donor record."""
+    pass
+
+
+def remove_donor_from_db():
+    """Function for deleting a donor record."""
+    pass
+
+
 if __name__ == "__main__":
-@profile()
+    log.info('logging into database')
+    r = login_database.login_redis_cloud()
     main()
