@@ -54,5 +54,12 @@ def run_example():
         cover_type = r.lindex('186675', 2)
         log.info(f'Type of cover = {cover_type}')
 
+        r.hset('nancy', 'location', 'Seattle')
+        r.hset('nancy', 'phone', '206 555 7755')
+        r.hset('nancy', 'zip', '90210')
+
+        print(f"Nancy's phone #: {r.hget('nancy', 'phone')}, Nancy's Zip: {r.hget('nancy', 'zip')}")
+
     except Exception as e:
         print(f'Redis error: {e}')
+

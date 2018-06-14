@@ -9,8 +9,8 @@ import redis
 from neo4j.v1 import GraphDatabase, basic_auth
 import utilities
 
-log = utilities.configure_logger('default', '../logs/login_databases_dev.log')
-config_file = os.path.abspath('../config/config.ini')
+log = utilities.configure_logger('default', 'logs/mailroom.log')
+config_file = os.path.abspath('../nosql/config/config.ini')
 config = configparser.ConfigParser()
 
 
